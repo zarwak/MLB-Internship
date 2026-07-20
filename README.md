@@ -7,6 +7,7 @@ My daily work during the ML internship. Each day gets its own folder with whatev
 | Day | Work |
 |-----|------|
 | Day 1 | Student grading system in Python |
+| Day 2 | Student Management System |
 
 ## Day 1 — Student Grading System
 
@@ -16,4 +17,13 @@ Run it with:
 
 ```bash
 python Day1/grading.py
+```
+## Day 2 — Student Management System
+
+A student basic information keeping system, implemented by using lists and dictionary
+
+Run it with:
+
+```bash
+python Day2/Student_Record_Management_System.py
 ```
