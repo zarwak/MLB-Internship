@@ -7,12 +7,9 @@ My daily work during the ML internship. Each day gets its own folder with whatev
 | Day | Work |
 |-----|------|
 | Day 1 | Student grading system in Python |
-<<<<<<< HEAD
 | Day 2 | Student Management System |
-=======
-| Day 2 | Student record management system + Python collections practice (lists, tuples, sets, dictionaries) |
 | Day 3 | Number analysis tool + conditional/loop/logic-building practice |
->>>>>>> 0679ef1 (Day 3: Number Analysis Tool +coding practices)
+
 
 ## Day 1 — Student Grading System
 
@@ -23,7 +20,7 @@ Run it with:
 ```bash
 python Day1/grading.py
 ```
-<<<<<<< HEAD
+
 ## Day 2 — Student Management System
 
 A student basic information keeping system, implemented by using lists and dictionary
@@ -32,14 +29,14 @@ A student basic information keeping system, implemented by using lists and dicti
 ## Day 2 — Student Record Management System
 
 A console app for adding, viewing, searching, updating, and deleting student records in memory, plus notebooks practicing Python's core collection types (lists, tuples, sets, dictionaries). See [Day2/Readme.md](Day2/Readme.md) for details.
->>>>>>> 0679ef1 (Day 3: Number Analysis Tool +coding practices)
+
 
 Run it with:
 
 ```bash
 python Day2/Student_Record_Management_System.py
 ```
-<<<<<<< HEAD
+
 =======
 
 ## Day 3 — Number Analysis Tool
@@ -51,4 +48,4 @@ Run it with:
 ```bash
 python Day3/Number_Analysis_Tool.py
 ```
->>>>>>> 0679ef1 (Day 3: Number Analysis Tool +coding practices)
+
