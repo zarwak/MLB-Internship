@@ -1,0 +1,22 @@
+[
+  {
+    "name": "zarwa",
+    "roll_no": 17,
+    "course": "DS"
+  },
+  {
+    "name": "ali",
+    "roll_no": 64,
+    "course": "AI"
+  },
+  {
+    "name": "anne",
+    "roll_no": 90,
+    "course": "se"
+  },
+  {
+    "name": "agha",
+    "roll_no": 64,
+    "course": "ai"
+  }
+]
