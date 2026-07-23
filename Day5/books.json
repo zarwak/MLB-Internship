@@ -1,0 +1,23 @@
+[
+  {
+    "type": "Book",
+    "title": "The Hobbit",
+    "author": "Tolkien",
+    "id": "101",
+    "is_borrowed": false
+  },
+  {
+    "type": "Book",
+    "title": "Harry Potter and The Goblet of Fire",
+    "author": "JK",
+    "id": "121",
+    "is_borrowed": false
+  },
+  {
+    "type": "Book",
+    "title": "Narnia",
+    "author": "Altman",
+    "id": "2",
+    "is_borrowed": false
+  }
+]
