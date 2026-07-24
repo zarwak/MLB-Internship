@@ -1,0 +1,16 @@
+student_id,name,age,city,course,score,attendance
+1,Ali,21,Lahore,ML,88,95
+2,Sara,22,Karachi,ML,92,88
+3,Zara,20,Lahore,Data,79,76
+4,Omar,23,Islamabad,Web,85,91
+5,Hina,21,Karachi,ML,95,99
+6,Bilal,24,Lahore,Data,61,60
+7,Ayesha,22,Islamabad,Web,73,72
+8,Usman,20,Karachi,ML,90,94
+9,Fatima,23,Lahore,Data,58,55
+10,Hamza,21,Islamabad,Web,84,89
+11,Noor,22,Karachi,ML,77,80
+12,Saad,25,Lahore,Data,69,70
+13,Iqra,20,Islamabad,ML,99,98
+14,Danish,23,Karachi,Web,45,40
+15,Mariam,21,Lahore,Data,81,85
