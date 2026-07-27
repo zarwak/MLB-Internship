@@ -21,6 +21,7 @@ Day7/
 ├── pie_performance.png                # Performance category split
 ├── boxplot_subjects.png               # Marks spread across all 4 subjects
 ├── dashboard.py                       # Mini project: Streamlit dashboard
+├── requirements.txt                   # deps for Streamlit Cloud (streamlit/pandas/matplotlib/seaborn)
 └── README.md                          # this file
 ```
 
