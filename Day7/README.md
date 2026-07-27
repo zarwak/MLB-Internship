@@ -7,6 +7,9 @@ whole class at a glance.
 
 ---
 
+## Live link:
+[link](https://dashboardstudentperformance.streamlit.app/)
+
 ## What's in this folder
 
 ```
