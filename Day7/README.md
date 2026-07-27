@@ -8,7 +8,10 @@ whole class at a glance.
 ---
 
 ## Live link:
-[link](https://dashboardstudentperformance.streamlit.app/)
+[Live Link To Dashboard ](https://dashboardstudentperformance.streamlit.app/)
+
+## Demo-Video:
+![Video-Demo](demo_video_summarizer.gif)
 
 ## What's in this folder
 
