@@ -14,10 +14,10 @@ load  →  preprocess  →  split  →  scale  →  train  →  predict  →  ev
 ---
 
 ## Live link:
-[Live Link To Student Score Predictor](https://your-day8-app.streamlit.app/)
+([Live Link To Student Score Predictor](https://student-score-prediction-system.streamlit.app/))
 
 ## Demo-Video:
-_(screen recording walking through the implementation — to be added)_
+![Live Demo](demo_video_summarizer.gif)
 
 ---
 
