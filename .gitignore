@@ -7,3 +7,6 @@ __pycache__/
 .venv/
 venv/
 env/
+
+# Staging folder for Hugging Face Space uploads (contents are copies)
+_hf_upload/

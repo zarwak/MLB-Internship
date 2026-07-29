@@ -5,6 +5,18 @@ import numpy as np
 from sklearn.datasets import load_iris
 import os
 
+# Hugging Face free-tier Gradio Spaces run on ZeroGPU, which refuses to start
+# unless at least one function is marked with @spaces.GPU. This model is pure
+# CPU scikit-learn, so the marker is only there to satisfy that check.
+# The `spaces` package only exists on HF, so fall back to a no-op decorator
+# locally and keep `python app.py` working on this machine.
+try:
+    import spaces
+    gpu_stub = spaces.GPU
+except ImportError:
+    def gpu_stub(fn):
+        return fn
+
 # Get the directory where this script is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -21,6 +33,7 @@ with open(scaler_path, 'rb') as f:
 iris = load_iris()
 target_names = iris.target_names
 
+@gpu_stub
 def predict_species(sepal_len, sepal_wid, petal_len, petal_wid):
     """Predict Iris species based on measurements."""
     input_data = np.array([[sepal_len, sepal_wid, petal_len, petal_wid]])
