@@ -19,6 +19,10 @@ This folder contains my work for Day 9 of the MLB Internship, covering classific
 - `app.py` – the interactive Gradio web app (this is what the Space runs).
 - `logreg_iris.pkl`, `dt_iris.pkl`, `scaler_iris.pkl` – the trained models and the fitted scaler.
 
+## Live Demo
+![LIVE LINK](demo_video_summarizer-1.gif)
+
+
 ## Key Learnings
 - Understanding the difference between regression and classification.
 - Implementing and evaluating classification models using scikit‑learn.
