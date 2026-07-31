@@ -20,8 +20,9 @@ This project demonstrates unsupervised learning techniques on the Iris dataset, 
 ![DEMO OF THE PROJECT](demo_video_summarizer.gif)
 
 ---
+## APP LINK :
 
-
+[CLICK HERE TO GO TO THE APP ](https://iris-clustering-pca.streamlit.app/)
 
 ---
 
