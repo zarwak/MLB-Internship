@@ -7,6 +7,13 @@ This project is the entry point into **Deep Learning**. It covers installing and
 Everything here was built from scratch with **TensorFlow 2.21.0 / Keras 3.15.1** and runs on CPU in under two minutes.
 
 ---
+## APP LINK
+
+[CLICK HERE TO GO TO THE APP ](https://fashion-mnist-simulation.streamlit.app/)
+---
+## SIMULATION DEMO BELOW:
+
+![DEMO HERE : ](demo_video_summarizer.gif)
 
 ## 🎯 Objectives
 
