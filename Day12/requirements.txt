@@ -5,7 +5,10 @@
 # needed to serve the app. See export_for_deploy.py for why.
 #
 # To TRAIN the model yourself (the practice scripts, the notebook and
-# 4_ann_fashion_mnist.py) install requirements-train.txt instead.
+# 4_ann_fashion_mnist.py) install train-deps.txt instead.
+#
+# Keep this the ONLY requirements*.txt in this folder - Streamlit Cloud
+# globs that pattern and will happily install a second one.
 
 streamlit>=1.40.0
 numpy>=1.26.0
