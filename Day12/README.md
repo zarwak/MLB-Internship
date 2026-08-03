@@ -22,52 +22,7 @@ Everything here was built from scratch with **TensorFlow 2.21.0 / Keras 3.15.1**
 
 ---
 
-## 🔄 Project Workflow
 
-```mermaid
-flowchart TD
-    A([START]) --> B["<b>Practice 1</b><br/>pip install tensorflow"]
-    B --> C{Import<br/>succeeds?}
-    C -- No --> B
-    C -- Yes --> D["Verify: version, devices,<br/>tensor math, gradients"]
-
-    D --> E["<b>Practice 2</b><br/>Build Input → Hidden → Output"]
-    E --> F["model.summary()<br/>explain every parameter"]
-
-    F --> G["<b>Practice 3</b><br/>Swap activation function"]
-    G --> H["ReLU / Sigmoid / Tanh"]
-    H --> I{Structure<br/>changed?}
-    I -- "No — same 67 params" --> J["Train all three<br/>to compare LEARNING"]
-
-    J --> K([MINI PROJECT])
-
-    K --> L["<b>1. LOAD</b><br/>fashion_mnist.load_data()<br/>60,000 train + 10,000 test"]
-    L --> M["<b>2. EXPLORE</b><br/>shapes, class balance,<br/>sample images"]
-    M --> N["<b>3. NORMALIZE</b><br/>pixels ÷ 255 → 0.0-1.0"]
-
-    N --> O["<b>4. BUILD ANN</b><br/>Flatten 784<br/>Dense 128 ReLU<br/>Dense 64 ReLU<br/>Dense 10 Softmax"]
-    O --> P["<b>compile</b><br/>Adam + sparse categorical<br/>crossentropy"]
-
-    P --> Q["<b>5. TRAIN</b><br/>15 epochs, batch 32<br/>validation_split 0.2"]
-
-    Q --> R["forward pass → loss →<br/>backprop → update weights"]
-    R --> S{More<br/>epochs?}
-    S -- Yes --> R
-    S -- No --> T["<b>6. EVALUATE</b><br/>on 10,000 unseen<br/>test images"]
-
-    T --> U["<b>7. PLOT</b><br/>accuracy &amp; loss curves"]
-    U --> V["<b>8. PREDICT</b><br/>10 probabilities per image<br/>argmax → class"]
-    V --> W["<b>9. DIAGNOSE</b><br/>per-class accuracy<br/>+ confusion matrix"]
-    W --> X["<b>10. SAVE</b><br/>.keras model<br/>+ results summary"]
-    X --> Y([DONE — 86.31% test accuracy])
-
-    style A fill:#0ea5e9,stroke:#0369a1,color:#fff
-    style K fill:#8b5cf6,stroke:#6d28d9,color:#fff
-    style Y fill:#22c55e,stroke:#15803d,color:#fff
-    style C fill:#fef3c7,stroke:#d97706
-    style I fill:#fef3c7,stroke:#d97706
-    style S fill:#fef3c7,stroke:#d97706
-```
 
 ### The training loop, in detail
 
@@ -637,6 +592,52 @@ Set the pool to **"Only ones it got WRONG"** (1,369 images) and step through. Ne
 - Test how far accuracy degrades when the model is shown deliberately noisy images
 
 ---
+## 🔄 Project Workflow
+
+```mermaid
+flowchart TD
+    A([START]) --> B["<b>Practice 1</b><br/>pip install tensorflow"]
+    B --> C{Import<br/>succeeds?}
+    C -- No --> B
+    C -- Yes --> D["Verify: version, devices,<br/>tensor math, gradients"]
+
+    D --> E["<b>Practice 2</b><br/>Build Input → Hidden → Output"]
+    E --> F["model.summary()<br/>explain every parameter"]
+
+    F --> G["<b>Practice 3</b><br/>Swap activation function"]
+    G --> H["ReLU / Sigmoid / Tanh"]
+    H --> I{Structure<br/>changed?}
+    I -- "No — same 67 params" --> J["Train all three<br/>to compare LEARNING"]
+
+    J --> K([MINI PROJECT])
+
+    K --> L["<b>1. LOAD</b><br/>fashion_mnist.load_data()<br/>60,000 train + 10,000 test"]
+    L --> M["<b>2. EXPLORE</b><br/>shapes, class balance,<br/>sample images"]
+    M --> N["<b>3. NORMALIZE</b><br/>pixels ÷ 255 → 0.0-1.0"]
+
+    N --> O["<b>4. BUILD ANN</b><br/>Flatten 784<br/>Dense 128 ReLU<br/>Dense 64 ReLU<br/>Dense 10 Softmax"]
+    O --> P["<b>compile</b><br/>Adam + sparse categorical<br/>crossentropy"]
+
+    P --> Q["<b>5. TRAIN</b><br/>15 epochs, batch 32<br/>validation_split 0.2"]
+
+    Q --> R["forward pass → loss →<br/>backprop → update weights"]
+    R --> S{More<br/>epochs?}
+    S -- Yes --> R
+    S -- No --> T["<b>6. EVALUATE</b><br/>on 10,000 unseen<br/>test images"]
+
+    T --> U["<b>7. PLOT</b><br/>accuracy &amp; loss curves"]
+    U --> V["<b>8. PREDICT</b><br/>10 probabilities per image<br/>argmax → class"]
+    V --> W["<b>9. DIAGNOSE</b><br/>per-class accuracy<br/>+ confusion matrix"]
+    W --> X["<b>10. SAVE</b><br/>.keras model<br/>+ results summary"]
+    X --> Y([DONE — 86.31% test accuracy])
+
+    style A fill:#0ea5e9,stroke:#0369a1,color:#fff
+    style K fill:#8b5cf6,stroke:#6d28d9,color:#fff
+    style Y fill:#22c55e,stroke:#15803d,color:#fff
+    style C fill:#fef3c7,stroke:#d97706
+    style I fill:#fef3c7,stroke:#d97706
+    style S fill:#fef3c7,stroke:#d97706
+```
 
 ## ✅ Expected Outcome — Checklist
 
