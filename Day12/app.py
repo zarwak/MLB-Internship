@@ -5,30 +5,39 @@ An interactive Streamlit app that shows the trained Fashion MNIST ANN
 actually running: an image goes in, you watch it flow through each layer,
 and the 10 output probabilities fill in live.
 
-Built for explaining the model out loud - every panel maps to a step in
-the network's forward pass.
+NO TENSORFLOW REQUIRED
+----------------------
+This app only performs a FORWARD PASS, which for our network is four
+plain matrix operations:
+
+    flatten -> (x @ W1 + b1) -> ReLU
+            -> (x @ W2 + b2) -> ReLU
+            -> (x @ W3 + b3) -> softmax
+
+TensorFlow is needed to TRAIN the model (backpropagation, gradients, the
+optimizer) but not to RUN it. So the app loads exported weights and does
+the arithmetic in NumPy. This keeps the deployment tiny and fast, and
+sidesteps the fact that TensorFlow has no wheels for newer Python versions.
+
+Verified identical to the TensorFlow model: 100% label agreement,
+max probability difference 1.2e-06. See export_for_deploy.py.
 
 Run with:
     streamlit run app.py
 
-Requires outputs/fashion_mnist_ann.keras, which is produced by
-4_ann_fashion_mnist.py.
+Requires outputs/model_weights.npz and outputs/test_data.npz, both
+produced by export_for_deploy.py.
 """
 
 import os
 import time
 
-os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
-
 import numpy as np
 import streamlit as st
 
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.datasets import fashion_mnist
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "outputs", "fashion_mnist_ann.keras")
+WEIGHTS_PATH = os.path.join(BASE_DIR, "outputs", "model_weights.npz")
+DATA_PATH = os.path.join(BASE_DIR, "outputs", "test_data.npz")
 
 CLASS_NAMES = [
     "T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
@@ -89,37 +98,53 @@ st.markdown("""
 # ======================================================================
 # Loading (cached so it happens once, not on every interaction)
 # ======================================================================
-@st.cache_resource(show_spinner="Loading the trained model...")
-def load_model():
-    if not os.path.exists(MODEL_PATH):
+@st.cache_resource(show_spinner="Loading model weights...")
+def load_weights():
+    if not os.path.exists(WEIGHTS_PATH):
         return None
-    return keras.models.load_model(MODEL_PATH)
+    data = dict(np.load(WEIGHTS_PATH))
+    n = int(data["n_dense"])
+    return {
+        "n": n,
+        "W": [data[f"W{i}"] for i in range(n)],
+        "b": [data[f"b{i}"] for i in range(n)],
+        "params": sum(int(data[f"W{i}"].size + data[f"b{i}"].size) for i in range(n)),
+    }
 
 
 @st.cache_data(show_spinner="Loading Fashion MNIST test set...")
 def load_test_data():
-    (_, _), (X_test, y_test) = fashion_mnist.load_data()
-    return X_test.astype("float32") / 255.0, y_test
+    if not os.path.exists(DATA_PATH):
+        return None, None
+    d = np.load(DATA_PATH)
+    return d["X_test"].astype("float32") / 255.0, d["y_test"].astype("int32")
+
+
+def forward_pass(w, images):
+    """
+    Push images through the network, keeping every intermediate
+    activation. This is what makes the simulation a simulation rather
+    than just a prediction.
+
+    Returns a list: [flattened, hidden1, hidden2, ..., probabilities]
+    """
+    x = images.reshape(len(images), -1)          # Flatten
+    activations = [x]
+    for i in range(w["n"]):
+        x = x @ w["W"][i] + w["b"][i]            # Dense: weights + bias
+        if i < w["n"] - 1:
+            x = np.maximum(0.0, x)               # ReLU on hidden layers
+        else:
+            e = np.exp(x - x.max(axis=1, keepdims=True))   # Softmax on output
+            x = e / e.sum(axis=1, keepdims=True)
+        activations.append(x)
+    return activations
 
 
 @st.cache_data(show_spinner="Running the model over all 10,000 test images...")
-def predict_all(_model, X_test):
+def predict_all(_w, X_test):
     """Predict once up front so filtering by 'correct/wrong' is instant."""
-    return _model.predict(X_test, batch_size=512, verbose=0)
-
-
-def forward_pass(model, image):
-    """
-    Push one image through the network layer by layer, keeping every
-    intermediate activation. This is what makes the simulation a
-    simulation rather than just a prediction.
-    """
-    x = image[np.newaxis, ...]          # add the batch dimension
-    activations = []
-    for layer in model.layers:
-        x = layer(x)
-        activations.append(np.array(x)[0])
-    return activations
+    return forward_pass(_w, X_test)[-1]
 
 
 # ======================================================================
@@ -132,17 +157,19 @@ st.caption(
     "and turned into 10 probabilities."
 )
 
-model = load_model()
-if model is None:
+weights = load_weights()
+X_test, y_test = load_test_data()
+
+if weights is None or X_test is None:
     st.error(
-        f"Trained model not found at `{MODEL_PATH}`.\n\n"
-        "Run `python 4_ann_fashion_mnist.py` first — it trains the model "
-        "and saves it there."
+        "Exported model files not found.\n\n"
+        f"Expected `{WEIGHTS_PATH}` and `{DATA_PATH}`.\n\n"
+        "Generate them by running, in order:\n\n"
+        "```\npython 4_ann_fashion_mnist.py\npython export_for_deploy.py\n```"
     )
     st.stop()
 
-X_test, y_test = load_test_data()
-all_preds = predict_all(model, X_test)
+all_preds = predict_all(weights, X_test)
 all_labels = all_preds.argmax(axis=1)
 
 
@@ -195,10 +222,11 @@ with st.sidebar:
         st.rerun()
 
     st.divider()
+    overall = float((all_labels == y_test).mean())
     st.caption(
-        f"Model: `{os.path.basename(MODEL_PATH)}`  \n"
-        f"Parameters: **{model.count_params():,}**  \n"
-        f"TensorFlow {tf.__version__}"
+        f"Parameters: **{weights['params']:,}**  \n"
+        f"Test accuracy: **{overall:.2%}**  \n"
+        f"Inference: NumPy (no TensorFlow needed)"
     )
 
 
@@ -283,7 +311,7 @@ def render_frame(idx, reveal, placeholders):
 
     with layers_ph.container():
         st.markdown("##### 2️⃣  Signal through the layers")
-        acts = forward_pass(model, X_test[idx])
+        acts = [a[0] for a in forward_pass(weights, X_test[idx][np.newaxis, ...])]
 
         st.markdown(
             f'<div class="layer-card">'
@@ -487,7 +515,17 @@ every failure is between **T-shirt, Pullover, Coat and Shirt** — four upper-bo
 garments that look nearly identical at 28 × 28. Watch the blue bar sitting right
 next to the red one: the model was often a hair away from being right.
 
+---
+
 **Model:** Flatten(784) → Dense(128, ReLU) → Dense(64, ReLU) → Dense(10, Softmax),
-{model.count_params():,} parameters, **86.31%** accuracy on the full 10,000-image
-test set.
+{weights['params']:,} parameters, **{overall:.2%}** accuracy on the full
+10,000-image test set.
+
+**A note on how this runs:** the model was *trained* with TensorFlow/Keras, but
+this app runs it with **NumPy alone**. A forward pass is just
+`x @ W + b`, ReLU, and softmax — four matrix operations. TensorFlow is needed
+for backpropagation and gradient descent during training, not for inference.
+Exporting the weights keeps the deployed app small and fast. It was verified
+against the TensorFlow model: **100% identical predictions**, largest
+probability difference 1.2 × 10⁻⁶.
 """)
