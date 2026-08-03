@@ -463,7 +463,7 @@ The model got **1,369 of 10,000** test images wrong (13.69%). Inspecting the fai
 Day12/
 ├── README.md                          # This file
 ├── requirements.txt                   # Deploy deps (streamlit + numpy only)
-├── requirements-train.txt             # Training deps (includes TensorFlow)
+├── train-deps.txt                     # Training deps (includes TensorFlow)
 │
 ├── 1_tensorflow_setup.py              # Practice 1: install + verify TF/Keras
 ├── 2_simple_neural_network.py         # Practice 2: Input→Hidden→Output + summary
@@ -497,7 +497,7 @@ Day12/
 **Install dependencies.** There are two files, on purpose — see [Deployment](#-deployment-notes) for why:
 
 ```bash
-pip install -r requirements-train.txt
+pip install -r train-deps.txt
 ```
 
 > ⚠️ TensorFlow does not publish wheels for every Python version. TF 2.21 supports **Python 3.9–3.13**. If `pip install tensorflow` fails, check `python --version` first — that's the cause far more often than anything else.
@@ -633,9 +633,15 @@ The NumPy version reproduces the full test-set result exactly — **86.31% accur
 | File | Used by | Contains |
 |---|---|---|
 | `requirements.txt` | Streamlit Cloud, and anyone just running the app | `streamlit`, `numpy` |
-| `requirements-train.txt` | Training the model yourself | TensorFlow, matplotlib, jupyter, streamlit |
+| `train-deps.txt` | Training the model yourself | TensorFlow, matplotlib, jupyter, streamlit |
 
-Streamlit Cloud automatically installs `requirements.txt`, which is why the deploy-minimal set lives there.
+### One more trap: Streamlit Cloud globs `requirements*.txt`
+
+Splitting the dependencies wasn't enough on its own. The second deploy failed with the *same* TensorFlow error, because the training file was originally named `requirements-train.txt` — and Streamlit Cloud matches `requirements*.txt`, not just the exact name `requirements.txt`. It found the training file and tried to install TensorFlow from it.
+
+Renaming it to `train-deps.txt` fixed it. The lesson: **only one file matching `requirements*.txt` should exist in the app's folder**, and it must be the deployment set.
+
+The error log is worth learning to read closely here — the give-away was that the failing constraint was `tensorflow>=2.16.0`, a string that by then existed in exactly one file in the repo. Grepping for it pointed straight at the culprit.
 
 > **The wider lesson:** training and inference have very different dependency needs. Bundling your training framework into a deployment is a habit worth breaking — it's the difference between a 600 MB container and a 30 MB one.
 

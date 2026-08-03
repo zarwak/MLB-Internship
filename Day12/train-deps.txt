@@ -1,6 +1,13 @@
 # Day 12 - dependencies for TRAINING and the practice scripts
 #
-# Install with:  pip install -r requirements-train.txt
+# Install with:  pip install -r train-deps.txt
+#
+# NOTE ON THE FILENAME: this deliberately avoids the name
+# "requirements*.txt". Streamlit Community Cloud globs for that pattern
+# when deciding what to install, and it picked THIS file up instead of
+# requirements.txt - which dragged TensorFlow into the deploy and broke
+# the build on Python 3.14. Renaming it makes the app's dependency set
+# unambiguous.
 #
 # Needed for:
 #   1_tensorflow_setup.py
