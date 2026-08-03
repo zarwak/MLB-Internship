@@ -1,0 +1,26 @@
+# Day 12 - dependencies for TRAINING and the practice scripts
+#
+# Install with:  pip install -r requirements-train.txt
+#
+# Needed for:
+#   1_tensorflow_setup.py
+#   2_simple_neural_network.py
+#   3_activation_experiments.py
+#   4_ann_fashion_mnist.py
+#   export_for_deploy.py
+#   Day12_Fashion_MNIST_ANN.ipynb
+#
+# NOTE: TensorFlow does not publish wheels for every Python version.
+# As of TF 2.21 the supported range is Python 3.9 - 3.13.
+# If `pip install tensorflow` fails, check your Python version first.
+
+tensorflow>=2.16.0      # includes Keras 3 - no separate keras install needed
+numpy>=1.26.0
+matplotlib>=3.8.0
+
+# Only needed to run the .ipynb notebook
+jupyter>=1.0.0
+notebook>=7.0.0
+
+# Only needed to run the simulation UI locally
+streamlit>=1.40.0

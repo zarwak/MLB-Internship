@@ -462,7 +462,8 @@ The model got **1,369 of 10,000** test images wrong (13.69%). Inspecting the fai
 ```
 Day12/
 ├── README.md                          # This file
-├── requirements.txt                   # Python dependencies
+├── requirements.txt                   # Deploy deps (streamlit + numpy only)
+├── requirements-train.txt             # Training deps (includes TensorFlow)
 │
 ├── 1_tensorflow_setup.py              # Practice 1: install + verify TF/Keras
 ├── 2_simple_neural_network.py         # Practice 2: Input→Hidden→Output + summary
@@ -470,6 +471,7 @@ Day12/
 ├── 4_ann_fashion_mnist.py             # Mini project: full ANN pipeline
 ├── Day12_Fashion_MNIST_ANN.ipynb      # Mini project as a notebook
 ├── app.py                             # Interactive simulation UI (Streamlit)
+├── export_for_deploy.py               # Exports weights + data for the app
 │
 ├── images/
 │   ├── activation_functions.png       # The three curves plotted
@@ -482,7 +484,9 @@ Day12/
 │   └── confusion_matrix.png           # 10×10 confusion matrix
 │
 └── outputs/
-    ├── fashion_mnist_ann.keras        # Trained model
+    ├── fashion_mnist_ann.keras        # Trained model (Keras format)
+    ├── model_weights.npz              # Exported weights for the app (399 KB)
+    ├── test_data.npz                  # Test images for the app (4.2 MB)
     └── results_summary.txt            # All metrics in plain text
 ```
 
@@ -490,11 +494,13 @@ Day12/
 
 ## 🚀 How to Run
 
-**Install dependencies:**
+**Install dependencies.** There are two files, on purpose — see [Deployment](#-deployment-notes) for why:
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-train.txt
 ```
+
+> ⚠️ TensorFlow does not publish wheels for every Python version. TF 2.21 supports **Python 3.9–3.13**. If `pip install tensorflow` fails, check `python --version` first — that's the cause far more often than anything else.
 
 **Run the practices in order:**
 
@@ -528,7 +534,17 @@ Everything runs on CPU. The full mini project trains in about 90 seconds.
 
 ## 🎮 The Simulation UI
 
-`app.py` is an interactive Streamlit app that shows the **trained model actually running** — one image at a time, layer by layer. It loads `outputs/fashion_mnist_ann.keras`, so run `4_ann_fashion_mnist.py` first.
+`app.py` is an interactive Streamlit app that shows the **trained model actually running** — one image at a time, layer by layer.
+
+It reads the exported `outputs/*.npz` files, so run the training and the export first:
+
+```bash
+python 4_ann_fashion_mnist.py
+```
+
+```bash
+python export_for_deploy.py
+```
 
 ```bash
 streamlit run app.py
@@ -557,6 +573,74 @@ Set the pool to **"Only ones it got WRONG"** (1,369 images) and step through. Ne
 
 ---
 
+## 🚢 Deployment Notes
+
+The app is deployed to Streamlit Community Cloud, and getting it there taught me something worth writing down.
+
+### The problem
+
+The first deploy failed:
+
+```
+Because only the following versions of tensorflow are available: ...
+have no wheels with a matching Python ABI tag ...
+And because you require tensorflow>=2.16.0, we can conclude that
+your requirements are unsatisfiable.
+```
+
+Streamlit Cloud was running **Python 3.14**, and TensorFlow publishes no wheels for 3.14. No version of TF could satisfy the requirement.
+
+### Why I didn't just pin the Python version
+
+Pinning to Python 3.12 in the app's Advanced settings would have fixed the install — but it would have traded one problem for a worse one. **Importing TensorFlow costs roughly 500 MB of RAM before you do any work at all**, and Streamlit Community Cloud's free tier caps out at 1 GB. That's a slow cold start and a likely out-of-memory crash.
+
+### The actual fix: don't ship TensorFlow at all
+
+The app only ever runs a **forward pass**. For this network that is four operations:
+
+```
+flatten  →  (x @ W₁ + b₁) → ReLU
+         →  (x @ W₂ + b₂) → ReLU
+         →  (x @ W₃ + b₃) → softmax
+```
+
+That's just matrix multiplication, addition, `max(0, x)` and an exponential ratio. **NumPy does all of it.**
+
+TensorFlow is genuinely needed to *train* a model — backpropagation, gradient computation, the Adam optimizer. It is **not** needed to *run* one. So `export_for_deploy.py` saves the learned weights to a plain `.npz`, and `app.py` does the arithmetic itself.
+
+### The result
+
+| | Before | After |
+|---|---|---|
+| Dependencies | tensorflow, numpy, matplotlib, jupyter… | **streamlit, numpy** |
+| Install size | ~600 MB | ~30 MB |
+| Cold start | 30–60 s | Under 2 s |
+| Python versions supported | 3.9–3.13 only | **Any** |
+| Exported model size | — | 399 KB weights + 4.2 MB test data |
+
+**Verified identical, not assumed identical.** `export_for_deploy.py` runs both implementations over the same images and compares:
+
+```
+Compared 500 images:
+  Largest probability difference : 1.162e-06
+  Predicted-label agreement      : 100.0000%
+```
+
+The NumPy version reproduces the full test-set result exactly — **86.31% accuracy, 1,369 wrong predictions** — with TensorFlow provably not imported. The `1.162e-06` difference is float32 rounding from a different operation order, nothing more.
+
+### Which requirements file is which
+
+| File | Used by | Contains |
+|---|---|---|
+| `requirements.txt` | Streamlit Cloud, and anyone just running the app | `streamlit`, `numpy` |
+| `requirements-train.txt` | Training the model yourself | TensorFlow, matplotlib, jupyter, streamlit |
+
+Streamlit Cloud automatically installs `requirements.txt`, which is why the deploy-minimal set lives there.
+
+> **The wider lesson:** training and inference have very different dependency needs. Bundling your training framework into a deployment is a habit worth breaking — it's the difference between a 600 MB container and a 30 MB one.
+
+---
+
 ## 💡 Key Insights
 
 1. **An ANN reads an image as 784 unrelated numbers.** `Flatten` destroys the spatial relationship between neighbouring pixels. The network never learns that pixel 5 sits beside pixel 6. This is *the* structural limitation of an ANN on image data.
@@ -570,6 +654,8 @@ Set the pool to **"Only ones it got WRONG"** (1,369 images) and step through. Ne
 5. **Overall accuracy hides the interesting story.** 86.31% overall conceals a range from 68.30% (T-shirt) to 98.60% (Sneaker). The confusion matrix is where the real diagnosis lives.
 
 6. **Similar-looking classes are genuinely hard.** Every significant confusion is between upper-body garments. The model isn't broken — it's hitting a real limit of 28×28 greyscale resolution combined with an architecture that ignores spatial structure.
+
+7. **Training and inference need completely different tooling.** A trained network is just a set of matrices. Running it needs four lines of NumPy; only *training* it needs TensorFlow. Realising this cut the deployed app from ~600 MB of dependencies to ~30 MB — see [Deployment Notes](#-deployment-notes).
 
 ---
 
