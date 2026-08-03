@@ -1,0 +1,13 @@
+# Day 12 - Deep Learning with TensorFlow / Keras
+# Install with:  pip install -r requirements.txt
+
+tensorflow>=2.16.0      # includes Keras 3 - no separate keras install needed
+numpy>=1.26.0
+matplotlib>=3.8.0
+
+# Only needed to run the .ipynb notebook
+jupyter>=1.0.0
+notebook>=7.0.0
+
+# Only needed for the simulation UI (app.py)
+streamlit>=1.40.0

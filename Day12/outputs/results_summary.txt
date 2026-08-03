@@ -1,0 +1,39 @@
+Day 12 - Fashion MNIST ANN - Results Summary
+=======================================================
+
+TensorFlow version : 2.21.0
+Keras version      : 3.15.1
+
+ARCHITECTURE
+  Flatten(28x28) -> Dense(128, relu) -> Dense(64, relu) -> Dense(10, softmax)
+  Total parameters : 109,386
+
+TRAINING CONFIGURATION
+  Optimizer        : Adam (lr=0.001)
+  Loss             : sparse_categorical_crossentropy
+  Epochs           : 15
+  Batch size       : 32
+  Validation split : 0.2
+
+FINAL RESULTS
+  Training accuracy   : 0.9289  (92.89%)
+  Validation accuracy : 0.8708  (87.08%)
+  Test accuracy       : 0.8631  (86.31%)
+  Training loss       : 0.1901
+  Validation loss     : 0.4061
+  Test loss           : 0.4189
+
+PER-CLASS TEST ACCURACY
+  T-shirt/top     0.6830
+  Trouser         0.9660
+  Pullover        0.7240
+  Dress           0.9010
+  Coat            0.7970
+  Sandal          0.9370
+  Shirt           0.7410
+  Sneaker         0.9860
+  Bag             0.9800
+  Ankle boot      0.9160
+
+  Best  : Sneaker (0.9860)
+  Worst : T-shirt/top (0.6830)
