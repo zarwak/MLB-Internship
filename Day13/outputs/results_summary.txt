@@ -1,0 +1,60 @@
+Day 13 - Fashion MNIST CNN - Results Summary
+=======================================================
+
+TensorFlow version : 2.21.0
+Keras version      : 3.15.1
+
+ARCHITECTURE
+  Conv2D(32,3x3,relu,same) -> MaxPool(2x2)
+  Conv2D(64,3x3,relu,same) -> MaxPool(2x2)
+  Conv2D(64,3x3,relu,same)
+  Flatten -> Dense(128,relu) -> Dropout(0.3) -> Dense(10,softmax)
+  Total parameters : 458,570
+
+TRAINING CONFIGURATION
+  Optimizer        : Adam (lr=0.001)
+  Loss             : sparse_categorical_crossentropy
+  Epochs           : 15
+  Batch size       : 64
+  Validation split : 0.2
+
+FINAL RESULTS
+  Training accuracy   : 0.9690  (96.90%)
+  Validation accuracy : 0.9171  (91.71%)
+  Test accuracy       : 0.9113  (91.13%)
+  Training loss       : 0.0815
+  Validation loss     : 0.3124
+  Test loss           : 0.3396
+  Correct / wrong     : 9,113 / 887
+
+PER-CLASS TEST ACCURACY
+  T-shirt/top     0.8340
+  Trouser         0.9800
+  Pullover        0.8690
+  Dress           0.9060
+  Coat            0.8380
+  Sandal          0.9930
+  Shirt           0.7970
+  Sneaker         0.9550
+  Bag             0.9830
+  Ankle boot      0.9580
+
+  Best  : Sandal (0.9930)
+  Worst : Shirt (0.7970)
+
+CONFUSION MATRIX (rows = actual, cols = predicted)
+    834     1    14    14     3     1   121     0    12     0   <- T-shirt/top
+      1   980     1    12     3     0     2     0     1     0   <- Trouser
+     14     2   869     7    52     0    56     0     0     0   <- Pullover
+     10     3    10   906    18     0    50     0     3     0   <- Dress
+      0     0    59    25   838     0    76     0     2     0   <- Coat
+      0     0     0     0     0   993     1     5     0     1   <- Sandal
+     75     1    54    20    50     0   797     0     3     0   <- Shirt
+      0     0     0     0     0    18     0   955     0    27   <- Sneaker
+      1     1     1     3     2     2     6     1   983     0   <- Bag
+      0     0     1     0     0     5     0    36     0   958   <- Ankle boot
+
+COMPARISON WITH DAY 12 ANN
+  Day 12 ANN test accuracy : 86.31%
+  Day 13 CNN test accuracy : 91.13%
+  Improvement              : +4.82 points
