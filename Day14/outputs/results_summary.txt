@@ -1,0 +1,29 @@
+Day 14 - Cats vs Dogs, Transfer Learning with MobileNetV2
+==========================================================
+
+Training images       : 18,610
+Validation images     : 4,652
+Image size            : 160x160
+Total parameters      : 2,259,265
+Trainable (phase 1)   : 1,281
+Trainable (phase 2)   : 1,840,897
+
+Val accuracy after phase 1 : 98.41%
+Val accuracy final         : 98.58%
+Train accuracy final       : 98.87%
+Correct / wrong            : 4,586 / 66
+Cat accuracy               : 97.98%
+Dog accuracy               : 99.16%
+F1 (dog)                   : 0.9862
+Total run time             : 36.7 minutes
+
+Per-epoch history
+epoch  train_acc  val_acc  train_loss  val_loss
+    1     0.9502   0.9824      0.1285    0.0536
+    2     0.9645   0.9843      0.0902    0.0478
+    3     0.9660   0.9830      0.0874    0.0467
+    4     0.9697   0.9834      0.0787    0.0453
+    5     0.9678   0.9841      0.0824    0.0439
+    6     0.9712   0.9850      0.0768    0.0400
+    7     0.9757   0.9860      0.0631    0.0363
+    8     0.9787   0.9858      0.0571    0.0406

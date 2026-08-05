@@ -1,0 +1,21 @@
+# Day 14 - Transfer Learning with MobileNetV2
+#
+# Install with:  pip install -r requirements.txt
+#
+# Needed for:
+#   1_transfer_learning_practice.py
+#   2_cats_vs_dogs_transfer_learning.py
+#   Day14_Cats_vs_Dogs_Transfer_Learning.ipynb
+#
+# NOTE: TensorFlow does not publish wheels for every Python version.
+# As of TF 2.21 the supported range is Python 3.9 - 3.13.
+# If `pip install tensorflow` fails, check your Python version first.
+
+tensorflow>=2.16.0          # includes Keras 3 - no separate keras install needed
+tensorflow-datasets>=4.9.0  # gives us the cats_vs_dogs dataset
+numpy>=1.26.0
+matplotlib>=3.8.0
+
+# Only needed to run the .ipynb notebook
+jupyter>=1.0.0
+notebook>=7.0.0
