@@ -1,4 +1,4 @@
-git push origin main# Day 13 - dependencies for the DEPLOYED app only (app.py).
+# Day 13 - dependencies for the DEPLOYED app only (app.py).
 #
 # TensorFlow is deliberately NOT here. The app runs the trained CNN with
 # NumPy alone (see cnn_numpy.py), so it installs in seconds, starts
