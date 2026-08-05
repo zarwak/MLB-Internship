@@ -1,0 +1,30 @@
+# Day 13 - dependencies for TRAINING and the practice scripts
+#
+# Install with:  pip install -r train-deps.txt
+#
+# NOTE ON THE FILENAME: this deliberately avoids the name
+# "requirements*.txt". Streamlit Community Cloud globs for that pattern
+# when deciding what to install - a file called requirements-train.txt
+# WILL get picked up and drag TensorFlow into the deploy. (Learned the
+# hard way on Day 12.)
+#
+# Needed for:
+#   1_cnn_practice.py
+#   2_cnn_fashion_mnist.py
+#   export_for_deploy.py
+#   Day13_Fashion_MNIST_CNN.ipynb
+#
+# NOTE: TensorFlow does not publish wheels for every Python version.
+# As of TF 2.21 the supported range is Python 3.9 - 3.13.
+# If `pip install tensorflow` fails, check your Python version first.
+
+tensorflow>=2.16.0      # includes Keras 3 - no separate keras install needed
+numpy>=1.26.0
+matplotlib>=3.8.0
+
+# Only needed to run the .ipynb notebook
+jupyter>=1.0.0
+notebook>=7.0.0
+
+# Only needed to run the app locally
+streamlit>=1.40.0

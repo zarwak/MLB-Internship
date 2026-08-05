@@ -1,0 +1,10 @@
+# Day 13 - dependencies for the DEPLOYED app only (app.py).
+#
+# TensorFlow is deliberately NOT here. The app runs the trained CNN with
+# NumPy alone (see cnn_numpy.py), so it installs in seconds, starts
+# instantly, and works on any Python version.
+#
+# To train the model yourself, use train-deps.txt instead.
+
+streamlit>=1.40.0
+numpy>=1.26.0
