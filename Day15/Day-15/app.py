@@ -12,7 +12,6 @@ Then open the link shown in the terminal in your browser.
 """
 
 import os
-import cv2
 import numpy as np
 from ultralytics import YOLO
 import gradio as gr
@@ -29,25 +28,24 @@ def detect_objects(image):
     Run YOLOv11 object detection on the uploaded image.
 
     Args:
-        image: A numpy array (H, W, 3) from Gradio's image input.
+        image: A numpy array (H, W, 3) from Gradio's image input (RGB format).
 
     Returns:
         tuple: (annotated_image, detection_text)
     """
-    # Convert RGB (Gradio) to BGR (OpenCV) if needed
     if image is not None:
-        # Gradio provides images as numpy arrays in RGB format
-        img_bgr = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
+        # Gradio provides images as numpy arrays in RGB format.
+        # YOLO model accepts RGB numpy arrays directly.
         # Run YOLO inference
-        results = model(img_bgr, conf=0.25)
+        results = model(image, conf=0.25)
         result = results[0]
 
         # Get the annotated image (with bounding boxes drawn)
+        # result.plot() returns a numpy array (BGR format from OpenCV)
         annotated_img = result.plot()
 
-        # Convert back to RGB for Gradio display
-        annotated_img_rgb = cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB)
+        # Convert BGR to RGB using numpy slicing (avoids cv2 dependency)
+        annotated_img_rgb = annotated_img[:, :, ::-1]
 
         # Build detection text
         lines = []
