@@ -17,14 +17,14 @@ What this script does:
   5. Creates a summary report of all detections
 
 Requirements:
-  pip install ultralytics opencv-python
+  pip install ultralytics pillow
 
 Usage:
   python object_detection.py
 """
 
 import os
-import cv2
+from PIL import Image
 from ultralytics import YOLO
 
 # ---------------------------------------------------------------
@@ -79,10 +79,12 @@ for img_path in image_files:
     result = results[0]  # Single image result
 
     # Get image dimensions for reference
-    img = cv2.imread(img_path)
-    if img is not None:
-        h, w = img.shape[:2]
+    try:
+        img_pil = Image.open(img_path)
+        w, h = img_pil.size
         print(f"  Image size: {w}x{h} pixels")
+    except Exception:
+        pass
 
     # Print detected objects
     num_detections = len(result.boxes)

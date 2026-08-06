@@ -15,14 +15,13 @@ Practice 2:
   - Observe detected objects, confidence scores, and bounding boxes
 
 Requirements:
-  pip install ultralytics opencv-python
+  pip install ultralytics pillow
 
 Usage:
   python yolo_practice.py
 """
 
 import os
-import cv2
 from ultralytics import YOLO
 
 # ---------------------------------------------------------------
