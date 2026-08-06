@@ -110,17 +110,30 @@ Day-15/
 ├── yolo_practice.py          # YOLO Practice Script (Practice 1 & 2)
 ├── object_detection.py       # Object Detection Script
 ├── app.py                    # Gradio web app for image upload/detection
+├── create_recording.py       # Script to generate screen recording
 ├── requirements.txt          # Python dependencies
+├── .gitignore                # Git ignore rules
 ├── README.md                 # This file
-├── sample_images/            # Sample input images
-│   ├── sample.jpg
-│   └── zidane.jpg
+├── sample_images/            # Sample input images for practice
+│   ├── sample/               # Single image for Step 2
+│   │   └── sample_img.jpg
+│   ├── multiple_images/      # Multiple images for Step 3
+│   │   ├── apple.jpg
+│   │   ├── banana.jpg
+│   │   └── people.jpg
+│   └── custom/               # Custom images for Practice 2
+│       ├── people.jpg
+│       ├── people (2).jpg
+│       ├── people (3).jpg
+│       └── people (4).jpg
 ├── dataset/                  # Fruit disease detection dataset
 │   ├── images/               # Input images (apple, banana, orange, etc.)
 │   └── labels/               # YOLO format labels (empty - no training)
 ├── output_images/            # Output images with bounding boxes
-│   ├── detection_*.jpg       # Detection results for each image
+│   ├── detection_*.jpg       # Object detection results
+│   ├── practice_*.jpg        # YOLO practice results
 │   └── detection_summary.txt # Summary report of all detections
+├── yolov8n.pt                # Pre-trained YOLOv8 nano model
 └── screen_recording.mp4      # Screen recording explaining the implementation
 ```
 

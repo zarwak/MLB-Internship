@@ -48,11 +48,11 @@ print("Step 2: Object detection on a single image")
 print("=" * 60)
 
 # Create a sample image directory if it doesn't exist
-sample_dir = "sample_images"
+sample_dir = "sample_images/sample"
 os.makedirs(sample_dir, exist_ok=True)
 
 # If no sample image exists, download one from the internet
-sample_image_path = os.path.join(sample_dir, "sample.jpg")
+sample_image_path = os.path.join(sample_dir, "sample_img.jpg")
 if not os.path.exists(sample_image_path):
     print("No sample image found. Downloading a sample image...")
     import urllib.request
@@ -92,22 +92,7 @@ print("\n" + "=" * 60)
 print("Step 3: Object detection on multiple images")
 print("=" * 60)
 
-# Download a few more sample images
-multi_image_paths = []
-image_urls = [
-    ("https://ultralytics.com/images/zidane.jpg", "zidane.jpg"),
-    ("https://ultralytics.com/images/street.jpg", "street.jpg"),
-    ("https://ultralytics.com/images/dogs.jpg", "dogs.jpg"),
-]
-
-for url, filename in image_urls:
-    path = os.path.join(sample_dir, filename)
-    if not os.path.exists(path):
-        print(f"Downloading: {filename}")
-        import urllib.request
-        urllib.request.urlretrieve(url, path)
-    multi_image_paths.append(path)
-
+multi_image_paths = [os.path.join("sample_images", "multiple_images", f) for f in os.listdir("sample_images/multiple_images") if f.endswith((".jpg", ".png"))]
 # Run inference on all images at once (batch mode)
 print(f"\nRunning inference on {len(multi_image_paths)} images...")
 results = model(multi_image_paths)
@@ -136,35 +121,46 @@ print("\n" + "=" * 60)
 print("Step 4: Practice 2 — Test on your own images")
 print("=" * 60)
 
-# This section shows how to test on any image you provide.
-# Simply place your image in the sample_images/ folder and
-# update the path below.
+# This section shows how to test on your own images.
+# Place your images in the sample_images/custom/ folder.
 
-own_image_path = os.path.join(sample_dir, "my_image.jpg")
-if os.path.exists(own_image_path):
-    print(f"Found your image: {own_image_path}")
-    results = model(own_image_path)
-    result = results[0]
+custom_dir = "sample_images/custom"
+os.makedirs(custom_dir, exist_ok=True)
 
-    print(f"Objects detected: {len(result.boxes)}")
-    for i, box in enumerate(result.boxes):
-        cls_id = int(box.cls[0])
-        class_name = model.names[cls_id]
-        confidence = float(box.conf[0])
-        bbox = box.xyxy[0].tolist()
-        print(f"  Object {i+1}: {class_name} "
-              f"(confidence: {confidence:.2f}) "
-              f"bbox: [{bbox[0]:.0f}, {bbox[1]:.0f}, {bbox[2]:.0f}, {bbox[3]:.0f}]")
+# Find all images in the custom directory
+custom_image_paths = [
+    os.path.join(custom_dir, f)
+    for f in sorted(os.listdir(custom_dir))
+    if f.lower().endswith((".jpg", ".jpeg", ".png"))
+] if os.path.exists(custom_dir) else []
 
-    output_path = os.path.join("output_images", "practice_own_result.jpg")
-    result.save(output_path)
-    print(f"Result saved to: {output_path}")
+if custom_image_paths:
+    print(f"Found {len(custom_image_paths)} custom image(s) in: {custom_dir}/")
+    results = model(custom_image_paths)
+
+    for i, (result, img_path) in enumerate(zip(results, custom_image_paths)):
+        img_name = os.path.basename(img_path)
+        print(f"\n  Custom Image {i+1}: {img_name}")
+        print(f"  Objects detected: {len(result.boxes)}")
+
+        for j, box in enumerate(result.boxes):
+            cls_id = int(box.cls[0])
+            class_name = model.names[cls_id]
+            confidence = float(box.conf[0])
+            bbox = box.xyxy[0].tolist()
+            print(f"    Object {j+1}: {class_name} "
+                  f"(confidence: {confidence:.2f}) "
+                  f"bbox: [{bbox[0]:.0f}, {bbox[1]:.0f}, {bbox[2]:.0f}, {bbox[3]:.0f}]")
+
+        # Save the result
+        output_path = os.path.join("output_images", f"practice_custom_{img_name}")
+        result.save(output_path)
+        print(f"  Result saved to: {output_path}")
 else:
-    print(f"No custom image found at: {own_image_path}")
-    print("To test on your own image:")
-    print(f"  1. Place an image at: {own_image_path}")
+    print(f"No custom images found in: {custom_dir}/")
+    print("To test on your own images:")
+    print(f"  1. Place your images in: {custom_dir}/")
     print("  2. Re-run this script")
-    print("  3. Or modify 'own_image_path' in this script to point to your image")
 
 # ---------------------------------------------------------------
 # Summary
@@ -172,7 +168,9 @@ else:
 print("\n" + "=" * 60)
 print("Practice complete!")
 print("=" * 60)
-print(f"Sample images: {sample_dir}/")
+print(f"Sample images: sample_images/sample/")
+print(f"Multiple images: sample_images/multiple_images/")
+print(f"Custom images: sample_images/custom/")
 print(f"Output images: output_images/")
 print("\nKey takeaways:")
 print("  - YOLO loads pre-trained models with a single line: YOLO('yolov8n.pt')")
