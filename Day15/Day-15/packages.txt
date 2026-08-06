@@ -1,0 +1,2 @@
+# Remove libgl1 and libglib2.0-0 as they're causing dependency conflicts
+# You might not need any apt packages for headless OpenCV
