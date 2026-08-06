@@ -134,9 +134,10 @@ The YOLOv11n model was run on all 172 images in the Fruit Disease Detection data
 Day-15/
 ├── yolo_practice.py          # YOLO Practice Script (Practice 1 & 2)
 ├── object_detection.py       # Object Detection Script
-├── app.py                    # Gradio web app for image upload/detection
+├── app.py                    # Streamlit web app for image upload/detection
 ├── create_recording.py       # Script to generate screen recording
 ├── requirements.txt          # Python dependencies
+├── runtime.txt               # Python version (3.11) for Streamlit Cloud
 ├── .gitignore                # Git ignore rules
 ├── README.md                 # This file
 ├── sample_images/            # Sample input images for practice
@@ -187,35 +188,35 @@ python object_detection.py
 ```
 This runs object detection on the Fruit Disease Detection dataset (172 images) and saves results with bounding boxes in `output_images/fruit disease detection/`.
 
-### 4. Launch the Gradio App
+### 4. Launch the Streamlit App
 ```bash
-python app.py
+streamlit run app.py
 ```
 Open the link shown in the terminal. Upload an image to see real-time object detection results.
 
 ---
 
-## Gradio App
+## Streamlit App
 
-The Gradio app (`app.py`) provides a web interface where users can:
+The Streamlit app (`app.py`) provides a web interface where users can:
 - Upload an image
-- Click "Detect Objects" to run YOLOv11 inference
+- Run YOLOv11 inference automatically
 - View the results with bounding boxes, class labels, and confidence scores
+- Download the detection result image
 
-**Live Demo**: [Gradio App Link](https://your-username.gradio.app) (replace with actual link when deployed)
-
----
 
 ## Requirements
 
 ```
 ultralytics>=8.0
-opencv-python>=4.8
-numpy>=1.24
+streamlit>=1.30
 pillow>=10.0
-gradio>=4.0
+opencv-python-headless>=4.8
+numpy>=1.24
 torch>=2.0
 ```
+
+**Note**: `opencv-python-headless` is used instead of `opencv-python` for server compatibility (Streamlit Cloud). The `runtime.txt` file specifies Python 3.11 for Streamlit Cloud deployment.
 
 ---
 
