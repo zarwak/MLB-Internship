@@ -25,7 +25,7 @@ Thumbs.db
 
 # Model files (large binary files)
 *.pt
-!yolov8n.pt
+!yolo11n.pt
 
 # Temporary downloads
 temp_downloads/

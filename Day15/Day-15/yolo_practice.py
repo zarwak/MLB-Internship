@@ -28,14 +28,13 @@ from ultralytics import YOLO
 # ---------------------------------------------------------------
 # Step 1: Load a pre-trained YOLO model
 # ---------------------------------------------------------------
-# YOLOv8n is the smallest and fastest version — great for practice.
-# Other options: yolov8s.pt, yolov8m.pt, yolov8l.pt, yolov8x.pt
-# YOLO11 is also available: yolo11n.pt, yolo11s.pt, etc.
+# YOLOv11n is the smallest and fastest version — great for practice.
+# Other options: yolo11s.pt, yolo11m.pt, yolo11l.pt, yolo11x.pt
 print("=" * 60)
-print("Step 1: Loading pre-trained YOLOv8n model...")
+print("Step 1: Loading pre-trained YOLOv11n model...")
 print("=" * 60)
 
-model = YOLO("yolov8n.pt")  # 'n' = nano (smallest, fastest)
+model = YOLO("yolo11n.pt")  # 'n' = nano (smallest, fastest)
 print(f"Model loaded successfully: {model}")
 print(f"Model classes: {len(model.names)} classes")
 print(f"Sample classes: {list(model.names.values())[:10]} ...")
@@ -173,7 +172,7 @@ print(f"Multiple images: sample_images/multiple_images/")
 print(f"Custom images: sample_images/custom/")
 print(f"Output images: output_images/")
 print("\nKey takeaways:")
-print("  - YOLO loads pre-trained models with a single line: YOLO('yolov8n.pt')")
+print("  - YOLO loads pre-trained models with a single line: YOLO('yolo11n.pt')")
 print("  - Inference is simple: model('image.jpg') returns results")
 print("  - Each result has .boxes with .cls (class), .conf (confidence), .xyxy (bbox)")
 print("  - Use result.save('path.jpg') to save the image with bounding boxes")

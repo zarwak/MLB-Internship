@@ -1,17 +1,17 @@
 """
-Object Detection using YOLOv8
+Object Detection using YOLOv11
 ==============================
 This script performs object detection on a Fruit Disease Detection dataset
-using a pre-trained YOLOv8 model.
+using a pre-trained YOLOv11 model.
 
 Dataset: Fruit Disease Detection (from Roboflow Universe / public sources)
-  - Images: apple, banana, orange, tomato, grapes, strawberry
-  - The pre-trained YOLOv8n model (trained on COCO) is used for inference.
+  - Images: Various fruit disease images in Dataset/images/
+  - The pre-trained YOLOv11n model (trained on COCO) is used for inference.
   - COCO classes include: apple, banana, orange, tomato, grape, etc.
 
 What this script does:
-  1. Loads a pre-trained YOLOv8n model
-  2. Runs inference on all images in the dataset/images/ folder
+  1. Loads a pre-trained YOLOv11n model
+  2. Runs inference on all images in the Dataset/images/ folder
   3. Prints detected objects, confidence scores, and bounding boxes
   4. Saves output images with bounding boxes drawn on them
   5. Creates a summary report of all detections
@@ -30,20 +30,22 @@ from ultralytics import YOLO
 # ---------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------
-MODEL_NAME = "yolov8n.pt"          # Pre-trained YOLOv8 nano model
-DATASET_DIR = "dataset"             # Folder containing the dataset
+MODEL_NAME = "yolo11n.pt"          # Pre-trained YOLOv11 nano model
+DATASET_DIR = "Dataset"              # Folder containing the dataset
 IMAGES_DIR = os.path.join(DATASET_DIR, "images")
-OUTPUT_DIR = "output_images"        # Folder to save detection results
-CONFIDENCE_THRESHOLD = 0.25         # Minimum confidence to show a detection
+OUTPUT_DIR = "output_images"         # Folder to save detection results
+OUTPUT_SUBDIR = "fruit disease detection"  # Subfolder for detection results
+CONFIDENCE_THRESHOLD = 0.25          # Minimum confidence to show a detection
 
-# Create output directory if it doesn't exist
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+# Create output directories if they don't exist
+output_subdir_path = os.path.join(OUTPUT_DIR, OUTPUT_SUBDIR)
+os.makedirs(output_subdir_path, exist_ok=True)
 
 # ---------------------------------------------------------------
-# Step 1: Load the pre-trained YOLOv8 model
+# Step 1: Load the pre-trained YOLOv11 model
 # ---------------------------------------------------------------
 print("=" * 70)
-print("Object Detection using YOLOv8")
+print("Object Detection using YOLOv11")
 print("=" * 70)
 print(f"\nLoading pre-trained model: {MODEL_NAME}")
 print("This model was trained on the COCO dataset (80 common object classes).")
@@ -107,7 +109,7 @@ for img_path in image_files:
               f"bbox: [{bbox[0]:.0f}, {bbox[1]:.0f}, {bbox[2]:.0f}, {bbox[3]:.0f}]")
 
     # Save the output image with bounding boxes drawn
-    output_path = os.path.join(OUTPUT_DIR, f"detection_{img_name}")
+    output_path = os.path.join(output_subdir_path, f"detection_{img_name}")
     result.save(output_path)
     print(f"  Output saved to: {output_path}")
 
@@ -133,7 +135,7 @@ for cls, count in sorted(class_counts.items(), key=lambda x: -x[1]):
     print(f"  {cls}: {count}")
 
 # Save summary to a text file
-summary_path = os.path.join(OUTPUT_DIR, "detection_summary.txt")
+summary_path = os.path.join(output_subdir_path, "detection_summary.txt")
 with open(summary_path, "w") as f:
     f.write("Object Detection Summary Report\n")
     f.write("=" * 50 + "\n\n")
