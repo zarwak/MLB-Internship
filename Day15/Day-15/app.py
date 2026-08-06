@@ -1,5 +1,5 @@
 """
-Gradio App for Object Detection using YOLOv8
+Gradio App for Object Detection using YOLOv11
 =============================================
 A simple web app where users can upload an image and see
 object detection results with bounding boxes, class labels,
@@ -17,8 +17,8 @@ import numpy as np
 from ultralytics import YOLO
 import gradio as gr
 
-# Load the pre-trained YOLOv8 model
-MODEL_NAME = "yolov8n.pt"
+# Load the pre-trained YOLOv11 model
+MODEL_NAME = "yolo11n.pt"
 print(f"Loading model: {MODEL_NAME} ...")
 model = YOLO(MODEL_NAME)
 print("Model loaded! Starting Gradio app...")
@@ -26,7 +26,7 @@ print("Model loaded! Starting Gradio app...")
 
 def detect_objects(image):
     """
-    Run YOLOv8 object detection on the uploaded image.
+    Run YOLOv11 object detection on the uploaded image.
 
     Args:
         image: A numpy array (H, W, 3) from Gradio's image input.
@@ -73,8 +73,8 @@ def detect_objects(image):
 
 
 # Create the Gradio interface
-with gr.Blocks(title="YOLOv8 Object Detection") as demo:
-    gr.Markdown("# 🍎 Object Detection using YOLOv8")
+with gr.Blocks(title="YOLOv11 Object Detection") as demo:
+    gr.Markdown("# 🍎 Object Detection using YOLOv11")
     gr.Markdown(
         "Upload an image to detect objects. The model will draw bounding boxes, "
         "show class labels, and confidence scores."
@@ -98,10 +98,10 @@ with gr.Blocks(title="YOLOv8 Object Detection") as demo:
     gr.Markdown(
         "### How it works:\n"
         "1. Upload an image using the uploader above.\n"
-        "2. Click 'Detect Objects' to run YOLOv8 inference.\n"
+        "2. Click 'Detect Objects' to run YOLOv11 inference.\n"
         "3. View the results with bounding boxes and details.\n"
         "\n"
-        "**Model:** YOLOv8n (pre-trained on COCO dataset, 80 classes)\n"
+        "**Model:** YOLOv11n (pre-trained on COCO dataset, 80 classes)\n"
         "**Classes include:** person, car, dog, cat, apple, banana, orange, "
         "tomato, grape, book, chair, and many more."
     )

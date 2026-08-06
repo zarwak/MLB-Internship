@@ -1,0 +1,856 @@
+Object Detection Summary Report
+==================================================
+
+Model: yolo11n.pt
+Total images processed: 172
+Total objects detected: 165
+
+Detections by class:
+  apple: 36
+  orange: 26
+  vase: 25
+  person: 17
+  banana: 14
+  cake: 12
+  broccoli: 7
+  pizza: 7
+  bird: 5
+  donut: 3
+  cup: 2
+  bear: 2
+  carrot: 2
+  keyboard: 1
+  wine glass: 1
+  bottle: 1
+  cat: 1
+  bowl: 1
+  fork: 1
+  dog: 1
+
+Detailed detections:
+--------------------------------------------------
+  Image: 12Anthracnose_jpg.rf.734d94b230a31b32ffaca9f159bd9423.jpg
+  Object: orange
+  Confidence: 0.81
+  Bounding Box: [59, 30, 426, 335]
+
+  Image: 165wh_jpg.rf.781131b8a699bd012e417b1a41ef9cc2.jpg
+  Object: apple
+  Confidence: 0.35
+  Bounding Box: [0, 11, 152, 158]
+
+  Image: 360_F_323048666_6haEiCCpiVadV2ZV0SUHZ3MMaSEkbmmY_jpg.rf.2491302af8141a0f2865213b12f705eb.jpg
+  Object: apple
+  Confidence: 0.52
+  Bounding Box: [207, 1, 417, 190]
+
+  Image: 4-272012_081_01_jpg.rf.bbfd8b6a1b7947971d21aba3a667603d.jpg
+  Object: person
+  Confidence: 0.35
+  Bounding Box: [2, 134, 564, 447]
+
+  Image: 4-272012_081_01_jpg.rf.bbfd8b6a1b7947971d21aba3a667603d.jpg
+  Object: person
+  Confidence: 0.27
+  Bounding Box: [96, 195, 568, 448]
+
+  Image: 5539573_jpg.rf.3c65aacac7e08fc6cbb594f3d91276e9.jpg
+  Object: apple
+  Confidence: 0.58
+  Bounding Box: [104, 260, 489, 717]
+
+  Image: 87d3addb-03bc-4c07-8c1d-f0c75ac0cf55_rw_3840_jpg.rf.bcf0d0178f37433696edcbf499c888bc.jpg
+  Object: apple
+  Confidence: 0.85
+  Bounding Box: [1495, 926, 3063, 2525]
+
+  Image: 87d3addb-03bc-4c07-8c1d-f0c75ac0cf55_rw_3840_jpg.rf.bcf0d0178f37433696edcbf499c888bc.jpg
+  Object: broccoli
+  Confidence: 0.40
+  Bounding Box: [821, 560, 1675, 1364]
+
+  Image: 87d3addb-03bc-4c07-8c1d-f0c75ac0cf55_rw_3840_jpg.rf.bcf0d0178f37433696edcbf499c888bc.jpg
+  Object: broccoli
+  Confidence: 0.30
+  Bounding Box: [821, 735, 1519, 1371]
+
+  Image: 87d3addb-03bc-4c07-8c1d-f0c75ac0cf55_rw_3840_jpg.rf.bcf0d0178f37433696edcbf499c888bc.jpg
+  Object: apple
+  Confidence: 0.29
+  Bounding Box: [696, 177, 1639, 798]
+
+  Image: Anthracnose-1-_jpg.rf.ffb52f50c8503ca2334affd6eda340b6.jpg
+  Object: apple
+  Confidence: 0.81
+  Bounding Box: [130, 63, 357, 297]
+
+  Image: Anthracnose-1jpg_png.rf.029fdbba9db9a6ee7b4514ca8520f7ac.jpg
+  Object: pizza
+  Confidence: 0.69
+  Bounding Box: [8, 3, 437, 292]
+
+  Image: Anthracnose-1jpg_png.rf.029fdbba9db9a6ee7b4514ca8520f7ac.jpg
+  Object: broccoli
+  Confidence: 0.55
+  Bounding Box: [5, 2, 202, 84]
+
+  Image: Applescab_jpg.rf.f9afa551297fb69b5606e76a35c7bafd.jpg
+  Object: orange
+  Confidence: 0.43
+  Bounding Box: [157, 47, 285, 167]
+
+  Image: Black-Spot-Citrus_jpg.rf.f86a8d96d7039a3f2e4ff24b419c06e8.jpg
+  Object: orange
+  Confidence: 0.32
+  Bounding Box: [13, 13, 505, 463]
+
+  Image: Botrytis-cinerea_png.rf.beab2b75675ec7554dfff5e323284dbf.jpg
+  Object: broccoli
+  Confidence: 0.49
+  Bounding Box: [415, 292, 546, 431]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: apple
+  Confidence: 0.77
+  Bounding Box: [117, 0, 592, 355]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: apple
+  Confidence: 0.76
+  Bounding Box: [664, 0, 1024, 130]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: orange
+  Confidence: 0.66
+  Bounding Box: [2, 843, 537, 1023]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: apple
+  Confidence: 0.65
+  Bounding Box: [592, 91, 980, 335]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: apple
+  Confidence: 0.60
+  Bounding Box: [141, 184, 906, 917]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: apple
+  Confidence: 0.54
+  Bounding Box: [0, 251, 183, 762]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: apple
+  Confidence: 0.40
+  Bounding Box: [859, 194, 1023, 763]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: orange
+  Confidence: 0.37
+  Bounding Box: [823, 942, 1023, 1023]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: orange
+  Confidence: 0.36
+  Bounding Box: [1, 0, 149, 134]
+
+  Image: Citrus-Melanose_jpg.rf.319e410174f6d0b1027ca081a8a156cd.jpg
+  Object: orange
+  Confidence: 0.34
+  Bounding Box: [872, 193, 1023, 767]
+
+  Image: DjWTSRhWsAA7WAf_jpg.rf.32660938ccf0640f1a93bfa04f21b6ab.jpg
+  Object: orange
+  Confidence: 0.27
+  Bounding Box: [467, 608, 599, 800]
+
+  Image: DjWTSRhWsAA7WAf_jpg.rf.32660938ccf0640f1a93bfa04f21b6ab.jpg
+  Object: orange
+  Confidence: 0.25
+  Bounding Box: [65, 62, 440, 608]
+
+  Image: Fig3HGMelanoseOnSweetOrangeFruit_jpg.rf.270ed00f0d8028905d353fcc479fc223.jpg
+  Object: banana
+  Confidence: 0.87
+  Bounding Box: [4, 0, 1271, 1056]
+
+  Image: Fig3HGMelanoseOnSweetOrangeFruit_jpg.rf.270ed00f0d8028905d353fcc479fc223.jpg
+  Object: person
+  Confidence: 0.42
+  Bounding Box: [1, 724, 401, 1048]
+
+  Image: Fig3HGMelanoseOnSweetOrangeFruit_jpg.rf.270ed00f0d8028905d353fcc479fc223.jpg
+  Object: person
+  Confidence: 0.29
+  Bounding Box: [1208, 655, 1281, 1052]
+
+  Image: Fig3HGMelanoseOnSweetOrangeFruit_jpg.rf.270ed00f0d8028905d353fcc479fc223.jpg
+  Object: person
+  Confidence: 0.29
+  Bounding Box: [1040, 644, 1281, 1048]
+
+  Image: Leprosis-1_jpg.rf.b4ad694d0118ad289f4c8858395e99a7.jpg
+  Object: orange
+  Confidence: 0.78
+  Bounding Box: [65, 18, 652, 586]
+
+  Image: Leprosis-1_jpg.rf.b4ad694d0118ad289f4c8858395e99a7.jpg
+  Object: orange
+  Confidence: 0.52
+  Bounding Box: [570, 287, 788, 584]
+
+  Image: Scab_jpg.rf.bf5de3823a85b45a48492dbf1ed0f72c.jpg
+  Object: apple
+  Confidence: 0.92
+  Bounding Box: [42, 165, 308, 433]
+
+  Image: Scab_jpg.rf.bf5de3823a85b45a48492dbf1ed0f72c.jpg
+  Object: apple
+  Confidence: 0.76
+  Bounding Box: [0, 382, 40, 470]
+
+  Image: Scab_jpg.rf.bf5de3823a85b45a48492dbf1ed0f72c.jpg
+  Object: person
+  Confidence: 0.47
+  Bounding Box: [1, 353, 567, 548]
+
+  Image: Scab_jpg.rf.bf5de3823a85b45a48492dbf1ed0f72c.jpg
+  Object: apple
+  Confidence: 0.43
+  Bounding Box: [369, 21, 637, 257]
+
+  Image: Scab_jpg.rf.bf5de3823a85b45a48492dbf1ed0f72c.jpg
+  Object: person
+  Confidence: 0.37
+  Bounding Box: [1, 357, 404, 547]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-45-45-PM_jpeg.rf.c5c7e860851b42243f83b847639361d8.jpg
+  Object: vase
+  Confidence: 0.69
+  Bounding Box: [3, 40, 129, 183]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-45-46-PM-2-_jpeg.rf.2f67c529dc80ce7ac1e250b7603ce1b8.jpg
+  Object: apple
+  Confidence: 0.68
+  Bounding Box: [10, 5, 239, 198]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-53-59-PM_jpeg.rf.83d1d1d3ec253354bc35ce18615ae955.jpg
+  Object: vase
+  Confidence: 0.52
+  Bounding Box: [24, 29, 88, 130]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-53-59-PM_jpeg.rf.83d1d1d3ec253354bc35ce18615ae955.jpg
+  Object: vase
+  Confidence: 0.49
+  Bounding Box: [81, 40, 149, 112]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-54-00-PM-1-_jpeg.rf.3b4255908c4aa145543c4da7efaf570d.jpg
+  Object: vase
+  Confidence: 0.33
+  Bounding Box: [3, 44, 73, 150]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-54-00-PM-2-_jpeg.rf.bba9da20ac3cf433697f87625a8773dc.jpg
+  Object: vase
+  Confidence: 0.62
+  Bounding Box: [73, 30, 180, 153]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-54-01-PM-1-_jpeg.rf.5be6451910517d7d47e5926baebc1e4f.jpg
+  Object: pizza
+  Confidence: 0.54
+  Bounding Box: [8, 7, 269, 176]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-54-01-PM-1-_jpeg.rf.5be6451910517d7d47e5926baebc1e4f.jpg
+  Object: donut
+  Confidence: 0.32
+  Bounding Box: [10, 7, 268, 176]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-54-01-PM_jpeg.rf.e349e69ac3aaa337cac875c350a67593.jpg
+  Object: apple
+  Confidence: 0.95
+  Bounding Box: [73, 32, 198, 172]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-54-01-PM_jpeg.rf.e349e69ac3aaa337cac875c350a67593.jpg
+  Object: keyboard
+  Confidence: 0.37
+  Bounding Box: [208, 184, 258, 194]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-54-03-PM-1-_jpeg.rf.73149136819c46bf6fea7861c6263a39.jpg
+  Object: apple
+  Confidence: 0.52
+  Bounding Box: [0, 104, 44, 145]
+
+  Image: WhatsApp-Image-2022-04-16-at-10-57-00-PM_jpeg.rf.2b22debcb5b1d44535c70b451902bfb5.jpg
+  Object: vase
+  Confidence: 0.28
+  Bounding Box: [8, 4, 113, 117]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-00-PM_jpeg.rf.a52f74226d5906ec40ddba090a983871.jpg
+  Object: bird
+  Confidence: 0.44
+  Bounding Box: [28, 24, 117, 147]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-00-PM_jpeg.rf.a52f74226d5906ec40ddba090a983871.jpg
+  Object: wine glass
+  Confidence: 0.35
+  Bounding Box: [29, 22, 117, 147]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-02-PM-2-_jpeg.rf.5a2d07efbde81aa9b414713d546eb9c3.jpg
+  Object: vase
+  Confidence: 0.26
+  Bounding Box: [4, 3, 70, 85]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-02-PM_jpeg.rf.f4e3d484ae2e77dda103b8ac5fa93778.jpg
+  Object: bird
+  Confidence: 0.45
+  Bounding Box: [51, 41, 161, 184]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-03-PM_jpeg.rf.b4c35b81085724c0a440d74712bf0d84.jpg
+  Object: orange
+  Confidence: 0.45
+  Bounding Box: [48, 30, 150, 164]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-04-PM-1-_jpeg.rf.e269884c9ed3430fd45bcf95855c13a1.jpg
+  Object: pizza
+  Confidence: 0.62
+  Bounding Box: [2, 26, 127, 180]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-04-PM_jpeg.rf.147233c1e9bfb2d5e90c9a6aa1723625.jpg
+  Object: apple
+  Confidence: 0.53
+  Bounding Box: [38, 31, 146, 168]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-04-PM_jpeg.rf.147233c1e9bfb2d5e90c9a6aa1723625.jpg
+  Object: orange
+  Confidence: 0.33
+  Bounding Box: [38, 31, 147, 168]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-05-PM-2-_jpeg.rf.b4aa36ab19ea302c8c501f54e4770fc2.jpg
+  Object: vase
+  Confidence: 0.85
+  Bounding Box: [53, 46, 151, 197]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-05-PM-3-_jpeg.rf.47bf3b4d92dfe99d5c88f4dd9d7b8dcd.jpg
+  Object: apple
+  Confidence: 0.38
+  Bounding Box: [49, 23, 203, 188]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-01-05-PM_jpeg.rf.99525147fcf226c4c1f68d54acc0d96d.jpg
+  Object: apple
+  Confidence: 0.73
+  Bounding Box: [45, 20, 247, 166]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-03-58-PM-3-_jpeg.rf.ddaab15c5641e190935bf9d814bbea86.jpg
+  Object: cake
+  Confidence: 0.41
+  Bounding Box: [8, 8, 134, 154]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-03-58-PM-3-_jpeg.rf.ddaab15c5641e190935bf9d814bbea86.jpg
+  Object: vase
+  Confidence: 0.29
+  Bounding Box: [8, 12, 133, 153]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-03-58-PM_jpeg.rf.4efdb00d1ef00e3d8f4c0a3acc5a9d53.jpg
+  Object: pizza
+  Confidence: 0.70
+  Bounding Box: [70, 23, 211, 184]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-03-59-PM-1-_jpeg.rf.a6e653f88163b4813ce06f2eb8931b89.jpg
+  Object: cake
+  Confidence: 0.63
+  Bounding Box: [9, 24, 121, 124]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-03-59-PM-2-_jpeg.rf.278de224d53fea8d486839b24c87ce52.jpg
+  Object: vase
+  Confidence: 0.30
+  Bounding Box: [5, 15, 139, 154]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-03-59-PM_jpeg.rf.36ecc8b9adcb43308c3349be38e724af.jpg
+  Object: apple
+  Confidence: 0.56
+  Bounding Box: [95, 1, 196, 90]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-04-00-PM_jpeg.rf.6039a58fbf3047bdad36a6748d7b7ab5.jpg
+  Object: orange
+  Confidence: 0.33
+  Bounding Box: [42, 9, 202, 165]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-05-59-PM_jpeg.rf.fd0a242cc216621d6cee790cc174b9ce.jpg
+  Object: cake
+  Confidence: 0.39
+  Bounding Box: [1, 4, 212, 224]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-07-47-PM_jpeg.rf.d2f8f97090073efe75ab123a43b7683b.jpg
+  Object: cake
+  Confidence: 0.76
+  Bounding Box: [14, 110, 242, 332]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-07-47-PM_jpeg.rf.d2f8f97090073efe75ab123a43b7683b.jpg
+  Object: cake
+  Confidence: 0.56
+  Bounding Box: [234, 4, 473, 368]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-05-PM_jpeg.rf.94c40a2bf11e79b0d2c6c1e3717bd994.jpg
+  Object: cake
+  Confidence: 0.65
+  Bounding Box: [7, 13, 181, 248]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-06-PM-2-_jpeg.rf.96989725b05e902b8bb916d3eda27ece.jpg
+  Object: vase
+  Confidence: 0.48
+  Bounding Box: [0, 6, 50, 111]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-06-PM_jpeg.rf.058d687118bf95f44c2cc141e2627e0c.jpg
+  Object: vase
+  Confidence: 0.41
+  Bounding Box: [0, 3, 48, 93]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-06-PM_jpeg.rf.058d687118bf95f44c2cc141e2627e0c.jpg
+  Object: cup
+  Confidence: 0.37
+  Bounding Box: [0, 5, 48, 92]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-08-PM-3-_jpeg.rf.3c93f9a804d1d86b818b125bfbe2dd04.jpg
+  Object: person
+  Confidence: 0.66
+  Bounding Box: [1, 132, 132, 202]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-08-PM_jpeg.rf.03f4d41b886f4ff237d1f41ca08e6f55.jpg
+  Object: vase
+  Confidence: 0.60
+  Bounding Box: [29, 41, 177, 235]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-09-PM-1-_jpeg.rf.83bf3a7dcd28d8e695c25a44e8e51d2c.jpg
+  Object: person
+  Confidence: 0.27
+  Bounding Box: [60, 1, 113, 92]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-09-PM-2-_jpeg.rf.cd5dd538cb86aa8aeee4033007162252.jpg
+  Object: vase
+  Confidence: 0.41
+  Bounding Box: [2, 0, 109, 204]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-09-PM_jpeg.rf.f237d4c8832b926318368c4e472b9086.jpg
+  Object: vase
+  Confidence: 0.27
+  Bounding Box: [3, 6, 131, 141]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-10-PM-1-_jpeg.rf.58b4512ef324c02d218a05b03af9a51e.jpg
+  Object: orange
+  Confidence: 0.81
+  Bounding Box: [18, 16, 130, 160]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-11-PM-1-_jpeg.rf.307f38fb87e80fcc01095d0355f0ef87.jpg
+  Object: vase
+  Confidence: 0.43
+  Bounding Box: [2, 2, 56, 96]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-10-11-PM_jpeg.rf.2d51064e811309403b435a7bc77288c6.jpg
+  Object: donut
+  Confidence: 0.40
+  Bounding Box: [1, 11, 49, 101]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-18-PM_jpeg.rf.d98c84e45037b4cf10ce2cbe847a4426.jpg
+  Object: vase
+  Confidence: 0.56
+  Bounding Box: [1, 0, 52, 93]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-19-PM_jpeg.rf.d4ee4874e125ede2bf047fb0bafea0b4.jpg
+  Object: vase
+  Confidence: 0.38
+  Bounding Box: [4, 1, 86, 135]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-19-PM_jpeg.rf.d4ee4874e125ede2bf047fb0bafea0b4.jpg
+  Object: bottle
+  Confidence: 0.25
+  Bounding Box: [4, 1, 86, 136]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-21-PM-2-_jpeg.rf.875fa81c009921c92133e46b1b3f1691.jpg
+  Object: banana
+  Confidence: 0.36
+  Bounding Box: [17, 32, 131, 177]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-21-PM-2-_jpeg.rf.875fa81c009921c92133e46b1b3f1691.jpg
+  Object: apple
+  Confidence: 0.27
+  Bounding Box: [17, 32, 131, 177]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-21-PM_jpeg.rf.ad991d8c371474c23c6d51aa91b0eea9.jpg
+  Object: cake
+  Confidence: 0.27
+  Bounding Box: [6, 8, 63, 84]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-23-PM-2-_jpeg.rf.10905331c66c67611f3134afb99fdce5.jpg
+  Object: orange
+  Confidence: 0.63
+  Bounding Box: [1, 14, 98, 162]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-23-PM_jpeg.rf.d19ea1c4508402a1e324933fef26bbe5.jpg
+  Object: broccoli
+  Confidence: 0.57
+  Bounding Box: [0, 2, 119, 194]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-23-PM_jpeg.rf.d19ea1c4508402a1e324933fef26bbe5.jpg
+  Object: apple
+  Confidence: 0.39
+  Bounding Box: [79, 11, 122, 50]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-24-PM-1-_jpeg.rf.8f32c37b2d68fac34dfcd26081131d31.jpg
+  Object: banana
+  Confidence: 0.79
+  Bounding Box: [11, 28, 126, 165]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-14-24-PM-1-_jpeg.rf.8f32c37b2d68fac34dfcd26081131d31.jpg
+  Object: banana
+  Confidence: 0.77
+  Bounding Box: [76, 65, 131, 171]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-43-PM-2-_jpeg.rf.419d6363fa69e137d37886e31c01a15f.jpg
+  Object: vase
+  Confidence: 0.37
+  Bounding Box: [4, 15, 82, 142]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-43-PM_jpeg.rf.872153f813a51b538fb69efcb102b032.jpg
+  Object: person
+  Confidence: 0.34
+  Bounding Box: [0, 8, 24, 70]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-43-PM_jpeg.rf.872153f813a51b538fb69efcb102b032.jpg
+  Object: broccoli
+  Confidence: 0.29
+  Bounding Box: [4, 2, 136, 164]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-44-PM-2-_jpeg.rf.589b99c7c3a8bb6ae9ae174b2e8cec52.jpg
+  Object: vase
+  Confidence: 0.49
+  Bounding Box: [13, 9, 100, 108]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-44-PM_jpeg.rf.e477a839e5de644fe92bc2ea0824a598.jpg
+  Object: pizza
+  Confidence: 0.83
+  Bounding Box: [14, 2, 254, 187]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-45-PM-1-_jpeg.rf.828375228efde0d654796fdf936fa1aa.jpg
+  Object: vase
+  Confidence: 0.57
+  Bounding Box: [1, 38, 115, 173]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-45-PM_jpeg.rf.ab7b8d78cade337e9351aff980835836.jpg
+  Object: cat
+  Confidence: 0.53
+  Bounding Box: [0, 0, 114, 49]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-46-PM-1-_jpeg.rf.dd5c7e48ff11203e7034836f1bb1ff9f.jpg
+  Object: banana
+  Confidence: 0.52
+  Bounding Box: [0, 29, 41, 131]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-46-PM-1-_jpeg.rf.dd5c7e48ff11203e7034836f1bb1ff9f.jpg
+  Object: banana
+  Confidence: 0.35
+  Bounding Box: [0, 44, 133, 175]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-46-PM-2-_jpeg.rf.d4a6a854216a63e01b8687a503068b9a.jpg
+  Object: pizza
+  Confidence: 0.30
+  Bounding Box: [14, 21, 256, 185]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-46-PM-3-_jpeg.rf.d6aef4de90c8f27610cd5bacf176d1b2.jpg
+  Object: cake
+  Confidence: 0.46
+  Bounding Box: [14, 1, 241, 181]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-46-PM-3-_jpeg.rf.d6aef4de90c8f27610cd5bacf176d1b2.jpg
+  Object: orange
+  Confidence: 0.30
+  Bounding Box: [14, 2, 242, 181]
+
+  Image: WhatsApp-Image-2022-04-16-at-11-16-46-PM_jpeg.rf.bbc8c0943e72ba59ae8f50604159f562.jpg
+  Object: person
+  Confidence: 0.34
+  Bounding Box: [25, 27, 144, 101]
+
+  Image: anthracnose-of-papaya-and-mango-papaya-2_jpg.rf.7c7dd9c7d7136493b6832a813a26b7b6.jpg
+  Object: bear
+  Confidence: 0.29
+  Bounding Box: [0, 47, 258, 435]
+
+  Image: apple_scab_mature_fruit_sm-1-_jpg.rf.ace4395505633bbd7dd630b4c1c9bace.jpg
+  Object: bird
+  Confidence: 0.50
+  Bounding Box: [46, 45, 299, 279]
+
+  Image: apple_scab_mature_fruit_sm-1-_jpg.rf.ace4395505633bbd7dd630b4c1c9bace.jpg
+  Object: banana
+  Confidence: 0.33
+  Bounding Box: [269, 1, 378, 126]
+
+  Image: banana-fusarium-fruit-rot_jpg.rf.d3b490d581678e46a37a6df56fd2a300.jpg
+  Object: banana
+  Confidence: 0.31
+  Bounding Box: [1, 1, 191, 320]
+
+  Image: banana-rot2_jpg.rf.328f58120303cbaff009ee5c8b361af8.jpg
+  Object: banana
+  Confidence: 0.87
+  Bounding Box: [53, 51, 576, 318]
+
+  Image: banana-rot3_jpg.rf.66bc58b89731c8eb404dac9c846e59fb.jpg
+  Object: bowl
+  Confidence: 0.51
+  Bounding Box: [23, 33, 229, 141]
+
+  Image: banana-rot3_jpg.rf.66bc58b89731c8eb404dac9c846e59fb.jpg
+  Object: banana
+  Confidence: 0.30
+  Bounding Box: [3, 32, 230, 143]
+
+  Image: banana-rot5_jpg.rf.74c4d58e7634f314f2cd749f0cafcafd.jpg
+  Object: banana
+  Confidence: 0.91
+  Bounding Box: [132, 168, 534, 761]
+
+  Image: banana-rot6_jpg.rf.a85c0ea9629dae36f0d3709d959b4cdb.jpg
+  Object: banana
+  Confidence: 0.49
+  Bounding Box: [0, 41, 318, 217]
+
+  Image: citrus-Guignardia_citricarpa-black-spot-1024x768_jpg.rf.793e7919ad70f898c20c92341bc40640.jpg
+  Object: orange
+  Confidence: 0.89
+  Bounding Box: [190, 110, 759, 732]
+
+  Image: colletrotrichum-acutatum_jpg.rf.39075a3673d8e4079f4d06043536170c.jpg
+  Object: donut
+  Confidence: 0.54
+  Bounding Box: [118, 0, 532, 448]
+
+  Image: download-1-_jpg.rf.3eef1a60f65e31e54399a17d8768de49.jpg
+  Object: bear
+  Confidence: 0.56
+  Bounding Box: [11, 15, 224, 225]
+
+  Image: download-1-_jpg.rf.6205afda5fc2514a4bdde163d0b8fc1e.jpg
+  Object: cake
+  Confidence: 0.30
+  Bounding Box: [13, 26, 175, 254]
+
+  Image: download-1-_jpg.rf.944db6072820974517af102a1a89dba1.jpg
+  Object: bird
+  Confidence: 0.54
+  Bounding Box: [56, 18, 216, 178]
+
+  Image: download-1-_jpg.rf.944db6072820974517af102a1a89dba1.jpg
+  Object: person
+  Confidence: 0.43
+  Bounding Box: [68, 93, 236, 181]
+
+  Image: download-1-_jpg.rf.9c6fd645188a3e710ccb6717fa6743ec.jpg
+  Object: cake
+  Confidence: 0.39
+  Bounding Box: [18, 18, 217, 199]
+
+  Image: download-1-_jpg.rf.b72ad4223acf6ad9f8560e4b6dfb0182.jpg
+  Object: person
+  Confidence: 0.43
+  Bounding Box: [0, 73, 58, 194]
+
+  Image: download-2-_jpg.rf.961fbb25df70db6c8c411e777823876e.jpg
+  Object: orange
+  Confidence: 0.90
+  Bounding Box: [128, 66, 221, 155]
+
+  Image: download-2-_jpg.rf.961fbb25df70db6c8c411e777823876e.jpg
+  Object: person
+  Confidence: 0.65
+  Bounding Box: [46, 105, 131, 194]
+
+  Image: download-2-_jpg.rf.d79127ee925a20e4d96e43c1f81c7931.jpg
+  Object: vase
+  Confidence: 0.62
+  Bounding Box: [4, 1, 167, 296]
+
+  Image: download-2-_jpg.rf.de76d38d6ec98e157908101eab99c2ee.jpg
+  Object: apple
+  Confidence: 0.58
+  Bounding Box: [19, 1, 236, 199]
+
+  Image: download-3-_jpg.rf.e685df45c2d87b249cf1662250d185cb.jpg
+  Object: orange
+  Confidence: 0.44
+  Bounding Box: [34, 0, 207, 177]
+
+  Image: download-3-_jpg.rf.e685df45c2d87b249cf1662250d185cb.jpg
+  Object: person
+  Confidence: 0.34
+  Bounding Box: [0, 12, 73, 191]
+
+  Image: download-3-_jpg.rf.ffa6c87d197323a5ce025918f929051f.jpg
+  Object: apple
+  Confidence: 0.52
+  Bounding Box: [7, 1, 267, 183]
+
+  Image: download-3-_jpg.rf.ffa6c87d197323a5ce025918f929051f.jpg
+  Object: banana
+  Confidence: 0.37
+  Bounding Box: [7, 1, 269, 183]
+
+  Image: download-4-_jpg.rf.78042a60778c5b15708fae954f88c0df.jpg
+  Object: apple
+  Confidence: 0.82
+  Bounding Box: [35, 1, 235, 179]
+
+  Image: download-4-_jpg.rf.9c784769a4eb26663e05de0628af9b7f.jpg
+  Object: orange
+  Confidence: 0.91
+  Bounding Box: [35, 42, 175, 192]
+
+  Image: download-5-_jpg.rf.29fd314945a70528cddd19d20f211b73.jpg
+  Object: apple
+  Confidence: 0.29
+  Bounding Box: [5, 13, 206, 231]
+
+  Image: download-5-_jpg.rf.3ab5febf8d121f976d264f5626114c1c.jpg
+  Object: broccoli
+  Confidence: 0.66
+  Bounding Box: [10, 4, 193, 250]
+
+  Image: download-5-_jpg.rf.f6d78fc910ef2a8a20142b15914604f8.jpg
+  Object: apple
+  Confidence: 0.53
+  Bounding Box: [67, 18, 193, 159]
+
+  Image: download-6-_jpg.rf.02ddaabda8f8e7615fb04357601807cb.jpg
+  Object: orange
+  Confidence: 0.90
+  Bounding Box: [28, 16, 128, 116]
+
+  Image: download-6-_jpg.rf.02ddaabda8f8e7615fb04357601807cb.jpg
+  Object: orange
+  Confidence: 0.88
+  Bounding Box: [123, 40, 244, 155]
+
+  Image: download-7-_jpg.rf.9fe9d90757f5b2e20df89fb396900bba.jpg
+  Object: orange
+  Confidence: 0.66
+  Bounding Box: [34, 0, 206, 177]
+
+  Image: download_jpg.rf.a52e3a0f500cc5e229104c9a922ad6f9.jpg
+  Object: orange
+  Confidence: 0.46
+  Bounding Box: [39, 16, 223, 192]
+
+  Image: download_jpg.rf.a52e3a0f500cc5e229104c9a922ad6f9.jpg
+  Object: vase
+  Confidence: 0.30
+  Bounding Box: [37, 16, 220, 193]
+
+  Image: download_jpg.rf.babac5b6d0c5771a34e4ac7ee5afc90b.jpg
+  Object: apple
+  Confidence: 0.48
+  Bounding Box: [9, 10, 254, 177]
+
+  Image: download_jpg.rf.babac5b6d0c5771a34e4ac7ee5afc90b.jpg
+  Object: carrot
+  Confidence: 0.29
+  Bounding Box: [214, 5, 274, 182]
+
+  Image: download_jpg.rf.babac5b6d0c5771a34e4ac7ee5afc90b.jpg
+  Object: carrot
+  Confidence: 0.28
+  Bounding Box: [214, 5, 256, 69]
+
+  Image: download_jpg.rf.d56891b1cc5052b92b6a33d97e5990dd.jpg
+  Object: banana
+  Confidence: 0.51
+  Bounding Box: [1, 0, 245, 201]
+
+  Image: download_jpg.rf.d56891b1cc5052b92b6a33d97e5990dd.jpg
+  Object: person
+  Confidence: 0.42
+  Bounding Box: [0, 140, 77, 202]
+
+  Image: download_jpg.rf.d56891b1cc5052b92b6a33d97e5990dd.jpg
+  Object: person
+  Confidence: 0.33
+  Bounding Box: [201, 126, 247, 202]
+
+  Image: download_jpg.rf.ec48090ac31e1a49dafad94ce98165b1.jpg
+  Object: orange
+  Confidence: 0.42
+  Bounding Box: [64, 21, 191, 144]
+
+  Image: guava-rot2_jpg.rf.3ecf75a6048e69035ae4b73e6b538886.jpg
+  Object: cup
+  Confidence: 0.37
+  Bounding Box: [13, 0, 96, 78]
+
+  Image: guava-rot3_jpg.rf.00f668f5f67ee154e2f582d125cdcb55.jpg
+  Object: fork
+  Confidence: 0.37
+  Bounding Box: [32, 7, 66, 81]
+
+  Image: guava-rot6_jpg.rf.d15c769d34c80b5072b97df22bfe7fe2.jpg
+  Object: dog
+  Confidence: 0.27
+  Bounding Box: [31, 9, 208, 188]
+
+  Image: guava-rot_jpg.rf.189664d59c6e14172d2e44b7eebf68b4.jpg
+  Object: pizza
+  Confidence: 0.77
+  Bounding Box: [2, 34, 595, 796]
+
+  Image: guava-rust-pustules_jpg.rf.cbdadd76ffd72ef980d58c97827fcdc5.jpg
+  Object: cake
+  Confidence: 0.26
+  Bounding Box: [167, 72, 543, 365]
+
+  Image: guava_anthracnose2_jpg.rf.13f7d9a41e549264c6950c4bb6b5b9a4.jpg
+  Object: cake
+  Confidence: 0.36
+  Bounding Box: [6, 9, 494, 461]
+
+  Image: images_jpg.rf.dcc32583372a0bf5ef614a6336d3564a.jpg
+  Object: vase
+  Confidence: 0.29
+  Bounding Box: [96, 0, 229, 166]
+
+  Image: powdery-mildew_jpg.rf.c2b3dfdf6d39a8a531db91cd2bb8acab.jpg
+  Object: bird
+  Confidence: 0.44
+  Bounding Box: [69, 0, 294, 137]
+
+  Image: powderymildewsweetsunrise5-26-151_jpg.rf.d4080d46f7f0274a650b8144395b86bc.jpg
+  Object: apple
+  Confidence: 0.70
+  Bounding Box: [1012, 993, 2155, 2165]
+
+  Image: sbfs_yellow_2_app_jpg.rf.4e84bbde880f7fbd7fcda6f8deb366d7.jpg
+  Object: apple
+  Confidence: 0.68
+  Bounding Box: [99, 270, 557, 740]
+
+  Image: sooty-blotch-1-_png.rf.f71687ca45d9b0931e58fe6af08d5ccd.jpg
+  Object: apple
+  Confidence: 0.91
+  Bounding Box: [87, 27, 492, 429]
+
+  Image: sooty-blotch-1-_png.rf.f71687ca45d9b0931e58fe6af08d5ccd.jpg
+  Object: apple
+  Confidence: 0.73
+  Bounding Box: [0, 181, 106, 521]
+
+  Image: sooty-blotch-apple_jpg.rf.95e83ea7cb1795ae78e545dc1d99485c.jpg
+  Object: apple
+  Confidence: 0.83
+  Bounding Box: [222, 261, 1149, 1202]
+
+  Image: strawberry-mildew-rotten_jpg.rf.dcf46b3399df99084bd9fe43d2f28159.jpg
+  Object: apple
+  Confidence: 0.40
+  Bounding Box: [164, 46, 610, 402]
+
+  Image: strawberry-mildew-rotten_jpg.rf.dcf46b3399df99084bd9fe43d2f28159.jpg
+  Object: vase
+  Confidence: 0.37
+  Bounding Box: [158, 45, 611, 401]
+
