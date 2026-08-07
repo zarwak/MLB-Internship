@@ -27,6 +27,7 @@ import streamlit as st
 import cv2
 import numpy as np
 import os
+from PIL import Image
 from datetime import datetime
 
 # ---------------------------------------------------------------------------
@@ -261,9 +262,13 @@ if source == "📤 Upload Image":
         "Choose an image file", type=["jpg", "jpeg", "png", "bmp"]
     )
     if uploaded_file is not None:
-        file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-        original_img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-        if original_img is None:
+        try:
+            pil_image = Image.open(uploaded_file).convert("RGB")
+            original_img = cv2.cvtColor(
+                np.array(pil_image),
+                cv2.COLOR_RGB2BGR
+            )
+        except Exception:
             st.sidebar.error("Could not read the uploaded image.")
 else:
     sample_images = load_sample_images()
