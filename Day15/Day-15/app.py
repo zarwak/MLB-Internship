@@ -53,7 +53,7 @@ if uploaded_file is not None:
 
     # Display the original image
     st.subheader("Original Image")
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
 
     # Run YOLO inference
     with st.spinner("Running object detection..."):
@@ -69,7 +69,7 @@ if uploaded_file is not None:
 
     # Display the detection results
     st.subheader("Detection Results")
-    st.image(annotated_img_rgb, caption="Detected Objects", use_column_width=True)
+    st.image(annotated_img_rgb, caption="Detected Objects", use_container_width=True)
 
     # Display detection details
     st.subheader("Detection Details")
