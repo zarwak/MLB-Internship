@@ -340,7 +340,7 @@ if original_img is not None:
         col1, col2 = st.columns(2)
         with col1:
             new_width = st.number_input("Width", min_value=1, value=w, step=10)
-        with col2:streamlit run app.py
+        with col2:
             new_height = st.number_input("Height", min_value=1, value=h, step=10)
         processed_img = op_resize(original_img, new_width, new_height)
         operation_applied = True
