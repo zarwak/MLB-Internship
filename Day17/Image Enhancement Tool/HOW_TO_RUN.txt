@@ -1,0 +1,56 @@
+HOW TO RUN - Document Image Enhancement Tool
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. (Optional) No real photos yet? Create one fake tilted test image:
+   python generate_test_image.py
+
+3. Put your document photos inside the input_images/ folder.
+   (jpg, jpeg, png, or bmp)
+
+4. Run the tool:
+   python process.py
+
+5. Enhanced results are saved into output_images/ with the same filename.
+
+WHAT IT DOES TO EACH IMAGE, IN ORDER:
+  1. Tries to find the document's 4 corners and straighten it (perspective fix)
+     - if it can't find a clear page outline, it just uses the original image
+  2. Converts it to grayscale
+  3. Removes noise (bilateral filter)
+  4. Fixes brightness/contrast (CLAHE - smart local contrast boost)
+  5. Sharpens the text edges
+  6. Saves the result
+
+FILES:
+  enhancer.py            - the actual pipeline (all the real logic lives here)
+  process.py              - runs enhancer.py on every image in input_images/
+  generate_test_image.py  - makes one fake tilted test photo, for a quick test
+  app.py                  - Streamlit web app (interactive UI, see below)
+
+
+RUNNING THE STREAMLIT APP LOCALLY
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. Start the app:
+   streamlit run app.py
+
+3. It opens in your browser. Upload a document image, toggle the processing
+   options in the sidebar, and download the result.
+
+
+DEPLOYING THE APP PUBLICLY (Streamlit Community Cloud - free)
+
+1. Push this whole "Day17" project to a public GitHub repo.
+2. Go to https://share.streamlit.io and sign in with GitHub.
+3. Click "New app", pick your repo and branch.
+4. Set "Main file path" to:
+   Image Enhancement Tool/app.py
+5. Deploy. You'll get a public URL like https://<something>.streamlit.app
+
+Note: folder names with spaces (like "Image Enhancement Tool") usually work
+fine on Streamlit Cloud, but if you hit path issues, rename the folder to
+"image_enhancement_tool" (no spaces) and update the main file path to match.
