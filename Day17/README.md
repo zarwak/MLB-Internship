@@ -3,6 +3,9 @@
 This is my Day 17 work. The goal was simple: learn how to fix up images using
 OpenCV, before feeding them into any AI model. Things like straightening a
 tilted photo, cleaning up noise, and making text easier to read.
+## Find My Demo:
+
+![demo](demo_video_summarizer.gif)
 
 ## What's in this folder
 
