@@ -18,7 +18,7 @@ VALID_EXT = (".jpg", ".jpeg", ".png", ".bmp")
 
 # the actual pipeline lives in the other folder - point Python to it instead
 # of duplicating the code here
-TOOL_DIR = os.path.join(BASE_DIR, "..", "Image Enhancement Tool")
+TOOL_DIR = os.path.join(BASE_DIR, "..", "image_enhancement_tool")
 sys.path.insert(0, TOOL_DIR)
 from enhancer import correct_perspective, enhance_document  # noqa: E402
 

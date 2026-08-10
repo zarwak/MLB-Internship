@@ -1,10 +1,10 @@
 HOW TO RUN - Challenge Task (5 tilted documents)
 
-This reuses the pipeline from the "Image Enhancement Tool" folder, so install
+This reuses the pipeline from the "image_enhancement_tool" folder, so install
 its requirements first.
 
-1. Install libraries once (from inside the "Image Enhancement Tool" folder):
-   pip install -r "../Image Enhancement Tool/requirements.txt"
+1. Install libraries once (from inside the "image_enhancement_tool" folder):
+   pip install -r "../image_enhancement_tool/requirements.txt"
 
 2. (Optional) No real tilted photos yet? Generate 5 fake ones:
    python generate_test_documents.py
