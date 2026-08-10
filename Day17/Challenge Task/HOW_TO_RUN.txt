@@ -1,0 +1,26 @@
+HOW TO RUN - Challenge Task (5 tilted documents)
+
+This reuses the pipeline from the "Image Enhancement Tool" folder, so install
+its requirements first.
+
+1. Install libraries once (from inside the "Image Enhancement Tool" folder):
+   pip install -r "../Image Enhancement Tool/requirements.txt"
+
+2. (Optional) No real tilted photos yet? Generate 5 fake ones:
+   python generate_test_documents.py
+   -> saved into tilted_inputs/
+
+   Have your own tilted document photos? Just put exactly 5 of them into
+   tilted_inputs/ instead (jpg, jpeg, png, or bmp) and skip this step.
+
+3. Run the challenge task:
+   python run_challenge.py
+
+4. Check results/ - for each image you'll find 3 files:
+   <name>_1_original.jpg
+   <name>_2_perspective_corrected.jpg
+   <name>_3_final_enhanced.jpg
+
+FOLDERS:
+  tilted_inputs/  - the 5 tilted document photos (input)
+  results/        - original / perspective-corrected / final-enhanced, per image (output)
