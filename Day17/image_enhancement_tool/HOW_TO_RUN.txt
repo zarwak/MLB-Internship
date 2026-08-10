@@ -48,9 +48,5 @@ DEPLOYING THE APP PUBLICLY (Streamlit Community Cloud - free)
 2. Go to https://share.streamlit.io and sign in with GitHub.
 3. Click "New app", pick your repo and branch.
 4. Set "Main file path" to:
-   Image Enhancement Tool/app.py
+   image_enhancement_tool/app.py
 5. Deploy. You'll get a public URL like https://<something>.streamlit.app
-
-Note: folder names with spaces (like "Image Enhancement Tool") usually work
-fine on Streamlit Cloud, but if you hit path issues, rename the folder to
-"image_enhancement_tool" (no spaces) and update the main file path to match.
