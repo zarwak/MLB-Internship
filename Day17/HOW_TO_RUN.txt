@@ -1,0 +1,25 @@
+HOW TO RUN THESE SCRIPTS
+
+1. Install the libraries once:
+   pip install -r requirements.txt
+
+2. Run any script from inside this Day17 folder, example:
+   python 01_translation.py
+
+3. A window pops up showing the image. Press any key to close it and see the next one.
+
+4. Every result is also auto-saved inside the outputs/ folder, so you don't lose anything.
+
+5. The first time you run any script, it auto-creates a fake sample document image
+   inside images/ (we don't have a real dataset yet - that comes in the mini project).
+
+ORDER TO RUN (matches today's topics):
+  01_translation.py
+  02_rotation.py
+  03_scaling.py
+  04_affine_transform.py
+  05_perspective_transform.py
+  06_brightness.py
+  07_contrast.py
+  08_blur_filters.py
+  09_sharpen.py
