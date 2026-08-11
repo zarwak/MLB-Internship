@@ -1,0 +1,61 @@
+HOW TO RUN - Document Boundary Detection Tool
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. Put your document photos inside the input_images/ folder.
+   (jpg, jpeg, png, or bmp) - aim for 10-15 photos covering a mix of:
+   straight scans, mobile phone photos, tilted shots, shadows/uneven
+   lighting, and slightly blurred photos.
+
+3. Run the tool:
+   python process.py
+
+4. Results are saved into output_images/<photo_name>/ - one subfolder per
+   photo, with every step of the pipeline saved as its own file:
+     1_original.jpg
+     2_grayscale.jpg
+     3_blurred.jpg
+     4_edges_canny.jpg
+     5_morphological.jpg
+     6_boundary_detected.jpg
+   Green box (in 6_boundary_detected.jpg) = a clean 4-corner page boundary
+   was found. Orange box = no clean 4-corner outline found, this is an
+   approximate best-guess boundary instead.
+
+WHAT IT DOES TO EACH IMAGE, IN ORDER:
+  1. Resizes it down for faster, more consistent processing
+  2. Converts it to grayscale and blurs it (removes noise before edge detection)
+  3. Finds edges with Canny (thresholds auto-picked from the image's own brightness)
+  4. Cleans up the edge map with morphological closing (bridges gaps from shadows)
+  5. Finds the largest 4-corner shape in the cleaned edges (the page outline)
+     - if no clean 4-corner shape is found, falls back to a rotated bounding
+       box of the largest shape instead
+  6. Draws the result on the original, full-resolution photo and saves it
+
+FILES:
+  detector.py   - the actual pipeline (all the real logic lives here)
+  process.py    - runs detector.py on every image in input_images/
+  app.py        - Streamlit web app (interactive UI, see below)
+
+
+RUNNING THE STREAMLIT APP LOCALLY
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. Start the app:
+   streamlit run app.py
+
+3. It opens in your browser. Upload a document photo and see all 6 steps of
+   the pipeline side by side, with a download button for the final result.
+
+
+DEPLOYING THE APP PUBLICLY (Streamlit Community Cloud - free)
+
+1. Push this whole "Day18" project to a public GitHub repo.
+2. Go to https://share.streamlit.io and sign in with GitHub.
+3. Click "New app", pick your repo and branch.
+4. Set "Main file path" to:
+   document_boundary_tool/app.py
+5. Deploy. You'll get a public URL like https://<something>.streamlit.app
