@@ -1,0 +1,27 @@
+HOW TO RUN - Challenge Task (10 document images)
+
+This reuses the pipeline from the "document_boundary_tool" folder, so
+install its requirements first.
+
+1. Install libraries once (from inside the "document_boundary_tool" folder):
+   pip install -r "../document_boundary_tool/requirements.txt"
+
+2. Make sure there are at least 10 document photos in:
+   ../document_boundary_tool/input_images/
+   (jpg, jpeg, png, or bmp)
+
+3. Run the challenge task:
+   python run_challenge.py
+
+4. Check results/ - for each image you'll find 4 files:
+   <name>_1_original.jpg
+   <name>_2_edge_detection.jpg
+   <name>_3_morphological.jpg
+   <name>_4_boundary_detected.jpg
+   plus one results_summary.md table covering all 10 images.
+
+FOLDERS:
+  results/  - all 4 output images per photo, plus results_summary.md (output)
+
+Input photos live in document_boundary_tool/input_images/ rather than a
+separate copy here, so you only need to drop your document photos in once.
