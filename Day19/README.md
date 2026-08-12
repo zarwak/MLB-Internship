@@ -115,6 +115,5 @@ plus one extra check for round shapes:
 
 ## Links
 
-- Streamlit app: [add your public app link here]
-- GitHub repo: [add your repo link here]
-- Screen recording: [add your recording link here]
+- Streamlit app: [\[add your public app link here\]](https://shapedetectionsystem.streamlit.app/)
+- GitHub repo: [\[add your repo link here\]](https://github.com/zarwak/MLB-Internship/tree/main/Day19)
