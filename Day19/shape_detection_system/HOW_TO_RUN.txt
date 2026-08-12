@@ -1,0 +1,62 @@
+HOW TO RUN - Shape Detection System
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. Put your shape photos inside the input_images/ folder.
+   (jpg, jpeg, png, or bmp) - aim for 10-15 images covering a mix of:
+   different shapes (circle, square, rectangle, triangle, polygon),
+   different sizes, different colors, and different backgrounds.
+
+3. Run the tool:
+   python process.py
+
+4. Results are saved into output_images/<photo_name>/ - one subfolder per
+   photo, with every step of the pipeline saved as its own file:
+     1_original.jpg
+     2_grayscale.jpg
+     3_blurred.jpg
+     4_threshold.jpg
+     5_all_contours.jpg
+     6_labeled_shapes.jpg
+   6_labeled_shapes.jpg has every detected shape outlined, boxed, and
+   labeled with its name, area, and perimeter.
+
+WHAT IT DOES TO EACH IMAGE, IN ORDER:
+  1. Converts it to grayscale and blurs it (removes noise before thresholding)
+  2. Thresholds it with Otsu's method (auto-picks the black/white cutoff from
+     the image's own brightness, then auto-detects whether shapes are darker
+     or lighter than their background and flips the threshold if needed)
+  3. Finds the outer contour of every shape big enough to matter
+  4. For each contour: counts corners (approxPolyDP) and checks circularity
+     to classify it as a Triangle, Square, Rectangle, Circle, or Polygon,
+     and measures its area, perimeter, and bounding rectangle
+  5. Draws the outline, bounding box, and label on the original photo and saves it
+
+FILES:
+  detector.py   - the actual pipeline (all the real logic lives here)
+  process.py    - runs detector.py on every image in input_images/
+  app.py        - Streamlit web app (interactive UI, see below)
+
+
+RUNNING THE STREAMLIT APP LOCALLY
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. Start the app:
+   streamlit run app.py
+
+3. It opens in your browser. Upload a photo and see all 6 steps of the
+   pipeline side by side, a measurements table, and a download button for
+   the final labeled result.
+
+
+DEPLOYING THE APP PUBLICLY (Streamlit Community Cloud - free)
+
+1. Push this whole "Day19" project to a public GitHub repo.
+2. Go to https://share.streamlit.io and sign in with GitHub.
+3. Click "New app", pick your repo and branch.
+4. Set "Main file path" to:
+   shape_detection_system/app.py
+5. Deploy. You'll get a public URL like https://<something>.streamlit.app

@@ -1,0 +1,26 @@
+HOW TO RUN - Challenge Task (10 shape images)
+
+This reuses the pipeline from the "shape_detection_system" folder, so
+install its requirements first.
+
+1. Install libraries once (from inside the "shape_detection_system" folder):
+   pip install -r "../shape_detection_system/requirements.txt"
+
+2. Make sure there are at least 10 shape photos in:
+   ../shape_detection_system/input_images/
+   (jpg, jpeg, png, or bmp)
+
+3. Run the challenge task:
+   python run_challenge.py
+
+4. Check results/ - for each image you'll find 3 files:
+   <name>_1_original.jpg
+   <name>_2_contour_detection.jpg
+   <name>_3_final_shapes.jpg
+   plus one results_summary.md table covering all 10 images.
+
+FOLDERS:
+  results/  - all 3 output images per photo, plus results_summary.md (output)
+
+Input photos live in shape_detection_system/input_images/ rather than a
+separate copy here, so you only need to drop your shape photos in once.
