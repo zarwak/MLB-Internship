@@ -1,0 +1,12 @@
+# Large media and generated video outputs
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+
+# Optional: ignore local generated outputs if needed
+Challenge Task/results/
+coding_practice/outputs/
+video_processing_tool/outputs/
+video_processing_tool/input_videos/
