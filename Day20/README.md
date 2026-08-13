@@ -115,6 +115,6 @@ compare them while it runs.
 
 ## Links
 
-- Streamlit app: [add your public app link here]
-- GitHub repo: [add your repo link here]
-- Screen recording: [add your recording link here]
+- Streamlit app: https://videoprocessingtool.streamlit.app/
+- GitHub repo: https://github.com/zarwak/MLB-Internship/tree/main/Day20
+
