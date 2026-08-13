@@ -1,0 +1,29 @@
+HOW TO RUN - Challenge Task (3 videos)
+
+This reuses the pipeline from the "video_processing_tool" folder, so
+install its requirements first.
+
+1. Install libraries once (from inside the "video_processing_tool" folder):
+   pip install -r "../video_processing_tool/requirements.txt"
+
+2. Make sure there are at least 3 video files in:
+   ../video_processing_tool/input_videos/
+   (mp4, avi, mov, or mkv)
+
+3. Run the challenge task:
+   python run_challenge.py
+
+4. Check results/ - for each video you'll find 2 files:
+   <name>_original.mp4
+   <name>_processed.mp4
+   plus one results_summary.md table covering all 3 videos.
+
+5. Open results_summary.md and fill in the Observations column by hand
+   after watching each original/processed pair - what changed, what edge
+   detection caught well or missed, anything that surprised you.
+
+FOLDERS:
+  results/  - both output videos per input, plus results_summary.md (output)
+
+Input videos live in video_processing_tool/input_videos/ rather than a
+separate copy here, so you only need to drop your videos in once.

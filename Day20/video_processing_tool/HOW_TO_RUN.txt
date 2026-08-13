@@ -1,0 +1,64 @@
+HOW TO RUN - Real-Time Video Processing Tool
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. Put your video file(s) inside the input_videos/ folder.
+   (mp4, avi, mov, or mkv) - one 30-60 second clip is enough to start.
+
+3. Run the tool:
+   python process_video.py
+
+4. A window pops up showing "Original | Processed" side by side while it
+   works (press 'q' to stop early). The processed result is saved into
+   outputs/<video_name>_processed.mp4 for EVERY video found in step 2.
+
+WHAT IT DOES TO EACH FRAME, IN ORDER:
+  1. Converts it to grayscale (color isn't needed to find edges)
+  2. Applies Gaussian Blur (removes noise before edge detection, so Canny
+     reacts to real object outlines instead of camera grain)
+  3. Applies Canny Edge Detection (finds and keeps only the sharp
+     brightness changes - i.e. edges)
+The saved output video is the final Canny edge result.
+
+FILES:
+  processor.py       - the actual pipeline + video-I/O helpers (all the
+                        real logic lives here)
+  process_video.py   - runs processor.py on every video in input_videos/
+  webcam_live.py      - same pipeline, fed by your webcam in real time
+                         instead of a file (run: python webcam_live.py)
+  app.py              - Streamlit web app (interactive UI, see below)
+
+
+RUNNING THE WEBCAM SCRIPT LOCALLY
+
+   python webcam_live.py
+
+Opens your default camera (index 0), shows "Original | Processed" live,
+saves the session to outputs/webcam_processed.mp4. Press 'q' to stop.
+
+
+RUNNING THE STREAMLIT APP LOCALLY
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. Start the app:
+   streamlit run app.py
+
+3. It opens in your browser with two tabs:
+   - "Process a video": upload a video, watch a live-updating preview,
+     download the processed result when it's done.
+   - "Webcam snapshot": takes one photo at a time through your browser's
+     camera and processes it (a deployed web app can't run a true
+     continuous live cv2 feed the way the local webcam_live.py script can).
+
+
+DEPLOYING THE APP PUBLICLY (Streamlit Community Cloud - free)
+
+1. Push this whole "Day20" project to a public GitHub repo.
+2. Go to https://share.streamlit.io and sign in with GitHub.
+3. Click "New app", pick your repo and branch.
+4. Set "Main file path" to:
+   video_processing_tool/app.py
+5. Deploy. You'll get a public URL like https://<something>.streamlit.app
