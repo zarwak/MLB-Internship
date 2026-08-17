@@ -1,0 +1,40 @@
+HOW TO RUN - Day 21 Coding Practice (CV Interface)
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. (Optional) Generate two synthetic test images if you don't have your own:
+   python make_sample_images.py
+   This writes sample_images/shapes.png and sample_images/photo_like.png
+
+3. Start the app:
+   streamlit run app.py
+
+4. It opens in your browser:
+   - Upload an image (or drag in one of the sample_images/ files)
+   - Pick an operation from the dropdown
+   - Click "Process Image"
+   - See the original and processed image side by side
+   - "Download processed image" saves via the browser
+   - "Save processed image to disk" writes it into output_images/ in this
+     folder, with a timestamped filename
+
+FILES:
+  image_ops.py          - the 7 operations, each as its own pure function:
+                           Grayscale, Blur, Edge Detection, Rotation,
+                           Image Enhancement (Sharpen), Contour Detection,
+                           Shape Detection. All 7 are collected in one
+                           OPERATIONS dict so app.py never needs an
+                           if/elif chain - it just looks up the function
+                           the dropdown selected.
+  app.py                 - the Streamlit interface itself
+  make_sample_images.py  - generates two synthetic test images (a flat
+                            "shapes" image for Contour/Shape Detection, and
+                            a noisy gradient "photo_like" image for
+                            Blur/Edge/Rotation/Enhancement)
+  output_images/          - where "Save to disk" writes results (created
+                            automatically, empty until you use the app)
+
+This is deliberately the "bare" version - no sliders, no saved history,
+just upload -> pick -> process -> download/save. The polished version with
+adjustable parameters is the mini project in ../cv_image_studio.

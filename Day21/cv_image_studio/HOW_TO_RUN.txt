@@ -1,0 +1,57 @@
+HOW TO RUN - Challenge Task (Custom Features)
+
+1. Install the libraries once (from inside this folder):
+   pip install -r requirements.txt
+
+2. (Optional) Generate sample images:
+   python make_sample_images.py
+
+3. Start the app:
+   streamlit run app.py
+
+4. It opens in your browser. Upload an image or pick a sample, then choose
+   a Mode in the sidebar:
+
+   - Single Operation: same idea as the mini project, but with 3 new
+     operations added: Brightness & Contrast, Flip, Threshold.
+
+   - Chain Multiple Filters (Pipeline): pick several operations in the
+     "Build your pipeline" box (they run in the order you pick them), and
+     each one gets its own settings expander in the sidebar. Every step's
+     output feeds into the next step's input, and you can see each
+     intermediate result plus the final one.
+
+WHAT'S CUSTOM HERE (not covered in class):
+
+  Brightness & Contrast
+    new_pixel = contrast * pixel + brightness (clipped to 0-255)
+    Useful because a lot of real photos are just too dark/washed out for
+    the other 7 operations (blur, edges, contours) to work well on -
+    fixing exposure first is a normal step in any real editing pipeline.
+
+  Flip
+    Pure array reversal along an axis - no math, just reading pixels
+    backwards. Small, but genuinely useful (mirroring, correcting a
+    sideways photo).
+
+  Threshold
+    Turns a photo into pure black/white, with 3 methods: Binary (fixed
+    cutoff), Binary Inverted, and Otsu (auto-picks the cutoff from the
+    image's own histogram - same idea used inside Day19's shape detector).
+
+  Pipeline mode (the "make it more useful" part)
+    Real photo editing is never just one filter - you crop, adjust
+    exposure, then sharpen, then maybe threshold for a specific effect.
+    Because every operation in image_ops_extended.py has the same
+    "image in -> image out" shape, chaining them is just feeding one
+    function's output into the next - no special-case code needed to
+    support this.
+
+FILES:
+  image_ops_extended.py  - 7 base ops + 3 custom ops + PARAM_SPECS (now
+                            supports both numeric sliders and dropdown
+                            "choice" params, e.g. Flip's direction)
+  app.py                  - Single Operation mode + Pipeline mode
+  make_sample_images.py   - generates 3 sample images, including a
+                             deliberately dark/low-contrast one to make the
+                             Brightness & Contrast feature's value obvious
