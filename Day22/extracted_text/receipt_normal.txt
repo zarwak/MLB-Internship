@@ -1,0 +1,46 @@
+FRESH
+MART
+GROCERY
+123
+Market
+Street,
+Lahore
+Milk
+1L
+x2
+360 _
+00
+Bread
+Loaf
+x1
+180_
+00
+Eggs
+(dozen)
+x1
+320 _
+00
+Rice
+Basmati
+x1
+1450 _
+00
+Cooking
+0il
+1L
+x1
+650 ,_
+00
+SUBTOTAL
+2960
+TAX
+(58)
+148
+00
+TOTAL
+3108
+THANK
+YOU
+FOR
+SHOPPING
+5kg

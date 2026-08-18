@@ -1,0 +1,6 @@
+Preprocessing comparison for printed_doc_noisy_lowlight.png
+
+[raw                   ] avg_conf=0.89  chars= 436  "QUARTERLY PROGRESS REPORT Project: Optical Character Recogni"
+[grayscale             ] avg_conf=0.83  chars= 437  "QUARTERLY PROGRESS REPORT Project: Optical Character Recogni"
+[grayscale+CLAHE+otsu  ] avg_conf=0.03  chars= 381  "EUARIELFRO:ReSSFeFORT Rrojede epic | CnaradterRecoghiton Pin"
+[grayscale+denoise+CLAHE+otsu] avg_conf=0.09  chars= 341  "QUNrTIfY M *(X;RE SS frt F*C)NT Itopc ; (pra (hactu iarrxrn "

@@ -1,0 +1,15 @@
+# Day 22 - OCR Document Reader dependencies.
+#
+# Unlike Day12/13, there's no separate train-deps.txt split here: EasyOCR
+# ships pretrained models (it downloads them on first run, not trained by
+# us), so the "deployed app" dependencies and the "practice script"
+# dependencies are the same thing - there's nothing heavy to strip out.
+#
+# torch is EasyOCR's only real weight (CPU wheel, no CUDA needed since
+# Streamlit Cloud / HF Spaces free tier has no GPU).
+
+streamlit>=1.45.0
+easyocr>=1.7.2
+opencv-python-headless>=5.0.0
+numpy>=1.26.0
+pillow>=10.0.0
