@@ -7,9 +7,17 @@
 #
 # torch is EasyOCR's only real weight (CPU wheel, no CUDA needed since
 # Streamlit Cloud / HF Spaces free tier has no GPU).
+#
+# No opencv-python-headless here on purpose: it failed to install on
+# Streamlit Cloud's build (ModuleNotFoundError: No module named 'cv2' at
+# runtime, even though the rest of the app started fine). app.py uses
+# scikit-image instead for its preprocessing - EasyOCR already pulls it
+# in as a transitive dependency, so it's proven to install cleanly in
+# the exact same environment; listing it explicitly here just makes that
+# dependency visible instead of implicit.
 
 streamlit>=1.45.0
 easyocr>=1.7.2
-opencv-python-headless>=5.0.0
+scikit-image>=0.24.0
 numpy>=1.26.0
 pillow>=10.0.0

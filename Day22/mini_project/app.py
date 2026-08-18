@@ -18,11 +18,11 @@ import io
 import os
 from datetime import datetime
 
-import cv2
 import easyocr
 import numpy as np
 import streamlit as st
 from PIL import Image
+from skimage import color, exposure, filters
 
 st.set_page_config(page_title="DoxProX OCR Reader", page_icon=":page_facing_up:", layout="wide")
 
@@ -46,12 +46,21 @@ def preprocess(pil_image: Image.Image) -> np.ndarray:
     ocr_practice/run_easyocr_batch.py. Optional here because it can
     actually hurt already-clean, high-contrast images (over-thresholding
     can erase thin strokes) - that trade-off is the whole reason this is
-    a checkbox and not something applied unconditionally."""
-    bgr = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-    gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
-    enhanced = clahe.apply(gray)
-    _t, binary = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    a checkbox and not something applied unconditionally.
+
+    Uses scikit-image instead of OpenCV here on purpose: EasyOCR already
+    depends on scikit-image internally (it's used for the detection
+    model's post-processing), so it's guaranteed to already be installed
+    everywhere EasyOCR runs - including Streamlit Cloud's build, where
+    opencv-python-headless failed to install (the wheel didn't come
+    through in their build environment) and crashed the deployed app
+    with `ModuleNotFoundError: No module named 'cv2'`. One less separate
+    heavy binary dependency to go wrong on a platform we don't control.
+    """
+    gray = color.rgb2gray(np.array(pil_image))  # float64 in [0, 1]
+    enhanced = exposure.equalize_adapthist(gray, clip_limit=0.03)  # this *is* CLAHE
+    otsu_thresh = filters.threshold_otsu(enhanced)
+    binary = (enhanced > otsu_thresh).astype(np.uint8) * 255
     return binary
 
 
