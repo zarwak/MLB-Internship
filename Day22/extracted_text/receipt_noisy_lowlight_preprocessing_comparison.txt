@@ -1,0 +1,6 @@
+Preprocessing comparison for receipt_noisy_lowlight.png
+
+[raw                   ] avg_conf=0.92  chars= 226  "FRESH MART GROCERY 123 Market Street, Lahore Milk 1L 360 .00"
+[grayscale             ] avg_conf=0.94  chars= 226  "FRESH MART GROCERY 123 Market Street, Lahore Milk 1L x2 360 "
+[grayscale+CLAHE+otsu  ] avg_conf=0.00  chars=   0  ""
+[grayscale+denoise+CLAHE+otsu] avg_conf=0.00  chars=   0  ""
