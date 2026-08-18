@@ -293,6 +293,17 @@ more preprocessing steps is not automatically better.
   assumption that "more classical image cleanup = better OCR" turned
   out to be backwards for a neural-network-based engine, and the failed
   denoise fix made that even clearer.
+- **`opencv-python-headless` failed to install on Streamlit Cloud's
+  build**, even though it installed fine locally - the deployed app
+  crashed at runtime with `ModuleNotFoundError: No module named 'cv2'`
+  while everything else worked. Since EasyOCR already depends on
+  `scikit-image` internally (proven to install cleanly in that same
+  environment - EasyOCR itself needs it to even boot), `mini_project/app.py`
+  was rewritten to do its grayscale + CLAHE + Otsu-threshold
+  preprocessing with `skimage.color`/`exposure`/`filters` instead of
+  `cv2`, and `opencv-python-headless` was dropped from `requirements.txt`
+  entirely. One fewer heavy binary dependency that a platform we don't
+  control could fail to build.
 
 ## Requirements met
 
