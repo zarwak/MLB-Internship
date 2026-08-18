@@ -1,0 +1,12 @@
+QUARTERLY PROGRESS REPORT
+Project: Optical Character Recognition Pipeline
+Prepared by:
+ML Internship Program,
+22
+This document summarizes the OCR evaluation performed this week
+Multiple engines were benchmarked for accuracy, speed, and ease
+of integration into a document processing
+pipeline. Preprocessing
+steps such as grayscale conversion and contrast enhancement were
+found to noticeably improve recognition on low-quality scans
+Day

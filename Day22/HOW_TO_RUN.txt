@@ -1,0 +1,36 @@
+HOW TO RUN - Day 22 OCR
+
+0. This folder uses its own virtual environment (not the shared global
+   Python) because the C: drive was full when this was built - see the
+   README's "Why a venv this time" section. Activate it first:
+
+   cd D:\GitHub\ML-Bench\Day22
+   .venv\Scripts\activate
+
+   (If the venv doesn't exist yet: python -m venv .venv, then activate it,
+   then pip install -r requirements.txt)
+
+1. (Optional) Regenerate the 17 sample images:
+   python images\make_sample_images.py
+
+2. Run the OCR practice script (reads all 17 images, saves extracted text
+   to extracted_text\, runs the preprocessing comparison on 3 hard images):
+   python ocr_practice\run_easyocr_batch.py
+
+3. Start the mini project app:
+   streamlit run mini_project\app.py
+
+4. It opens in your browser. Upload any image from images\ (or your own),
+   optionally tick "Apply preprocessing", and see the extracted text next
+   to the original image. Download as .txt or save to disk.
+
+FILES:
+  images\make_sample_images.py        - generates the 17 test images
+  images\*.png                        - the test images themselves
+  ocr_practice\run_easyocr_batch.py   - batch OCR + preprocessing comparison
+  extracted_text\*.txt                - OCR output per image
+  extracted_text\*_preprocessing_comparison.txt - raw vs grayscale vs
+                                          grayscale+CLAHE+otsu vs
+                                          grayscale+denoise+CLAHE+otsu
+  mini_project\app.py                 - the Streamlit OCR Document Reader
+  requirements.txt                    - deployment dependencies

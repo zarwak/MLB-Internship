@@ -1,0 +1,6 @@
+Preprocessing comparison for printed_doc_dim_lighting.png
+
+[raw                   ] avg_conf=0.84  chars= 438  "QUARTERLY PROGRESS REPORT Project: Optical Character Recogni"
+[grayscale             ] avg_conf=0.84  chars= 438  "QUARTERLY PROGRESS REPORT Project: Optical Character Recogni"
+[grayscale+CLAHE+otsu  ] avg_conf=0.91  chars= 436  "QUARTERLY PROGRESS REPORT Project: Optical Character Recogni"
+[grayscale+denoise+CLAHE+otsu] avg_conf=0.10  chars= 304  "O-JATTi M Y ;icx;i SS Mi ix)it mit (Ye(im {rtr i ttw' irtart"
