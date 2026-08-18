@@ -5,16 +5,24 @@
 # us), so the "deployed app" dependencies and the "practice script"
 # dependencies are the same thing - there's nothing heavy to strip out.
 #
-# torch is EasyOCR's only real weight (CPU wheel, no CUDA needed since
-# Streamlit Cloud / HF Spaces free tier has no GPU).
+# No opencv-python-headless here on purpose: our own code doesn't need it
+# (app.py uses scikit-image for preprocessing instead - see below), but
+# note easyocr itself still depends on opencv-python-headless internally;
+# that's outside our control and not something removing our own import
+# fixes on its own.
 #
-# No opencv-python-headless here on purpose: it failed to install on
-# Streamlit Cloud's build (ModuleNotFoundError: No module named 'cv2' at
-# runtime, even though the rest of the app started fine). app.py uses
-# scikit-image instead for its preprocessing - EasyOCR already pulls it
-# in as a transitive dependency, so it's proven to install cleanly in
-# the exact same environment; listing it explicitly here just makes that
-# dependency visible instead of implicit.
+# --extra-index-url + the "+cpu" pins below are the actual fix for the
+# "ModuleNotFoundError: No module named 'easyocr'" deployment failure:
+# plain `torch` from PyPI pulls in several GB of bundled CUDA/nvidia-*
+# packages that aren't needed on Streamlit Cloud's free tier (no GPU
+# there anyway), and that install was almost certainly blowing past the
+# build's resource/time limit and silently failing - leaving easyocr
+# (which depends on torch) never installed, while lighter packages
+# earlier in the file succeeded. Pinning the CPU-only wheel build cuts
+# that from ~2GB+ down to ~200MB.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.13.0+cpu
+torchvision==0.28.0+cpu
 
 streamlit>=1.45.0
 easyocr>=1.7.2
