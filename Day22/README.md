@@ -20,9 +20,11 @@ archives possible.
 - `mini_project/app.py` - the Streamlit "Simple OCR Document Reader":
   upload an image, see the original + extracted text side by side,
   download or save the result.
-- `requirements.txt` - dependencies for running/deploying the app.
-- `runtime.txt` - pins Python 3.11 for the deployed app specifically
-  (the repo-root one doesn't apply to a nested app - see Challenges).
+- `requirements.txt` / `runtime.txt` - dependencies + Python version for
+  local use. **Duplicated** inside `mini_project/` too (identical
+  content) because Streamlit Cloud only reads these files from the repo
+  root or the entrypoint script's own folder - see Challenges below for
+  why that duplication exists.
 - `.venv/` - local virtual environment (see [Why a venv this time](#why-a-venv-this-time) below).
 
 ## What is OCR?
@@ -295,34 +297,33 @@ more preprocessing steps is not automatically better.
   assumption that "more classical image cleanup = better OCR" turned
   out to be backwards for a neural-network-based engine, and the failed
   denoise fix made that even clearer.
-- **Two rounds of Streamlit Cloud deploy failures, same underlying
-  cause.** First `import cv2` crashed at runtime (fixed by rewriting
-  `mini_project/app.py`'s preprocessing to use `scikit-image` instead of
-  OpenCV - see requirements.txt for that reasoning). Then `import
-  easyocr` itself started failing. Two things turned out to be true at
-  once:
-  1. There was no `runtime.txt` inside `Day22/` (only one at the repo
-     root pinning Python 3.11), and Streamlit Cloud looks for
-     `runtime.txt` next to the app's own `requirements.txt`, not just
-     the repo root - so this deployment was silently running on
-     whatever Python version Streamlit Cloud defaults to (3.14, judging
-     by the traceback paths), a version release-fresh enough that
-     several of EasyOCR's compiled dependencies (opencv, shapely,
-     scipy, pyclipper) can't be assumed to have prebuilt wheels for it
-     yet. Added `Day22/runtime.txt` pinning `python-3.11` to match the
-     rest of the repo and get back onto a Python version every one of
-     these packages has mature wheel support for.
-  2. Plain `torch` from PyPI bundles multiple GB of CUDA/`nvidia-*`
-     packages that a GPU-less free-tier build doesn't need and almost
-     certainly can't finish installing in time/space - which would
-     explain why `easyocr` (which depends on `torch`) silently never
-     finished installing while lighter packages earlier in
-     `requirements.txt` succeeded. Fixed by pointing pip at PyTorch's
-     own CPU-only wheel index (`--extra-index-url
-     https://download.pytorch.org/whl/cpu`) and pinning
-     `torch==2.13.0+cpu` / `torchvision==0.28.0+cpu` explicitly - verified
-     both exist for `cp311-manylinux_2_28-x86_64` (Streamlit Cloud's
-     platform) before pinning them, rather than guessing.
+- **Three rounds of Streamlit Cloud deploy failures - the first two
+  "fixes" were correct but never actually took effect, because of the
+  real, final cause.** In order:
+  1. `import cv2` crashed at runtime - fixed by rewriting
+     `mini_project/app.py`'s preprocessing to use `scikit-image` instead
+     of OpenCV (see `requirements.txt` for that reasoning).
+  2. `import easyocr` then started failing instead, which looked like a
+     dependency-resolution or Python-version problem, so `runtime.txt`
+     (pinning Python 3.11) and CPU-only `torch`/`torchvision` pins got
+     added.
+  3. It **still** failed the same way, and the actual server log (not
+     just the redacted error card) revealed why: Streamlit Cloud's
+     "Installing Streamlit" step only installed 38 packages - all of
+     them Streamlit's *own* bundled dependencies (altair, pandas,
+     watchdog, ...). `easyocr`, `torch`, and `scikit-image` were never
+     even attempted. Streamlit Community Cloud looks for
+     `requirements.txt` (and `runtime.txt`) either at the **repo root**
+     or in the **same folder as the app's entrypoint script** - and the
+     entrypoint is `Day22/mini_project/app.py`, while `requirements.txt`
+     was sitting in `Day22/`, one level up. Not the repo root, not the
+     entrypoint's folder - so Cloud silently never read it, and every
+     fix aimed at *what's inside* that file was invisible the entire
+     time. Fixed by copying `requirements.txt` and `runtime.txt` into
+     `Day22/mini_project/` too, alongside `app.py` itself. Lesson: when
+     a deployed app's error doesn't match what the dependency file
+     says, check whether the file is even being *found* before
+     debugging what's *in* it.
 
 ## Requirements met
 

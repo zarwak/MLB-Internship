@@ -33,4 +33,12 @@ FILES:
                                           grayscale+CLAHE+otsu vs
                                           grayscale+denoise+CLAHE+otsu
   mini_project\app.py                 - the Streamlit OCR Document Reader
-  requirements.txt                    - deployment dependencies
+  requirements.txt / runtime.txt      - deployment deps + Python version.
+                                          Also duplicated inside
+                                          mini_project\ - Streamlit Cloud
+                                          only reads these from the repo
+                                          root or the entrypoint script's
+                                          own folder, not a parent folder
+                                          (see README Challenges). If you
+                                          ever change one copy, change
+                                          both.
