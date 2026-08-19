@@ -12,7 +12,13 @@ tesseract-ocr
 # imports cv2 internally even though our own code never does - `import
 # cv2` then fails with "libGL.so.1: cannot open shared object file"
 # because Streamlit Cloud's container has none of the system graphics
-# libraries OpenCV expects, only being a headless Debian image. Same fix
-# already used for this in the DocProcessor project's Dockerfile.
+# libraries OpenCV expects, only being a headless Debian image. libgl1 +
+# libglib2.0-0 alone (what fixed this in the DocProcessor project) was
+# not the complete set here - this is the fuller list commonly needed
+# for opencv-python (non-headless) on a minimal Debian image.
 libgl1
 libglib2.0-0
+libsm6
+libxext6
+libxrender1
+libgomp1
