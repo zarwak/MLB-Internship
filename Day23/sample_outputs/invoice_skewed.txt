@@ -1,0 +1,58 @@
+Invoice No:
+BILL TO:
+Date: 12_
+-0847
+2026
+26
+88 Model
+2026
+NTN:
+Ul and UX Design
+40
+5000
+and
+15
+4000
+3000
+17%
+due
+54230
+373230
+INVOICE
+INV-2026
+August =
+Horizon
+Due
+Tech
+Date: 
+Solutions
+August =
+Town,
+Lahore
+4410238-6
+DESCRIPTION
+Web
+QTY
+Application
+RATE
+Development
+AMOUNT
+Services
+200000
+Server
+Setup
+Hosting
+60000
+Technical
+Documentation
+35000
+35000
+24000
+Subtotal
+319000
+Tax
+Payment =
+TOTAL
+within
+DUE
+days.

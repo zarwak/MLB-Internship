@@ -1,0 +1,87 @@
+# Day 23 - Document OCR Web Application dependencies.
+#
+# Four OCR engines: EasyOCR + docTR (both PyTorch-based - docTR reuses the
+# same torch already installed for EasyOCR rather than adding a third
+# framework), PaddleOCR (PaddlePaddle-based), and Tesseract (classic,
+# non-neural - pytesseract below is a thin wrapper; the actual engine is a
+# native binary that is NOT a pip package, see HOW_TO_RUN.txt). That is
+# still real weight from two deep-learning frameworks; see the README's
+# "Two engines, two frameworks" section for the honest cost/benefit
+# discussion and the Streamlit Cloud deployment risk this creates (large
+# build, may exceed the free tier's time/disk budget - the same failure
+# mode Day 22 already hit once with torch alone).
+#
+# docTR uses the lightweight "mobilenet" detection/recognition models
+# (set in ocr_pipeline.py's DOCTR_DET_ARCH/DOCTR_RECO_ARCH), not the
+# default resnet/master ones - a much smaller download and faster CPU
+# inference, at a small accuracy cost that is fine for printed text.
+#
+# These pins are carried over from Day 22 and Day 23's EasyOCR-only setup,
+# where getting the app to actually deploy took three rounds of debugging:
+#
+# 1. The --extra-index-url + "+cpu" pins below are not optional for torch.
+#    Plain `torch` from PyPI drags in several gigabytes of bundled CUDA and
+#    nvidia-* packages. Streamlit Cloud's free tier has no GPU, so none of
+#    that is used, but the download blows past the build's time and disk
+#    limits - the build then fails silently partway through and the app
+#    starts up with easyocr (which depends on torch) never installed,
+#    crashing with "ModuleNotFoundError: No module named 'easyocr'". The
+#    CPU-only wheels are roughly 200MB instead of 2GB+. PaddlePaddle's
+#    PyPI package is CPU-only by default, so it needs no such pin.
+#
+# 2. No opencv import of our own on purpose. Our own preprocessing uses
+#    scikit-image instead (see ocr_pipeline.py), because `import cv2`
+#    crashed on Streamlit Cloud during Day 22. Note both easyocr AND
+#    paddleocr still depend on opencv internally - that is outside our
+#    control, and dropping our own import is what fixed the Day 22 crash,
+#    not something that removes opencv from the dependency tree entirely.
+#
+# 3. numpy<2.0 is paddleocr==2.9.1's own constraint, not a preference of
+#    ours - EasyOCR, scikit-image and docTR are all fine with numpy 2.x,
+#    but paddleocr is not, so the lower version wins for the whole
+#    environment. docTR's own pip install pulls in a numpy>=2.0 wheel by
+#    default (nothing in its dependency tree needs it that strictly - it
+#    only asks for numpy<3.0,>=1.16), which silently upgrades numpy out
+#    from under paddleocr if you `pip install` them in the wrong order.
+#    Installing python-doctr first, then downgrading with
+#    `pip install numpy==1.26.4` afterward, is what this file's pin
+#    order assumes; installing straight from this requirements.txt file
+#    (top to bottom) avoids the problem entirely since pip resolves all
+#    pins together.
+#
+# 4. This file must sit either at the repo root or in the same folder as
+#    app.py. Streamlit Cloud does not look in parent folders, and if it
+#    cannot find the file it silently installs only Streamlit's own
+#    dependencies and gives no warning at all. app.py and this file are
+#    both in mini_project/, so that requirement is met.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.13.0+cpu
+torchvision==0.28.0+cpu
+
+# >=1.49 because st.image is called with width="stretch". The older
+# use_container_width=True spelling was deprecated with a removal date of
+# 31 Dec 2025, which has now passed, so the new spelling is the safe one
+# to deploy with - Streamlit Cloud installs a recent version.
+streamlit>=1.49.0
+easyocr>=1.7.2
+paddleocr==2.9.1
+# Pinned exactly, not >=. paddlepaddle 3.3.1 (the latest at the time of
+# writing) breaks paddleocr==2.9.1's CPU inference outright: every call
+# raises "NotFoundError: OneDnnContext does not have the input Filter"
+# inside a fused_conv2d op, because paddle's newer versions apply an
+# OneDNN fusion pass during inference that paddleocr 2.9.1's older model
+# graph format was never built to expect. paddlepaddle==3.0.0 (the first
+# 3.x release, closer to what 2.9.1 was actually tested against) does not
+# have this problem - verified end to end against a real image.
+paddlepaddle==3.0.0
+pytesseract>=0.3.13
+# Tesseract itself (the engine pytesseract wraps) is a native Windows
+# binary, not a pip package - see HOW_TO_RUN.txt for the installer link.
+python-doctr[torch]>=1.0.1
+# docTR's own install pulls a numpy>=2.0 wheel by default, which conflicts
+# with paddleocr's numpy<2.0 pin below - pip resolves this fine when
+# installing straight from this file (all pins considered together), it
+# only bites if you `pip install` the two separately in the wrong order.
+scikit-image>=0.24.0
+numpy>=1.26.0,<2.0
+pillow>=10.0.0
