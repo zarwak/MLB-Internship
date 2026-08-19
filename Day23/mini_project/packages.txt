@@ -1,3 +1,5 @@
 # See the copy at Day23/packages.txt for why this file is duplicated
 # in both places, and why it exists at all.
 tesseract-ocr
+libgl1
+libglib2.0-0
