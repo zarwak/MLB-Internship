@@ -1,0 +1,9 @@
+# Streamlit Cloud runs `apt-get install` on every line in this file
+# during the build - the ONLY way to get Tesseract onto the deployed
+# container, since pytesseract is just a Python wrapper around a native
+# binary that pip cannot install (see HOW_TO_RUN.txt section 0b for the
+# same fact on Windows, where it needs a separate installer instead).
+# Same folder rule as requirements.txt: Streamlit Cloud only reads this
+# from the repo root or the app's own folder, hence the duplicate copy
+# in mini_project/.
+tesseract-ocr

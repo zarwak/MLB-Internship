@@ -1,0 +1,47 @@
+Web
+Application
+Title:
+Program; Day 23
+Author: ML Internship
+Date: 19
+2026
+on the
+describes the
+an
+image,
+accepts
+of text.
+line
+every
+preprocessing; and
+download it as
+and
+on
+can review the
+Users
+text file for
+processing:
+REPORT
+STATUS
+PROJECT
+OCR
+Document
+August
+character
+optical
+completed
+work
+uploaded
+report
+This
+application
+The
+readable
+pipeline.
+recognition
+extracts
+plain
+applies
+screen
+result
+further
