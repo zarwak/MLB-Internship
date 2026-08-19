@@ -1,0 +1,12 @@
+NATIONAL IDENTITY CARD
+Name
+Bilal Ahmed
+Father Name
+PHOTO
+Rashid Ahmed
+Identity Number
+42101-7654321-3
+Date of Birth
+07.11.1998
+Expiry
+07.11.2030

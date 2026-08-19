@@ -1,0 +1,33 @@
+INVOICE
+Invoice No: INV-2026-0847
+Date: 12 August 2026
+Due Date: 26 August 2026
+BILL TO:
+Horizon Tech Solutions
+88 Model Town, Lahore
+NTN: 4410238-6
+DESCRIPTION
+QTY
+RATE
+AMOUNT
+Web Application Development
+40
+5000
+200000
+Ul and UX Design Services
+15
+4000
+60000
+Server Setup and Hosting
+35000
+35000
+Technical Documentation
+3000
+24000
+Subtotal
+319000
+Tax 17%
+54230
+TOTAL DUE
+373230
+Payment due within 14 days_

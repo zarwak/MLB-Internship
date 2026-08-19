@@ -1,0 +1,128 @@
+HOW TO RUN - Day 23 Document OCR Web Application
+
+0. ENVIRONMENT
+   This folder has its OWN virtual environment, separate from Day 22's -
+   unlike Day 22's EasyOCR-only setup, this app also installs PaddleOCR
+   (a second, unrelated deep-learning framework: PaddlePaddle instead of
+   PyTorch), and mixing that into Day 22's already-working venv risked
+   breaking it over a numpy version conflict (paddleocr needs numpy<2.0;
+   Day 22's venv has numpy 2.x). Keeping them apart means Day 22 stays
+   untouched no matter what happens here.
+
+   cd D:\GitHub\ML-Bench\Day23
+   .venv\Scripts\activate
+
+   Starting fresh instead (on another machine, or if that venv is gone):
+
+   cd D:\GitHub\ML-Bench\Day23
+   python -m venv .venv
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+
+   This installs ~2-3 GB of dependencies (two OCR engines' worth of
+   models and frameworks) and can take 15-20 minutes depending on your
+   connection - most of that is torch, paddlepaddle, and their various
+   supporting libraries (opencv, scipy, scikit-learn come along as
+   paddleocr's own dependencies).
+
+   Windows PowerShell note: if `.venv\Scripts\activate` does not work,
+   use `.venv\Scripts\Activate.ps1` instead. If activation is not an
+   option (e.g. you got a "No module named X" error running the app),
+   skip it entirely and call the venv's own python.exe directly:
+
+   D:\GitHub\ML-Bench\Day23\.venv\Scripts\python.exe -m streamlit run mini_project\app.py
+
+
+0b. TESSERACT BINARY (one-time, not a pip install)
+   pytesseract only wraps the Tesseract engine - the engine itself is a
+   separate native program pip cannot install:
+     1. Download the installer from
+        https://github.com/UB-Mannheim/tesseract/wiki
+        (tesseract-ocr-w64-setup-*.exe)
+     2. Run it, keep the default install path
+        (C:\Program Files\Tesseract-OCR\) - ocr_pipeline.py already checks
+        that exact path automatically, no PATH edit needed.
+     3. Installed somewhere else instead? Set an env var:
+        setx TESSERACT_CMD "C:\path\to\your\tesseract.exe"
+        (open a new terminal afterward for it to take effect)
+   Until this is done, picking "Tesseract" in the app raises a clear
+   error telling you to do this - it is not a crash, just a missing
+   native dependency pip cannot fetch for you.
+
+
+1. START THE APP (the mini project)
+   streamlit run mini_project\app.py
+
+   It opens in your browser. Pick an OCR Engine in the sidebar (EasyOCR,
+   PaddleOCR, Tesseract, docTR, or "Compare both" for EasyOCR vs
+   PaddleOCR), upload any image from sample_images\ (or one of your own),
+   then read the text on the right and download it as .txt. The first
+   run downloads each engine's model files (Tesseract excepted - see 0b
+   above), which takes a minute or two per engine; after that they are
+   cached in .model_cache\.
+
+
+2. (OPTIONAL) REGENERATE THE 18 SAMPLE IMAGES
+   python sample_images\make_sample_images.py
+
+
+3. (OPTIONAL) RE-RUN THE FULL TEST OVER ALL 18 IMAGES (the coding practice)
+   python coding_practice\batch_test.py
+
+   Takes a while - it runs every image through all four preprocessing
+   presets, on BOTH engines (144 OCR passes total), plus the deskew
+   comparison. Rewrites everything in sample_outputs\.
+
+
+FILES
+  mini_project\
+    app.py                        - the Streamlit web app (the deliverable)
+    requirements.txt / runtime.txt - a copy of the same files at the repo
+                                    root, kept next to app.py because
+                                    Streamlit Cloud only reads dependency
+                                    files from the repo root or the entry
+                                    point's own folder (see README) - if
+                                    you change one copy, change both.
+  coding_practice\
+    batch_test.py                 - runs the OCR pipeline over all 18
+                                    sample images, 4 presets, 2 engines,
+                                    writes the comparison tables to
+                                    sample_outputs\
+  ocr_pipeline.py                 - all the shared OCR logic: load,
+                                    preprocess, deskew, extract (for both
+                                    engines), save. Lives at the Day23
+                                    root (not inside either folder above)
+                                    because both app.py and batch_test.py
+                                    import the same copy of it - each
+                                    adds this folder to sys.path at
+                                    startup rather than keeping its own
+                                    duplicate.
+  sample_images\                  - 18 test images + the script that made
+                                    them
+  sample_outputs\                 - extracted text per image (per engine,
+                                    plus an overall-best copy), plus
+                                    preset_comparison.txt and
+                                    results_summary.md
+  .model_cache\                   - created automatically on first run.
+                                    Both engines' downloaded model files
+                                    go here (on D:) instead of their
+                                    default location in the user's home
+                                    folder - which is on C:, and C: has
+                                    0 bytes free on this machine (see
+                                    README). Safe to delete; everything
+                                    just re-downloads.
+  requirements.txt / runtime.txt  - the same dependency files, for local
+                                    `pip install -r requirements.txt`
+  README.md                       - the write-up
+
+
+DEPLOYING TO STREAMLIT CLOUD
+  1. Push this folder to GitHub.
+  2. Go to share.streamlit.io -> Create app -> pick this repo.
+  3. Set the main file path to:  Day23/mini_project/app.py
+  4. Deploy. First build can take 10-20 minutes because of the combined
+     weight of torch + paddlepaddle + their supporting libraries - see
+     the README's "Two engines, two frameworks" section for the honest
+     risk here. If the build times out or runs out of disk on the free
+     tier, that section also lists what to try next (there was no way to
+     verify Streamlit Cloud's exact limits without an actual deploy).
