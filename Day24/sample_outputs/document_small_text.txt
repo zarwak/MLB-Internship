@@ -1,0 +1,12 @@
+PROJECT STATUS REPORT
+Title: Document OCR Web Application
+Author: ML Internship Program;
+23
+Date: 19 August 2026
+This report describes the work completed on the optical character
+recognition pipeline. The application accepts an uploaded image,
+applies preprocessing; and extracts every readable line of text
+Users can review the result on screen and download It as a
+text file for further processing:
+Day
+plaln

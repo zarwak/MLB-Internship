@@ -1,0 +1,20 @@
+STUDENT ENROLMENT FORM
+Full Name:
+Ayesha Khan
+Father Name:
+Imran Khan
+Date of Birth:
+14 / 03
+2004
+CNIC Number:
+35202-1234567-8
+Contact Number:
+0300-1234567
+Email Address:
+ayesha khan@example.com
+Home Address:
+House 12, Gulberg, Lahore
+Programme Applied For:
+Computer Science
+Data Science
+Software Engineering
