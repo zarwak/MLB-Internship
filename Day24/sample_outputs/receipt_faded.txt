@@ -1,0 +1,47 @@
+CREEN
+VALLEY
+MART
+45
+Jinnah
+Rcad,
+Islamabad
+Tel:
+051-2233445
+Basmati
+Rice
+skg
+x1
+1450.00
+Fresh
+Milk
+1L
+x3
+540.00
+Brcwn
+Bread
+xZ
+360 . 00
+Chicken
+1kg
+x1
+760.00
+Cccking
+Oil
+1L
+x1
+650. 00
+SUBTOTAL
+3780 . 00
+TAX
+56
+183.00
+TOTAL
+3963.00
+CASH
+4000 .00
+CHANGE
+31 . 00
+THANK
+You ,
+COME
+AGAIN

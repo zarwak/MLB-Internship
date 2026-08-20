@@ -1,0 +1,14 @@
+# Streamlit reads .streamlit/config.toml from the CURRENT WORKING
+# DIRECTORY at launch, not from wherever app.py lives - the same "wrong
+# folder, silently ignored" trap as requirements.txt (see that file's
+# comment #4). HOW_TO_RUN.txt has you `cd Day23` before `streamlit run
+# mini_project\app.py`, so this copy covers local runs; the copy in
+# mini_project/.streamlit/config.toml covers Streamlit Cloud, whose
+# working directory is less predictable.
+[theme]
+base = "light"
+primaryColor = "#2563EB"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F1F5F9"
+textColor = "#0F172A"
+font = "sans serif"
