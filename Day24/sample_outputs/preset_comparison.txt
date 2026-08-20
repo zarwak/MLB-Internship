@@ -1,0 +1,127 @@
+Day 23 - preset comparison across all sample images
+======================================================================
+avg_conf = EasyOCR's own average confidence per detected line
+chars    = how many characters came out
+
+book_page.png
+  none      avg_conf=0.79  lines=  8  chars= 375  3.6s
+  light     avg_conf=0.81  lines=  8  chars= 375  5.9s
+  contrast  avg_conf=0.81  lines=  8  chars= 374  6.8s  <-- best
+  scanned   avg_conf=0.75  lines=  7  chars= 375  6.6s
+
+document_clean.png
+  none      avg_conf=0.77  lines=  9  chars= 411  6.2s
+  light     avg_conf=0.80  lines= 11  chars= 408  7.4s
+  contrast  avg_conf=0.87  lines= 13  chars= 408  7.5s  <-- best
+  scanned   avg_conf=0.76  lines= 10  chars= 409  7.1s
+
+document_dim_lighting.png
+  none      avg_conf=0.84  lines=  9  chars= 411  6.5s
+  light     avg_conf=0.84  lines= 11  chars= 409  7.3s
+  contrast  avg_conf=0.86  lines= 13  chars= 408  7.5s  <-- best
+  scanned   avg_conf=0.77  lines= 10  chars= 409  7.3s
+
+document_low_resolution.png
+  none      avg_conf=0.77  lines= 13  chars= 403  3.4s  <-- best
+  light     avg_conf=0.75  lines= 11  chars= 410  7.4s
+  contrast  avg_conf=0.72  lines= 11  chars= 410  7.0s
+  scanned   avg_conf=0.23  lines= 12  chars= 315  8.5s
+
+document_rotated.png
+  none      avg_conf=0.94  lines= 43  chars= 411  7.3s
+  light     avg_conf=0.94  lines= 47  chars= 409  7.8s  <-- best
+  contrast  avg_conf=0.94  lines= 49  chars= 409  8.1s
+  scanned   avg_conf=0.92  lines= 42  chars= 410  8.3s
+
+document_small_text.png
+  none      avg_conf=0.87  lines= 13  chars= 406  6.7s
+  light     avg_conf=0.84  lines= 13  chars= 410  7.3s
+  contrast  avg_conf=0.88  lines= 12  chars= 410  7.4s  <-- best
+  scanned   avg_conf=0.09  lines= 16  chars= 333  10.2s
+
+form_enrolment.png
+  none      avg_conf=0.87  lines= 18  chars= 243  5.9s
+  light     avg_conf=0.91  lines= 17  chars= 245  8.1s  <-- best
+  contrast  avg_conf=0.85  lines= 17  chars= 245  7.6s
+  scanned   avg_conf=0.85  lines= 18  chars= 243  7.7s
+
+form_low_contrast.png
+  none      avg_conf=0.84  lines= 18  chars= 243  5.8s
+  light     avg_conf=0.84  lines= 16  chars= 247  7.9s
+  contrast  avg_conf=0.88  lines= 18  chars= 243  7.9s
+  scanned   avg_conf=0.89  lines= 18  chars= 242  8.2s  <-- best
+
+form_with_checkboxes.png
+  none      avg_conf=0.86  lines= 21  chars= 306  6.6s
+  light     avg_conf=0.92  lines= 20  chars= 308  8.6s  <-- best
+  contrast  avg_conf=0.90  lines= 20  chars= 308  8.7s
+  scanned   avg_conf=0.84  lines= 21  chars= 305  8.6s
+
+handwritten_note.png
+  none      avg_conf=0.84  lines=  3  chars=  36  1.8s
+  light     avg_conf=0.78  lines=  3  chars=  36  1.6s
+  contrast  avg_conf=0.85  lines=  3  chars=  36  1.6s  <-- best
+  scanned   avg_conf=0.67  lines=  3  chars=  36  1.6s
+
+id_card.png
+  none      avg_conf=0.92  lines= 12  chars= 145  3.1s  <-- best
+  light     avg_conf=0.89  lines= 12  chars= 145  5.6s
+  contrast  avg_conf=0.91  lines= 12  chars= 145  5.6s
+  scanned   avg_conf=0.76  lines= 14  chars= 142  5.5s
+
+invoice_clean.png
+  none      avg_conf=0.93  lines= 33  chars= 406  6.6s
+  light     avg_conf=0.93  lines= 33  chars= 406  8.7s
+  contrast  avg_conf=0.94  lines= 33  chars= 406  8.5s  <-- best
+  scanned   avg_conf=0.83  lines= 33  chars= 403  9.8s
+
+invoice_scanned_tint.png
+  none      avg_conf=0.94  lines= 35  chars= 406  6.6s
+  light     avg_conf=0.94  lines= 33  chars= 406  8.9s
+  contrast  avg_conf=0.94  lines= 33  chars= 406  9.0s  <-- best
+  scanned   avg_conf=0.85  lines= 33  chars= 401  9.1s
+
+invoice_skewed.png
+  none      avg_conf=0.92  lines= 58  chars= 412  8.2s  <-- best
+  light     avg_conf=0.90  lines= 61  chars= 417  9.4s
+  contrast  avg_conf=0.90  lines= 61  chars= 418  9.5s
+  scanned   avg_conf=0.73  lines= 60  chars= 407  9.8s
+
+receipt_clean.png
+  none      avg_conf=0.88  lines= 56  chars= 279  6.0s  <-- best
+  light     avg_conf=0.87  lines= 54  chars= 288  13.0s
+  contrast  avg_conf=0.86  lines= 56  chars= 289  12.4s
+  scanned   avg_conf=0.84  lines= 47  chars= 288  13.6s
+
+receipt_faded.png
+  none      avg_conf=0.75  lines= 55  chars= 275  5.7s
+  light     avg_conf=0.73  lines= 49  chars= 278  12.4s
+  contrast  avg_conf=0.78  lines= 48  chars= 277  13.3s
+  scanned   avg_conf=0.83  lines= 47  chars= 283  12.8s  <-- best
+
+receipt_noisy_lowlight.png
+  none      avg_conf=0.89  lines= 47  chars= 272  5.8s  <-- best
+  light     avg_conf=0.87  lines= 54  chars= 280  13.0s
+  contrast  avg_conf=0.48  lines= 55  chars= 275  13.3s
+  scanned   avg_conf=0.01  lines=  3  chars=  11  10.1s
+
+receipt_tiny_text.png
+  none      avg_conf=0.41  lines= 35  chars= 236  5.6s
+  light     avg_conf=0.48  lines= 53  chars= 260  13.4s
+  contrast  avg_conf=0.53  lines= 54  chars= 267  13.6s  <-- best
+  scanned   avg_conf=0.49  lines= 47  chars= 278  12.3s
+
+
+Deskew on vs off (preset: contrast)
+----------------------------------------------------------------------
+document_rotated.png
+  deskew off avg_conf=0.94  lines= 49  chars= 409  corrected=0.0 deg
+  deskew on  avg_conf=0.87  lines= 13  chars= 411  corrected=-6.0 deg
+
+invoice_skewed.png
+  deskew off avg_conf=0.90  lines= 61  chars= 418  corrected=0.0 deg
+  deskew on  avg_conf=0.89  lines= 33  chars= 406  corrected=7.0 deg
+
+document_clean.png
+  deskew off avg_conf=0.87  lines= 13  chars= 408  corrected=0.0 deg
+  deskew on  avg_conf=0.87  lines= 13  chars= 408  corrected=0.0 deg

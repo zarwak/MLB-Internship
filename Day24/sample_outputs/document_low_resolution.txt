@@ -1,0 +1,13 @@
+PROJECT STATUS REPORT
+Title: Document OCR Web Application
+Author: ML Internship Program, Day 23
+Date: 19 August 2026
+This
+eport describes Ine work completed on the oplical
+chalacler
+recognition pipeline . The applicalion accepts an uploaded image,
+applies preprocessing;
+and extracts every readable line of text:
+Users can reviewv Ine result on screen and dowload
+plain
+text flle for further processing:

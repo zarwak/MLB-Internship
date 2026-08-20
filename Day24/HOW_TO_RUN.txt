@@ -1,0 +1,117 @@
+HOW TO RUN - Day 24 Document OCR Web Application
+
+0. ENVIRONMENT
+   This folder has its OWN virtual environment, separate from Day 23's.
+
+   cd D:\GitHub\ML-Bench\Day24
+   .venv\Scripts\activate
+
+   Starting fresh instead (on another machine, or if that venv is gone) -
+   USE PYTHON 3.11 EXPLICITLY. A plain `python -m venv .venv` picked up
+   Python 3.13 on this machine during Day 24's own build, which silently
+   created a venv that could not install numpy==1.26.4 (no prebuilt wheel
+   for 3.13, and no C compiler here to build one from source) - see the
+   README's challenge 1 for the full story. Find your Python 3.11 install
+   path first (Day 23's venv already has one, in its pyvenv.cfg), then:
+
+   cd D:\GitHub\ML-Bench\Day24
+   C:\Users\<you>\AppData\Local\Programs\Python\Python311\python.exe -m venv .venv
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+
+   This installs ~3-4 GB of dependencies (four OCR engines' worth of
+   models and frameworks, plus RapidOCR's much lighter onnxruntime) and
+   can take 15-20 minutes depending on your connection.
+
+   Windows PowerShell note: if `.venv\Scripts\activate` does not work,
+   use `.venv\Scripts\Activate.ps1` instead. If activation is not an
+   option, skip it entirely and call the venv's own python.exe directly:
+
+   D:\GitHub\ML-Bench\Day24\.venv\Scripts\python.exe -m streamlit run mini_project\app.py
+
+
+0b. TESSERACT BINARY (one-time, not a pip install)
+   Same as Day 23 - pytesseract only wraps the Tesseract engine, which is
+   a separate native program pip cannot install:
+     1. Download the installer from
+        https://github.com/UB-Mannheim/tesseract/wiki
+        (tesseract-ocr-w64-setup-*.exe)
+     2. Run it, keep the default install path
+        (C:\Program Files\Tesseract-OCR\) - ocr_pipeline.py already checks
+        that exact path automatically, no PATH edit needed.
+     3. Installed somewhere else instead? Set an env var:
+        setx TESSERACT_CMD "C:\path\to\your\tesseract.exe"
+        (open a new terminal afterward for it to take effect)
+   Until this is done, picking "Tesseract" in the app raises a clear
+   error telling you to do this.
+
+
+1. START THE APP (the mini project)
+   streamlit run mini_project\app.py
+
+   It opens in your browser. Pick an OCR Engine in the sidebar (EasyOCR,
+   PaddleOCR, Tesseract, docTR, or RapidOCR), then upload one or more
+   images from sample_images\ (or your own) - uploading several at once
+   processes them together using up to 4 threads, and a results table
+   appears with a row per document, each expandable into the full
+   image + text view. The first run of any engine downloads its model
+   files (Tesseract excepted - see 0b above; RapidOCR's is the smallest
+   at ~30MB), which are then cached in .model_cache\.
+
+
+2. (OPTIONAL) REGENERATE THE 18 SAMPLE IMAGES
+   python sample_images\make_sample_images.py
+
+
+3. (OPTIONAL) RE-RUN THE FULL TEST OVER ALL 18 IMAGES (the coding practice)
+   python coding_practice\batch_test.py
+
+   Unchanged from Day 23 - runs every image through all four presets on
+   every engine in ocr_pipeline.ENGINES, writing the comparison tables to
+   sample_outputs\.
+
+
+FILES
+  mini_project\
+    app.py                        - the Streamlit web app (the deliverable) -
+                                    multi-file upload, threaded processing,
+                                    the results table, and the per-document
+                                    detail view
+    requirements.txt / runtime.txt
+    / packages.txt                - copies of the same files at the repo
+                                    root, kept next to app.py because
+                                    Streamlit Cloud only reads dependency
+                                    files from the repo root or the entry
+                                    point's own folder - if you change one
+                                    copy, change both (packages.txt is the
+                                    one exception: Streamlit Cloud only
+                                    actually reads it from the TRUE repo
+                                    root, one level above Day24\ itself -
+                                    see Day 23's README, challenge 15)
+  coding_practice\
+    batch_test.py                 - unchanged from Day 23
+  ocr_pipeline.py                  - all the shared OCR logic. Day 24 added
+                                    get_reader_lock()/THREAD_SAFE_ENGINES
+                                    (the threading safety logic) and the
+                                    RapidOCR branch, on top of everything
+                                    Day 23 already had here.
+  sample_images\                  - the same 18 test images from Day 23
+  sample_outputs\                 - extracted text and comparison tables
+  .model_cache\                   - created automatically on first run, on
+                                    D: instead of the default home-folder
+                                    location on C: (which has 0 bytes free -
+                                    see the README). Safe to delete;
+                                    everything just re-downloads.
+  requirements.txt / runtime.txt
+  / packages.txt                  - the same dependency files, for local
+                                    `pip install -r requirements.txt`
+  README.md                       - the write-up: what changed in Day 24
+                                    and the real problems that came with it
+
+
+DEPLOYING TO STREAMLIT CLOUD
+  Not yet done for Day 24. Day 23's README documents the full deployment
+  saga (Python version pinning, packages.txt's repo-root-only rule, the
+  libGL/opencv fix) in detail - the same lessons apply here, plus RapidOCR
+  adds its own opencv_python dependency needing the same
+  opencv-python-headless treatment already in requirements.txt.
