@@ -7,38 +7,42 @@ shows it next to the original, and lets you download it as a `.txt`
 file.
 
 The app started out EasyOCR-only. Once the brief clarified that the goal
-was to compare two OCR engines and let the user pick, I added **PaddleOCR**
-as a second engine alongside EasyOCR, with a sidebar selector to choose
-either one - or a "Compare both" mode that runs the image through both
-and keeps whichever one was more confident. Everything below reflects
-that two-engine version; where a finding is specific to the earlier
-EasyOCR-only build, it says so.
+was to compare OCR engines and let the user pick, I added **PaddleOCR**
+as a second engine, then later added **Tesseract** and **docTR** too, so
+there are four engines now, each selectable from a sidebar dropdown.
+There used to be a "Compare both" mode as well, that ran an image
+through two engines at once and kept whichever was more confident - I
+dropped it once there were four engines to choose from, because a
+head-to-head scoreboard stops being a simple side-by-side once there are
+four possible answers instead of two, and picking one engine and reading
+its result is a much easier thing for a person to actually use. Everything
+below reflects the current four-engine version; where a finding is
+specific to an earlier build, it says so.
 
 ---
 
 ## What the app does
 
-1. You pick an **OCR Engine** in the sidebar: EasyOCR, PaddleOCR, or
-   "Compare both".
+1. You pick an **OCR Engine** in the sidebar: EasyOCR, PaddleOCR,
+   Tesseract, or docTR.
 2. You upload an image (a document, receipt, invoice, form - anything
    with text on it).
 3. The app cleans the image up a bit, because OCR reads cleaner images
    better.
-4. The chosen engine (or both) reads the text.
-5. You see the original image on the left and the text on the right -
-   plus, in Compare mode, a small scoreboard showing how each engine did.
+4. The chosen engine reads the text.
+5. You see the original image on the left and the text on the right.
 6. You can fix any mistakes in the text box, then download it as a
    `.txt` file.
 
-There is also an **Auto mode** (on by default, single-engine only) that
-tries a few different clean-up recipes and keeps whichever one worked
-best, so you do not have to know which preprocessing setting to pick.
+There is also an **Auto mode** (on by default) that tries a few
+different clean-up recipes and keeps whichever one worked best, so you
+do not have to know which preprocessing setting to pick.
 
 ---
 
 ## Which OCR libraries I used
 
-**EasyOCR and PaddleOCR**, selectable from a dropdown.
+**EasyOCR, PaddleOCR, Tesseract and docTR**, selectable from a dropdown.
 
 ### EasyOCR
 
@@ -64,8 +68,9 @@ A different OCR library from Baidu, built on the PaddlePaddle framework
 rather than PyTorch. The API is one step more involved than EasyOCR's -
 it wants an explicit angle-classifier flag and returns its detections in
 a slightly different shape - but the model files it downloads are
-noticeably smaller, and the two engines genuinely do not always agree on
-the same image (see the head-to-head numbers below).
+noticeably smaller, and it genuinely does not always agree with EasyOCR
+on the same image - which is exactly why it is worth having as a second
+opinion, not just a backup.
 
 ```python
 from paddleocr import PaddleOCR
@@ -73,35 +78,79 @@ ocr = PaddleOCR(use_angle_cls=True, lang="en")
 result = ocr.ocr(image, cls=True)
 ```
 
-`ocr_pipeline.py` normalises both engines' output into the same
+### Tesseract
+
+The oldest and most classic of the four - it started life at HP in the
+1980s, and Google maintains it now. `pytesseract` is only a thin Python
+wrapper around it; the actual engine is a separate program that has to
+be installed on the machine itself, which `pip install` cannot do for
+you (see challenge 12 below for how much that one fact cost me):
+
+```python
+import pytesseract
+data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
+```
+
+It hands back one row per detected *word*, not per line, so
+`ocr_pipeline.py` groups words back into lines using Tesseract's own
+block/paragraph/line numbering, to match the line-level shape the other
+three engines already return. It is the lightest and fastest of the
+four - no deep-learning model to load at all - but only works if
+something on the machine actually has the Tesseract program installed.
+
+### docTR
+
+A newer engine built on PyTorch, which means it shares its framework
+with EasyOCR rather than adding a third deep-learning framework the way
+PaddleOCR did. It ships several detection/recognition architectures, and
+I picked the `mobilenet` ones over the default `resnet`/`master` ones on
+purpose - a much smaller download and faster on a CPU, for a small
+accuracy cost that does not matter for printed text:
+
+```python
+from doctr.models import ocr_predictor
+model = ocr_predictor(det_arch="db_mobilenet_v3_large",
+                      reco_arch="crnn_mobilenet_v3_small", pretrained=True)
+result = model([image])
+```
+
+Its output already comes grouped into pages -> blocks -> lines -> words,
+so unlike Tesseract there is no manual regrouping needed.
+
+`ocr_pipeline.py` normalises all four engines' output into the same
 `OcrResult` shape, so nothing else in the app needs to know which engine
-actually produced a given result - see "Two engines, one interface"
+actually produced a given result - see "Four engines, one interface"
 below.
 
 ---
 
-## Two engines, one interface
+## Four engines, one interface
 
 Adding a second engine after the app already worked with one meant
 deciding how much of the pipeline could stay shared versus how much had
 to fork per engine.
 
 **Shared, unchanged:** all the preprocessing - grayscale, upscale,
-denoise, contrast, threshold, deskew. Both engines just want a clean
-image array; neither cares how it got clean. This is most of the
-pipeline's actual logic, and none of it needed to know a second engine
-existed.
+denoise, contrast, threshold, deskew. All four engines just want a clean
+image array; none of them care how it got clean. This is most of the
+pipeline's actual logic, and none of it needed to know a second (or
+third, or fourth) engine existed.
 
-**Forked, on purpose:** only the last step, reading the result back out.
-EasyOCR's `readtext()` returns a flat list of `(box, text, confidence)`
-triples. PaddleOCR's `ocr()` wraps that one level deeper - a list *per
-input image* (even for a single image) containing `[box, (text,
-confidence)]` pairs, and can hand back `None` instead of an empty list
-when it finds nothing, which is worth guarding for explicitly rather
-than assuming "no results" always looks the same. `extract_text()` in
-`ocr_pipeline.py` is the one place that difference is handled, so
-everything above it - the app, `batch_test.py` - only ever deals with
-one `OcrResult` shape regardless of which engine produced it.
+**Forked, on purpose:** only the last step, reading the result back out -
+and all four engines shape that result differently. EasyOCR's
+`readtext()` returns a flat list of `(box, text, confidence)` triples.
+PaddleOCR's `ocr()` wraps that one level deeper - a list *per input
+image* (even for a single image) containing `[box, (text, confidence)]`
+pairs, and can hand back `None` instead of an empty list when it finds
+nothing, which is worth guarding for explicitly rather than assuming "no
+results" always looks the same. Tesseract's `image_to_data()` returns one
+row *per word*, so it needs grouping back into lines using its own
+block/paragraph/line numbers before it matches the others. docTR already
+comes pre-grouped into pages -> blocks -> lines -> words, so that one
+just needs flattening. `extract_text()` in `ocr_pipeline.py` is the one
+place all four differences are handled, so everything above it - the
+app, `batch_test.py` - only ever deals with one `OcrResult` shape
+regardless of which engine produced it.
 
 **One real conversion needed:** PaddleOCR expects BGR channel order (it
 is built around OpenCV conventions), while the preprocessing pipeline
@@ -112,42 +161,53 @@ backwards would not crash anything (PaddleOCR would still detect *some*
 text - flipped red/blue channels do not change stroke shapes), it would
 just be a quiet, hard-to-notice accuracy hit rather than an error, which
 is exactly the kind of bug worth writing a deliberate conversion
-function for instead of leaving to chance.
+function for instead of leaving to chance. Tesseract and docTR need no
+such fix - Tesseract reads a plain PIL image and docTR stays in RGB the
+whole way through, same as the pipeline itself.
 
 ---
 
-## Two engines, two frameworks
+## Four engines, three frameworks
 
 Adding PaddleOCR did not just add a second `pip install` - it added a second
 entire deep-learning framework. EasyOCR is built on PyTorch, PaddleOCR is
-built on PaddlePaddle, and neither shares any weight with the other, so the
-venv ends up with both installed in full:
+built on PaddlePaddle, and neither shares any weight with the other. docTR
+is PyTorch-based too, so it rides along on EasyOCR's framework for free.
+Tesseract is not a Python deep-learning framework at all - it is a separate
+compiled C++ program, so it barely adds anything to the Python side:
 
 | | Framework | Approx. size (CPU wheels) |
 |---|---|---|
 | EasyOCR | PyTorch | ~200MB (`torch==2.13.0+cpu`, pinned via `--extra-index-url` - plain PyPI `torch` bundles several GB of CUDA) |
-| PaddleOCR | PaddlePaddle | ~100-150MB (`paddlepaddle` is CPU-only by default on PyPI, no pin needed) |
+| PaddleOCR | PaddlePaddle | ~100-150MB (`paddlepaddle==3.0.0` is CPU-only by default on PyPI) |
+| docTR | PyTorch (shared with EasyOCR) | just its own package + weights, no extra framework |
+| Tesseract | none (native binary) | pytesseract itself is tiny; the actual engine is a separate program installed outside pip entirely |
 
 Add in each engine's own dependencies (opencv, scipy and scikit-learn all
-come along as paddleocr's own requirements) and the full environment is
-roughly **2-3GB** - see the install step in `HOW_TO_RUN.txt`.
+come along as paddleocr's own requirements, and easyocr/paddleocr/doctr
+each pull in their own copy of opencv too - see challenge 18 below for what
+that caused on Streamlit Cloud) and the full environment is roughly
+**3-4GB** - see the install step in `HOW_TO_RUN.txt`.
 
 **The honest trade-off:** Day 22 already hit Streamlit Cloud's free-tier
-build limits once, with torch alone. Doubling the framework count roughly
-doubles that risk - a build that runs out of time or disk partway through,
-silently installing only Streamlit's own dependencies and giving no warning
-(see challenge 6 in "Challenges I faced"). This risk is an estimate carried
-over from Day 22's experience, not something verified against Streamlit
-Cloud's actual limits with a real deploy of this two-engine app.
+build limits once, with torch alone. Every extra engine adds to that risk -
+a build that runs out of time or disk partway through, silently installing
+only Streamlit's own dependencies and giving no warning (see challenge 6 in
+"Challenges I faced"). It is now deployed and working (see the deployment
+challenges below for everything that took), but I never got to properly
+load-test whether running all four engines back to back in one session
+stays inside the free tier's 1GB RAM ceiling - see "Possible improvements".
 
-**Why keep both anyway:** the point of this app was never "find the single
-best engine" - it was to compare two independently-trained models on the
-same image and let a person see where they disagree, which only works with
-both actually installed side by side. If a deploy does hit the free tier's
-limit, the fallback is dropping to a single-engine build: comment out the
-other engine's line in `requirements.txt` and its branch in
-`ocr_pipeline.get_reader()`, trading the comparison feature for a build that
-fits.
+**Why keep all four anyway:** once "Compare both" mode was gone, the reason
+for keeping every engine changed - it stopped being about running two
+models side by side and became about genuine choice. Each engine actually
+trades off differently: Tesseract is the fastest and lightest for a clean
+printed page, EasyOCR is the steady all-rounder with a confidence score
+per line, PaddleOCR is a second opinion when EasyOCR is unsure, and docTR
+tends to do best on more structured documents. If a deploy does hit the
+free tier's limit, the fallback is dropping to fewer engines: comment out
+the ones you do not need in `requirements.txt` and their branch in
+`ocr_pipeline.get_reader()`, trading choice for a build that fits.
 
 ---
 
@@ -419,7 +479,9 @@ model download with `OSError: [Errno 28] No space left on device`. The
 fix was to stop relying on either engine's default location at all -
 `ocr_pipeline.py` now passes explicit `model_storage_directory` /
 `det_model_dir` / `rec_model_dir` / `cls_model_dir` arguments pointing
-both engines at a `.model_cache/` folder next to the code, on D:. Same
+both engines at a `.model_cache/` folder next to the code, on D:. docTR
+got the same treatment (`DOCTR_CACHE_DIR`) the moment it was added,
+before it ever got the chance to hit the same wall. Same
 underlying problem as Day 22's pip installs, showing up in a completely
 different code path - worth remembering that "give it its own venv"
 does not automatically mean "nothing on this app writes to C: anymore."
@@ -463,6 +525,103 @@ retroactively fix a stream Python already opened. Verified by deleting
 the cached models and re-downloading them with no environment variable
 set at all.
 
+**12. Tesseract needs an actual program installed, not just a pip
+package.** `pytesseract` is only a wrapper - it shells out to a real
+Tesseract binary that pip cannot install, because it is not a Python
+package, it is a separate compiled program. Even after downloading the
+Windows installer and pointing `TESSERACT_CMD` at the right path with
+`setx`, it still failed the same way twice more, because `setx` only
+writes the value to the registry, and any shell that was already open
+before you ran it never picks that change up. Not even a brand new
+terminal always fixes it, if whatever hosts that terminal was itself
+opened before the `setx` ran - it inherits the environment its own
+parent process had at *its* startup, not whatever the registry says
+right now. The fix that actually stuck was to stop relying on the
+environment variable at all: `ocr_pipeline.py` now also checks the
+actual common install locations directly, so the app works the same
+regardless of which terminal happens to launch it.
+
+**13. The confidence badge lied to me too - a different lie than the
+score itself.** While tidying up the UI, `st.metric`'s built-in colour
+for the confidence label turned out to be misleading in its own way:
+Streamlit only knows how to colour a *number* green or red, based on its
+sign. Handed a plain word like "Shaky" instead of a number, it could not
+tell that from "Looks good" and was on track to colour both the same
+reassuring green with an upward arrow. Fixed by building a small colour
+badge by hand instead, so the colour always actually matches what the
+label says. Small bug, but the exact same shape as the "confidence score
+lied to me" lesson above - a UI number can look confident and still be
+wrong.
+
+**14. Streamlit Cloud quietly ignored my Python version pin.** The build
+kept using Python 3.14 even with a correctly formatted `runtime.txt`
+(`python-3.11`) sitting in three different, sensible-looking folders. The
+real problem was nothing to do with the file's content or location - the
+Python version for an app on Streamlit Cloud gets locked in when the app
+is first created, and does not seem to re-read `runtime.txt` on a later
+redeploy. The fix was setting the Python version directly in the app's
+own dashboard settings, not in the repo at all. `paddlepaddle==3.0.0`
+does not ship a wheel for Python 3.14, so this showed up as a dependency
+resolution failure that had nothing to do with dependencies.
+
+**15. `packages.txt` only works from the true repository root.**
+`requirements.txt` is read from either the repo root or the folder
+`app.py` lives in - I already knew that from Day 22. I assumed
+`packages.txt` (the file that installs system-level, non-Python
+packages like Tesseract) followed the same rule, and put copies in both
+places. It does not: Streamlit Cloud only ever read the copy sitting at
+the actual top of the repository, one level above even `Day23/` itself,
+since this whole internship's repo is one shared git repository, not one
+per day. The giveaway was the build log itself - a working `packages.txt`
+prints its own "installing from apt" section before the Python
+dependencies install, and that section was simply missing every time,
+right up until the root copy existed.
+
+**16. `packages.txt` does not support comments the way `requirements.txt`
+does.** Once I found the right folder, the very same file broke the
+build in a completely different way: `xargs: unmatched single quote`.
+`requirements.txt` is a pip format, and pip properly strips out `#`
+comment lines. `packages.txt` is apparently just piped straight into
+`apt-get install` with no such stripping, so my own explanatory comments
+- which happened to contain a couple of apostrophes, like "app's own
+folder" - broke the parsing for the *entire file*, not just that line.
+The fix was blunt: no comments at all, just bare package names, one per
+line.
+
+**17. Three engines, three different builds of OpenCV, all fighting
+each other.** Even with `packages.txt` finally being read, the app still
+crashed with `ImportError: libGL.so.1: cannot open shared object file`
+the moment any engine that touches `cv2` tried to load. None of my own
+code imports `cv2` directly - see challenge 2 back on Day 22 - but
+EasyOCR, PaddleOCR and docTR all pull it in anyway, each through its own
+dependency chain, and the build log showed all three different builds of
+OpenCV (`opencv-python`, `opencv-contrib-python`, and
+`opencv-python-headless`) getting installed side by side. `libGL.so.1` is
+a system graphics library that Streamlit Cloud's minimal container
+simply does not have, because it has no display at all - and the
+"headless" build of OpenCV exists precisely so you never need that
+library in the first place. The actual fix, confirmed against
+Streamlit's own documentation and someone else's working four-engine
+build of this exact project, was two things together: add
+`opencv-python-headless` explicitly to `requirements.txt`, and add
+`libgl1` to `packages.txt` as a fallback for whichever library still
+insists on the non-headless build regardless.
+
+**18. A fix that looked right and quietly did nothing at all.** Someone
+else's working version of this same project configures PaddleOCR with
+lightweight "mobile" models instead of the default heavier ones, to fit
+Streamlit Cloud's 1GB free-tier RAM limit. I nearly copied that
+configuration straight in. Testing it first against the exact PaddleOCR
+version this project is pinned to (`2.9.1`, pinned for a real reason -
+see challenge 10) showed it would not have worked: those parameter names
+belong to a newer version of PaddleOCR's API, and `2.9.1` does not raise
+an error for a parameter it does not recognise, it just silently ignores
+it and carries on with its own defaults. The fix would have sat in the
+code doing precisely nothing, while looking like it was doing something
+- which is worse than a crash, because nothing would ever have told me
+it was not working. Left as an open item rather than guessed at - see
+"Possible improvements" below.
+
 ---
 
 ## Possible improvements
@@ -488,6 +647,12 @@ set at all.
   before reading would cut that down.
 - **Support more languages.** EasyOCR handles 80+, and the app currently
   only asks for English.
+- **Actually load-test the free-tier RAM limit.** It deploys and runs
+  now, but I never properly tested what happens if one session cycles
+  through all four engines back to back - see challenge 18. Getting
+  PaddleOCR onto genuinely lighter models on this pinned version, not
+  just confirming the newer-API shortcut does not work, is the real
+  version of that fix.
 
 ---
 
@@ -495,17 +660,22 @@ set at all.
 
 ```
 Day23/
-  .venv/                   <- this app's own environment (EasyOCR + PaddleOCR)
+  .venv/                   <- this app's own environment (all four engines)
   mini_project/            <- the deliverable: the Streamlit web app
     app.py                 <- start here - has the engine selector
     requirements.txt       <- copy of the root one, kept next to app.py
     runtime.txt            <- (Streamlit Cloud needs them right here)
+    packages.txt           <- a spare copy, kept just in case (see below)
+    .streamlit/config.toml <- the app's colour theme
   coding_practice/          <- the practice script, run from a terminal
-    batch_test.py           <- runs all 18 images through 4 presets x 2 engines
+    batch_test.py           <- runs all 18 images through 4 presets x every
+                               engine (loops whatever ocr_pipeline.ENGINES is)
   ocr_pipeline.py          <- all the OCR logic - shared by both folders
                              above, not owned by either one
   requirements.txt        <- what to install
   runtime.txt             <- which Python version
+  packages.txt            <- another spare copy - not the one that actually
+                             works (see below)
   HOW_TO_RUN.txt          <- setup commands
   sample_images/          <- 18 test images + the script that generates them
   sample_outputs/         <- the extracted text (per engine + overall best),
@@ -521,6 +691,15 @@ means `batch_test.py` can run the exact same pipeline from the command
 line without Streamlit involved - and if the
 two had their own copies of the logic, they would have drifted apart the
 first time I fixed anything.
+
+**One more thing about `packages.txt`:** this whole internship is one
+shared git repository, with every day's folder inside it - so the true
+root of the repository is not `Day23/`, it is the folder one level above
+that, containing every `Day1`, `Day2`, and so on. Streamlit Cloud only
+ever reads `packages.txt` from that actual top level, which is not shown
+in the tree above because it sits outside `Day23/` entirely. The two
+copies inside `Day23/` shown above are spares I left in place just in
+case, not the ones doing any real work - see challenge 15.
 
 ---
 
@@ -576,29 +755,18 @@ pip install -r requirements.txt
 
 - [x] Accepts an image upload
 - [x] Applies preprocessing (grayscale, denoising, contrast, thresholding)
-- [x] Extracts text using **both EasyOCR and PaddleOCR**, selectable in
-      the app (plus a "compare both" mode)
+- [x] Extracts text using **EasyOCR, PaddleOCR, Tesseract and docTR**,
+      selectable in the app
 - [x] Displays the original image and the extracted text side by side
 - [x] Lets the user download the text as a `.txt` file
 - [x] Handles different document types (18 images across 6 categories)
-- [x] Tested on more than 15 images (18, each through 4 presets, on both
-      engines - 144 OCR passes)
+- [x] Tested on more than 15 images (18, each through 4 presets)
 - [x] Code organised into separate functions
 - [x] Built as a Streamlit app
-- [ ] Deployed to Streamlit Cloud - **needs your own account** (steps in
-      `HOW_TO_RUN.txt`; see "Two engines, two frameworks" for the honest
-      deployment-size risk this app carries)
-- [ ] Public URL added to this README - **after deploying**
+- [x] Deployed to Streamlit Cloud - live at
+      [ocrtoolapp.streamlit.app](https://ocrtoolapp.streamlit.app) (took a
+      real fight to get there - see challenges 14 to 18)
+- [x] Public URL added to this README - see above
 
 ---
 
-## Deployment (your part)
-
-1. Push this to GitHub.
-2. Go to [share.streamlit.io](https://share.streamlit.io) and click
-   **Create app**, then pick this repo.
-3. Set the main file path to `Day23/mini_project/app.py` (this matters -
-   see challenge 6 above).
-4. Deploy. The first build takes 5-10 minutes because of torch.
-5. Open the URL, upload one of the sample images to check it works, then
-   paste the link at the top of this README.
