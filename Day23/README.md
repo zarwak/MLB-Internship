@@ -1,11 +1,5 @@
 # Day 23 - Document OCR Web Application
 
-Yesterday (Day 22) I learned how OCR works and got EasyOCR reading text
-out of images. Today I turned that into a proper little web app: you
-upload a picture of a document, it cleans the image up, reads the text,
-shows it next to the original, and lets you download it as a `.txt`
-file.
-
 The app started out EasyOCR-only. Once the brief clarified that the goal
 was to compare OCR engines and let the user pick, I added **PaddleOCR**
 as a second engine, then later added **Tesseract** and **docTR** too, so
@@ -18,6 +12,10 @@ four possible answers instead of two, and picking one engine and reading
 its result is a much easier thing for a person to actually use. Everything
 below reflects the current four-engine version; where a finding is
 specific to an earlier build, it says so.
+
+---
+## DEMO:
+![DEMO VIDEO](demo_video_summarizer.gif)
 
 ---
 
