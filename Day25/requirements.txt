@@ -1,0 +1,14 @@
+# Day 25 - Image Feature Matching System
+
+# The app itself
+streamlit>=1.40.0
+opencv-python-headless>=4.9.0
+numpy>=1.26.0
+
+# Only used by coding_practice/05_harris_vs_orb.py for the summary chart.
+# The Streamlit app does not import it.
+matplotlib>=3.8.0
+
+# Only needed if you also want to run the alternative Gradio front end
+# (gradio_app.py). Not required by app.py.
+# gradio>=5.0.0
