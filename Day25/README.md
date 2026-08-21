@@ -13,10 +13,9 @@ comes from what happens *after* the match.
 
 ---
 
-**Status of the two links:**
-
-- **GitHub repository** — 
 - **Public app URL** —
+[Click here to go to the app](https://feature-detection-matching.streamlit.app/)
+
 - **Screen recording** — 
 
 ## What is in here
