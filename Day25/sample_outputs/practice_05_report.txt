@@ -1,0 +1,117 @@
+comparing Harris and ORB over 10 images
+
+==============================================================================
+1. SPEED AND YIELD  (best of 5 runs after warm-up, images capped at 1000 px)
+==============================================================================
+image                             px   Har n   R map   Har ms   ORB n   ORB ms
+------------------------------------------------------------------------------
+pair01_box_product_a          72,252     131     4.1    10.23     865    12.72
+pair02_graffiti_wall_a       512,000     553    26.6    48.83    1000    28.30
+pair03_leuven_landmark_a     422,813     362    22.5    37.30    1000    22.55
+pair04_aloe_plant_a          866,000    5066    44.8   263.61    1000    45.00
+pair05_suzanne_3d_a          307,200      72    16.3    20.84    1000    15.65
+pair06_rubber_whale_a        226,592     186    13.0    20.24     948    14.76
+pair07_text_page_a           142,892     158     8.0    17.54     972    14.85
+pair08_aerial_a              307,200    1065    16.6    59.25    1000    23.73
+pair09_indoor_stereo_a       280,908     164    15.1    23.72    1000    15.33
+pair10_basketball_a          307,200     156    16.5    23.34    1000    18.07
+------------------------------------------------------------------------------
+mean                                                     52.49            21.10
+median                                                   23.72            18.07
+
+On these images ORB is 2.5x faster than Harris on the mean
+(24 vs 18 ms on the median), which is not the
+result the usual 'Harris is the cheap one' summary predicts. Two
+things explain it:
+  - ORB works to a fixed budget. nfeatures=1000 caps its work no
+    matter how busy the image is.
+  - Harris has no budget. It returns everything above the
+    threshold, and the per-corner steps after the response map
+    (connected components, then cornerSubPix on every centroid)
+    scale with that count.
+
+The clearest case is pair04_aloe_plant_a: 5066 corners past the
+threshold and 264 ms spent, against ORB's capped 1000 in 45 ms.
+
+The 'R map' column is the response map alone, without the
+thresholding and sub-pixel steps: 18.3 ms on average, 2.9x cheaper
+than full Harris and 1.2x cheaper than ORB. So the
+Harris *operator* is indeed the cheap one; turning its output into
+a usable corner list is what costs, and that cost is unbounded.
+
+==============================================================================
+2. REPEATABILITY  (same physical point re-found within 3 px, averaged over 10 images)
+==============================================================================
+transform            Harris repeat   ORB repeat   verdict
+------------------------------------------------------------------------------
+identity                    100.0%       100.0%   comparable
+rotate 15                    56.9%        83.2%   ORB better by 26 pts
+rotate 45                    45.9%        80.2%   ORB better by 34 pts
+rotate 90                    76.2%        94.7%   ORB better by 19 pts
+scale 0.75                   50.3%        92.4%   ORB better by 42 pts
+scale 0.50                   33.8%        84.3%   ORB better by 50 pts
+scale 0.35                   26.5%        65.9%   ORB better by 39 pts
+brighten x1.3                71.3%        80.7%   ORB better by 9 pts
+blur k=5                     52.3%        88.5%   ORB better by 36 pts
+noise sigma=15               69.3%        94.4%   ORB better by 25 pts
+
+==============================================================================
+3. MATCHABILITY  (good matches after the ratio test, same ORB
+   descriptor attached to both detectors' output)
+==============================================================================
+transform           Harris+desc      ORB   note
+------------------------------------------------------------------------------
+identity                  618.5    978.3   both fine
+rotate 15                  32.7    510.7   Harris collapses - 6% of ORB
+rotate 45                  10.2    491.7   Harris collapses - 2% of ORB
+rotate 90                  11.2    779.9   Harris collapses - 1% of ORB
+scale 0.75                 49.3    374.8   Harris collapses - 13% of ORB
+scale 0.50                 16.0    259.7   Harris collapses - 6% of ORB
+scale 0.35                 18.6    122.2   Harris collapses - 15% of ORB
+brighten x1.3             233.5    541.8   Harris down to 43% of ORB
+blur k=5                  236.8    636.0   Harris down to 37% of ORB
+noise sigma=15            190.5    719.2   Harris down to 26% of ORB
+
+Read this table against the repeatability one above. Under
+'rotate 90' Harris *finds* the corners again perfectly well, yet
+almost none of them match. Those two facts together locate the
+failure precisely: it is not the detector losing the corners, it is
+the descriptor. A Harris corner has no orientation, so BRIEF lays
+its sampling pattern down at a fixed angle and reads a rotated
+patch in the wrong order. ORB rotates the pattern by the keypoint's
+own angle first, which is the entire 'Rotated BRIEF' half of the
+name. Detector and descriptor fail independently, and only the
+pair of experiments tells you which one you are looking at.
+
+==============================================================================
+CONCLUSION  (from the numbers above, not from the textbook)
+==============================================================================
+1. Speed did not go the way the usual summary claims. The Harris
+   response map is by far the cheapest thing here, but a full
+   Harris corner list is not, because nothing bounds how many
+   corners it has to refine. ORB's fixed feature budget makes its
+   cost predictable, which matters more in practice than raw ms.
+
+2. Rotation: Harris' response R is rotation invariant in theory -
+   it is built from the eigenvalues of M, which do not depend on
+   the window's orientation. Measured, it still fell to 46% at 45
+   degrees against ORB's 80%. The theory is about the operator; the
+   loss comes from everything around it - a square window, discrete
+   Sobel kernels and the interpolation the warp itself introduces.
+   Note rotate 90 scores much higher than rotate 45 for both, since
+   a quarter turn needs no interpolation at all.
+
+3. Scale is the real divide. At half size Harris repeatability was
+   34% against ORB's 84%, and good matches fell to 16 against
+   260. Harris has one fixed window and cannot see a corner that
+   has changed size; ORB's pyramid is built precisely for this.
+
+4. Only ORB can match on its own. The Harris column in experiment 3
+   exists only because ORB's descriptor was bolted onto Harris'
+   corners. Harris by itself outputs positions and stops.
+
+So: Harris for corners in one image at one scale - tracking,
+calibration targets, sub-pixel refinement. ORB when two images have
+to be put into correspondence, which is what this project needs.
+
+wrote D:\GitHub\ML-Bench\Day25\sample_outputs\practice_05_harris_vs_orb.png
