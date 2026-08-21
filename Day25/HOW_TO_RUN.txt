@@ -1,0 +1,79 @@
+Day 25 - Image Feature Matching System
+======================================
+
+SETUP
+-----
+From inside the Day25 folder:
+
+    pip install -r requirements.txt
+    python download_samples.py
+
+download_samples.py pulls 10 image pairs (20 files, ~3.9 MB) from OpenCV's
+public samples/data folder into sample_images/. It skips anything already
+downloaded, so it is safe to re-run.
+
+
+RUN THE APP
+-----------
+    streamlit run app.py
+
+Then open http://localhost:8501
+
+  - Pick a sample pair in the sidebar, or choose "Upload your own" and supply
+    two images.
+  - Four tabs: Matches, Keypoints, Location, Details.
+  - Sidebar sliders change the ORB keypoint budget and the Lowe ratio; the
+    numbers update live.
+
+A Gradio version of the same tool is also included:
+
+    pip install gradio
+    python gradio_app.py          # http://127.0.0.1:7860
+
+Only app.py is meant to be deployed. Both use the same underlying modules.
+
+
+REPRODUCE THE RESULTS TABLE
+---------------------------
+    python run_all_pairs.py
+
+Writes a match image per pair into sample_outputs/, prints the results table,
+and saves sample_outputs/results_table.md (the table quoted in README.md).
+
+
+CODING PRACTICE SCRIPTS
+-----------------------
+    python coding_practice/01_harris_corners.py        Harris + threshold sweep
+    python coding_practice/02_orb_keypoints.py         ORB, keypoint anatomy
+    python coding_practice/03_visualize_keypoints.py   Harris vs ORB side by side
+    python coding_practice/04_orb_bf_matching.py       matching + filter stages
+    python coding_practice/05_harris_vs_orb.py         full benchmark, ~2 minutes
+
+Script 05 writes sample_outputs/practice_05_harris_vs_orb.png and prints the
+report saved at sample_outputs/practice_05_report.txt.
+
+
+COMMAND LINE USE
+----------------
+Both core modules work standalone:
+
+    python feature_detection.py sample_images/pair02_graffiti_wall_a.png
+    python feature_detection.py my_photo.jpg --method harris --out corners.png
+
+    python feature_matching.py sample_images/pair01_box_product_a.png \
+                               sample_images/pair01_box_product_b.png
+    python feature_matching.py a.jpg b.jpg --features 2000 --ratio 0.8
+
+
+NOTES
+-----
+- requirements.txt uses opencv-python-headless. If you already have
+  opencv-python installed locally that is fine - the code never calls
+  cv2.imshow, so either build works. Headless is specified because the full
+  build fails to import on Streamlit Cloud and Hugging Face Spaces containers
+  (missing libGL.so).
+
+- All images are downscaled to 1000 px on the long side before processing, so
+  timings printed by different scripts are comparable.
+
+- Python 3.11 or newer. Developed and tested on Python 3.13.
