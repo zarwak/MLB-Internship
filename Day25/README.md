@@ -16,7 +16,8 @@ comes from what happens *after* the match.
 - **Public app URL** —
 [Click here to go to the app](https://feature-detection-matching.streamlit.app/)
 
-- **Screen recording** — 
+- **Demo** — 
+![DEMO TO THE APP](demo_video_summarizer.gif)
 
 ## What is in here
 
