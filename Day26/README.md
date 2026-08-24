@@ -6,6 +6,9 @@ Streamlit app. Built for the Day 26 task ("Introduction to Image
 Segmentation").
 
 **Live demo:** 
+![LIVE DEMO HERE](demo_video_summarizer.gif)
+
+**APP LINK:** [CLICK HERE TO GO TO THE APP](https://image-segmentation12.streamlit.app/)
 
 ![Compare tab](sample_outputs/practice_04_comparison_grid.jpg)
 
