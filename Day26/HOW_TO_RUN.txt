@@ -1,0 +1,68 @@
+Day 26 - Document & Object Segmentation Tool
+=============================================
+
+SETUP
+-----
+From inside the Day26 folder:
+
+    pip install -r requirements.txt
+    python generate_samples.py
+
+generate_samples.py renders 17 sample images straight into sample_images/
+(4 documents, 6 plain-background objects, 3 unevenly-lit objects, 3 objects
+with cast shadows). They are synthetic rather than downloaded, so setup has
+no network dependency and always produces the same 4 required categories.
+
+
+RUN THE APP
+-----------
+    streamlit run app.py
+
+Then open http://localhost:8501
+
+  - Pick a sample image in the sidebar, or choose "Upload your own".
+  - Pick a segmentation method: Binary, Adaptive (Mean/Gaussian), Otsu,
+    Watershed, or Foreground/Background Segmentation.
+  - Four tabs: Selected Method, Compare All Thresholds, Foreground /
+    Background, Details.
+  - Download the current result as a PNG from either the "Selected Method"
+    or "Foreground / Background" tab.
+
+
+REPRODUCE THE RESULTS TABLE
+----------------------------
+    python run_all_samples.py
+
+Writes one comparison panel per sample image into sample_outputs/, and
+saves sample_outputs/results_table.md (the table quoted in README.md).
+
+
+CODING PRACTICE SCRIPTS
+-------------------------
+    python coding_practice/01_grayscale_and_binary_threshold.py   binary sweep
+    python coding_practice/02_adaptive_threshold.py                adaptive vs binary on uneven light
+    python coding_practice/03_otsu_threshold.py                    otsu + histogram plot
+    python coding_practice/04_compare_thresholding_methods.py      all methods x all categories
+    python coding_practice/05_watershed_and_background_removal.py  watershed + bg removal
+
+Each script writes its output(s) into sample_outputs/.
+
+
+COMMAND LINE USE
+-----------------
+The core module works standalone:
+
+    python segmentation.py sample_images/doc01_invoice_clean.jpg --invert
+    python segmentation.py my_photo.jpg --method otsu --invert --out out.png
+
+
+NOTES
+-----
+- requirements.txt uses opencv-python-headless. If you already have
+  opencv-python installed locally that is fine - the code never calls
+  cv2.imshow, so either build works. Headless is specified because the full
+  build fails to import on Streamlit Cloud containers (missing libGL.so).
+
+- All images are downscaled to 1000 px on the long side before processing.
+
+- Python 3.11 or newer. Developed and tested on Python 3.13.
