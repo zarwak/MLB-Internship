@@ -1,0 +1,14 @@
+# Day 26 - Document & Object Segmentation Tool
+
+# The app itself
+streamlit>=1.40.0
+opencv-python-headless>=4.9.0
+numpy>=1.26.0
+
+# Only used by coding_practice/03_otsu_threshold.py for the histogram plot.
+# The Streamlit app does not import it.
+matplotlib>=3.8.0
+
+# Only used by generate_samples.py to render the synthetic sample images.
+# Not required to run the app itself.
+Pillow>=10.0.0
