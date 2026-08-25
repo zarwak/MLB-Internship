@@ -10,3 +10,6 @@ env/
 
 # Staging folder for Hugging Face Space uploads (contents are copies)
 _hf_upload/
+
+# YOLO model weights (auto-downloaded by ultralytics on first run)
+*.pt
