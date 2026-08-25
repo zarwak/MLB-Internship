@@ -1,0 +1,75 @@
+Day 27 - Smart Object Detection Application (YOLO)
+====================================================
+
+SETUP
+-----
+From inside the Day27 folder:
+
+    pip install -r requirements.txt
+    python download_samples.py
+
+download_samples.py fetches 12 real sample photos (2 copied straight out of
+the installed ultralytics package, 8 from COCO val2017, 2 from OpenCV's
+public samples/data) into sample_images/, and builds 2 short (~15s) sample
+videos into sample_videos/. The first run of any detection script/the app
+also downloads the YOLO model weights (~5-6 MB per variant) automatically.
+
+
+RUN THE APP
+-----------
+    streamlit run app.py
+
+Then open http://localhost:8501
+
+  - Sidebar: pick a YOLO variant (YOLO11n / YOLOv8n / YOLO11s), tune the
+    confidence and IoU thresholds, switch between Image and Video mode, and
+    pick a sample or upload your own.
+  - Image mode: three tabs - Detection Result (original vs. annotated,
+    download button), Detections Table (class/confidence/box + bar chart),
+    Try All Samples (runs the model over the whole sample gallery at once).
+  - Video mode: click "Run detection on this video" to process it frame by
+    frame (capped at 300 frames on the hosted app), then preview and
+    download the annotated mp4.
+
+
+REPRODUCE sample_outputs/
+--------------------------
+    python coding_practice/02_detect_images.py    annotates every sample image
+    python coding_practice/03_detect_videos.py    annotates every sample video
+    python coding_practice/04_analyze_results.py  writes results_table.md
+
+02 and 03 write into sample_outputs/detected_images/ and
+sample_outputs/detected_videos/ respectively. Unlike the app, these process
+full videos with no frame cap.
+
+
+CODING PRACTICE SCRIPTS
+-------------------------
+    python coding_practice/01_install_and_load_model.py   install check, loads YOLOv8n + YOLO11n, lists COCO classes
+    python coding_practice/02_detect_images.py             detect on every sample image
+    python coding_practice/03_detect_videos.py              detect on every sample video
+    python coding_practice/04_analyze_results.py            aggregate results -> results_table.md
+
+
+COMMAND LINE USE
+-----------------
+The core module works standalone on a single image:
+
+    python detection.py sample_images/ultralytics_bus.jpg
+    python detection.py my_photo.jpg --model yolo11s.pt --conf 0.4 --out out.jpg
+
+
+NOTES
+-----
+- requirements.txt uses opencv-python-headless. The code never calls
+  cv2.imshow, so either build works locally; headless is required for
+  Streamlit Cloud (the full build fails to import there - missing libGL.so).
+
+- Video output goes through imageio's bundled ffmpeg (libx264), not
+  cv2.VideoWriter - OpenCV's own build has no licensed H.264 encoder, so its
+  raw mp4 output doesn't play back in a browser <video> tag.
+
+- All images/frames are downscaled to 960 px on the long side before
+  inference.
+
+- Python 3.11 or newer. Developed and tested on Python 3.13.
