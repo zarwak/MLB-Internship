@@ -8,7 +8,8 @@ confidence scores, wrapped in a Streamlit app. Built for the Day 27 task
 **Live demo:**
 ![LIVE DEMO HERE](demo_video_summarizer.gif)
 
-**APP LINK:** _add the Streamlit Community Cloud URL here after deploying_
+**APP LINK:** [CLICK HERE TO GO TO THE APP](https://object-detection-opencv-yolo.streamlit.app/)
+
 
 ![Detection example](sample_outputs/detected_images/ultralytics_bus_detected.jpg)
 
