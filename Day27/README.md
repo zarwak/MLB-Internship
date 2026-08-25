@@ -6,7 +6,13 @@ confidence scores, wrapped in a Streamlit app. Built for the Day 27 task
 ("Introduction to Object Detection").
 
 **Live demo:**
-![LIVE DEMO HERE](demo_video_summarizer.gif)
+
+<video src="demo_video_summarizer.mp4" controls width="720"></video>
+
+_(GitHub renders the `<video>` tag above once this file is pushed - it's a
+20x-compressed re-encode of the original screen recording, same content. If
+it doesn't render in your viewer, the raw file is at
+[`demo_video_summarizer.mp4`](demo_video_summarizer.mp4).)_
 
 **APP LINK:** [CLICK HERE TO GO TO THE APP](https://object-detection-opencv-yolo.streamlit.app/)
 
