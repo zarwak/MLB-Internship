@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "day30-object-tracking",
+      "runtimeExecutable": "streamlit",
+      "runtimeArgs": ["run", "D:\\GitHub\\ML-Bench\\Day30\\app.py", "--server.port", "8530"],
+      "port": 8530
+    }
+  ]
+}
