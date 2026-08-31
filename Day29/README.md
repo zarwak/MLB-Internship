@@ -7,8 +7,9 @@ model to recognize it, then evaluate and deploy that custom model.
 
 **Live demo:** _(recording + hosted URL added after deployment - see
 `HOW_TO_RUN.txt`)_
+![DEMO HERE](demo_video_summarizer.gif)
 
-**APP LINK:** _(added after deploying to Streamlit Community Cloud)_
+**APP LINK:** _(added after deploying to Streamlit Community Cloud)_[APP HERE](https://road-damage-detection-app-yolo.streamlit.app/)
 
 
 ## Results
