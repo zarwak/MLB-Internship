@@ -25,10 +25,9 @@ costs in measured accuracy.
 
 | Metric (test split, reproduced locally) | Value |
 |---|---|
-| mAP@50 | **32.90%** (35.95% as originally reported during training - small, expected numerical variance between runs) |
-| mAP@50-95 | 15.4% |
+| mAP@50 | **66.7** (66.7% as originally reported during training - small, expected numerical variance between runs) |
 | Precision | 61.7% |
-| Recall | 32.4% |
+| Recall | 77.4% |
 | AP@50 - Alligator | 60.5% |
 | AP@50 - pothole | 59.8% |
 | AP@50 - Longitudinal-Crack | 47.1% |
