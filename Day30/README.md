@@ -9,7 +9,7 @@ crossing paths with another object.
 **Live demo:** _(recording + hosted URL added after deployment - see
 `HOW_TO_RUN.txt`)_
 
-![DEMO HERE](demo_video_summarizer.gif)
+![DEMO HERE](demo_video_summarizer2.gif)
 
 **APP LINK:** _[CLICK HERE TO GO TO THE APP](https://object-tracking.streamlit.app/)_
 
