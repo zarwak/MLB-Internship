@@ -1,0 +1,13 @@
+# Day 29 - dataset download / prep tools ONLY.
+#
+# Not needed to run the deployed app (best.pt is already committed) and
+# deliberately kept OUT of requirements.txt - see the note there for why
+# (roboflow's transitive deps caused a segfault on Streamlit Cloud when
+# they were in the same file that gets auto-installed at deploy time).
+#
+# Install with: pip install -r requirements-dev.txt
+# Needed for: download_dataset.py, coding_practice/02_prepare_class_variants.py
+
+roboflow>=1.1.0
+python-dotenv>=1.0.0
+pyyaml>=6.0

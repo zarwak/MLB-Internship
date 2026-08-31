@@ -12,8 +12,12 @@ pillow>=10.0.0
 # tag - imageio's bundled ffmpeg wheel does the encoding instead).
 imageio[ffmpeg]>=2.34.0
 
-# Dataset download / prep only (not needed to run the deployed app once
-# dataset/ and best.pt already exist locally)
-roboflow>=1.1.0
-python-dotenv>=1.0.0
-pyyaml>=6.0
+# Dataset download / prep tools (roboflow, python-dotenv, pyyaml) live in
+# requirements-dev.txt, NOT here. app.py never imports them - it just loads
+# the best.pt already committed to the repo. Streamlit Cloud installs
+# whatever's in this file at deploy time regardless of what's actually
+# imported, and roboflow's transitive deps (incl. the *non-headless*
+# opencv-python) can get resolved to versions that are ABI-incompatible
+# with opencv-python-headless/torch's precompiled wheels - which showed up
+# in practice as a segfault on boot, not a clean ImportError. Keep this
+# file minimal to what app.py/detection.py actually import.

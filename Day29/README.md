@@ -344,6 +344,21 @@ down while train loss keeps falling) - `best.pt` is what we ship and what
   *volume* alone (rather than the specific rare-class instances actually
   missing) isn't the bottleneck at this scale.
 
+- **Deploying to Streamlit Cloud segfaulted on boot** (`Segmentation
+  fault`, not a Python traceback) - the app crashed before any of its own
+  code could raise a normal error. Root cause: `requirements.txt` mixed the
+  app's actual runtime deps in with `roboflow` (used only by
+  `download_dataset.py`, which the deployed app never calls). Roboflow's
+  transitive dependencies include the full `opencv-python` package (not
+  the `-headless` build this project actually needs), and installing both
+  into one environment let pip's resolver land on versions that satisfy
+  every declared constraint on paper but are ABI-incompatible with each
+  other's precompiled C-extension wheels - the kind of conflict that
+  surfaces as a segfault, not a clean `ImportError`. Fixed by splitting
+  dataset-prep-only packages (`roboflow`, `python-dotenv`, `pyyaml`) into
+  `requirements-dev.txt`, keeping the deployed `requirements.txt` limited
+  to exactly what `app.py`/`detection.py` import.
+
 
 ## Next steps
 
@@ -418,7 +433,8 @@ Day29/
 │   └── predictions/                    # inference results + table
 ├── dataset/                            # full Roboflow export (gitignored, ~330 MB)
 ├── dataset_2class/                     # pothole-vs-crack relabel of the above (gitignored, reproducible)
-├── requirements.txt
+├── requirements.txt                    # deployed app's deps only - see Challenges for why
+├── requirements-dev.txt                # + dataset-download tools (roboflow etc.), local use only
 ├── runtime.txt
 └── HOW_TO_RUN.txt
 ```

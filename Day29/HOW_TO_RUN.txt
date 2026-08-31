@@ -3,13 +3,25 @@ Day 29 - Custom Road Damage Detection (Training + Deployment)
 
 SETUP
 -----
-From inside the Day29 folder:
+From inside the Day29 folder, to just run the app (best.pt is already
+committed, so this is all you need):
 
     pip install -r requirements.txt
 
-To re-download the dataset or re-train from scratch you also need a free
-Roboflow API key (Settings -> API Keys at app.roboflow.com) in a .env file
-next to this one:
+requirements.txt is deliberately minimal - only what app.py/detection.py
+actually import. Deploying this to a fresh environment (e.g. Streamlit
+Cloud) with dataset-download tools mixed into the SAME requirements file
+caused a segfault on boot in practice (roboflow's transitive deps resolved
+to versions ABI-incompatible with opencv-python-headless/torch's
+precompiled wheels), so those live in a separate file instead.
+
+To re-download the dataset or re-train from scratch, also install the dev
+tools and set a Roboflow API key:
+
+    pip install -r requirements-dev.txt
+    (free API key at app.roboflow.com -> Settings -> API Keys)
+
+...in a .env file next to this one:
 
     ROBOFLOW_API_KEY=your_key_here
 
