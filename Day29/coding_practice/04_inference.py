@@ -22,8 +22,9 @@ from detection import DEFAULT_CONF, detect_image, imwrite, load_image, load_mode
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--weights", default="best.pt")
-    p.add_argument("--source", default="dataset/test/images")
-    p.add_argument("--n", type=int, default=12, help="number of images to run inference on")
+    p.add_argument("--source", default="sample_images",
+                    help="folder of images to run on (default: the curated sample_images/ set)")
+    p.add_argument("--n", type=int, default=18, help="number of images to run inference on")
     p.add_argument("--conf", type=float, default=DEFAULT_CONF)
     p.add_argument("--out-dir", default="sample_outputs/predictions")
     args = p.parse_args()

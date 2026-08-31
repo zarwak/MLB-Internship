@@ -71,7 +71,7 @@ precision / recall) and prints the same table to the console.
 
 RUN INFERENCE ON TEST IMAGES
 -----------------------------
-    python coding_practice/04_inference.py --weights best.pt --source dataset_2class/test/images --n 12
+    python coding_practice/04_inference.py --weights best.pt
 
 Writes annotated images + sample_outputs/predictions/results_table.md.
 

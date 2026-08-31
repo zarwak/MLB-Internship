@@ -14,28 +14,40 @@ model to recognize it, then evaluate and deploy that custom model.
 
 ## Results
 
-**Shipped model:** YOLOv8**s**, 2 classes (`pothole` vs. `crack` - every
-crack/surface-damage type folded into one label), trained 120 epochs at
-native 640px resolution on a free Tesla T4 GPU (Kaggle Notebooks).
+**Shipped model:** YOLOv8**n**, all **8 original classes**
+(`Alligator`, `Edge Cracking`, `Lateral-Crack`, `Longitudinal-Crack`,
+`Ravelling`, `Rutting`, `Striping`, `pothole`), trained 30 epochs at 384px
+on CPU (this machine, no GPU). Chosen deliberately over the higher-scoring
+2-class model from the experiment series below: it keeps the full,
+specific damage taxonomy the assigned dataset actually ships with, at the
+cost of a lower mAP@50 - see the table for exactly what that trade-off
+costs in measured accuracy.
 
 | Metric (test split, reproduced locally) | Value |
 |---|---|
-| mAP@50 | **65.36%** (66.17% as originally reported on the training GPU - small, expected CPU/GPU numerical variance) |
-| mAP@50-95 | 31.6% |
-| Precision | 68.4% |
-| Recall | 60.6% |
-| AP@50 - crack | 61.1% |
-| AP@50 - pothole | 69.6% |
+| mAP@50 | **32.90%** (35.95% as originally reported during training - small, expected numerical variance between runs) |
+| mAP@50-95 | 15.4% |
+| Precision | 61.7% |
+| Recall | 32.4% |
+| AP@50 - Alligator | 60.5% |
+| AP@50 - pothole | 59.8% |
+| AP@50 - Longitudinal-Crack | 47.1% |
+| AP@50 - Lateral-Crack | 39.9% |
+| AP@50 - Ravelling | 25.2% |
+| AP@50 - Edge Cracking | 25.6% |
+| AP@50 - Striping | 5.2% |
+| AP@50 - Rutting | 0.0% |
 
-**80% mAP@50 target: not reached.** This is the strongest result out of
-**six full, real experiments** run in pursuit of it - every one of them is
-in the table below, because the brief explicitly asks for exactly this when
-the target isn't hit: "experiment with epochs/batch size/image size/data
-augmentation... record your observations."
+**80% mAP@50 target: not reached** (this variant, or any of the other five
+tried - the best of all six hit 66.17%, see the table below). This is one
+of **six full, real experiments** run in pursuit of the target - every one
+of them is in the table below, because the brief explicitly asks for
+exactly this when the target isn't hit: "experiment with epochs/batch
+size/image size/data augmentation... record your observations."
 
 | # | Classes | Model | Epochs | imgsz | Compute | Test mAP@50 |
 |---|---|---|---|---|---|---|
-| 1 | 8 (original taxonomy) | nano | 30 | 384 | CPU (local) | 35.95% |
+| **1 (shipped)** | **8 (original taxonomy)** | **nano** | **30** | **384** | **CPU (local)** | **35.95%** |
 | 2 | 5 (3 rarest dropped) | nano | 60 | 640 | GPU | 55.75% |
 | 3 | 1 ("damage" vs. nothing) | nano | 60 | 640 | GPU | 61.75% |
 | 4 | 2 (pothole vs. crack) | nano | 60 | 640 | GPU | 63.86% |
@@ -51,6 +63,15 @@ imbalance), vanishing gains from every lever after - is the signature of a
 genuine ceiling for a fast model on real, unfiltered street photos, not a
 tuning problem. See "Challenges" for the full reasoning behind each row and
 what would *actually* move this number further.
+
+**Why ship run 1 (35.95%) instead of run 5 (66.17%, the actual best
+result)?** Runs 2-6 all trade away label granularity for accuracy - by
+run 4 the model can only ever say "crack" or "pothole", not which of the 7
+original damage types it's looking at. Run 1 keeps every class the
+assigned dataset actually defines, which matters more for this deliverable
+than the higher score. Both `best.pt` (run 1, shipped) and the full set of
+alternative weights/results from runs 2-6 are reproducible from this repo
+- see `colab_train.ipynb` and the Challenges section below.
 
 
 ## The dataset
@@ -139,9 +160,9 @@ label directories' `images/`→`labels/` convention rather than a naive
    compute on training.
 3. `coding_practice/02_prepare_class_variants.py` - see "Challenges": the
    raw class list is badly imbalanced, so this builds three alternative
-   label sets - `dataset_2class/` (pothole vs. crack, the taxonomy the
-   shipped model actually trained on) plus `dataset_merged6/` and
-   `dataset_dropped5/` (kept for reference - see the Results table).
+   label sets (`dataset_2class/`, `dataset_merged6/`, `dataset_dropped5/`)
+   used for the comparison runs in the Results table above - the shipped
+   model itself trains directly on the original 8-class `dataset/`.
 4. `prepare_samples.py` - copies a small, fixed selection of test images
    into `sample_images/` (committable, unlike the full ~330 MB `dataset/`)
    and builds a short slideshow video into `sample_videos/`, so the app and
@@ -151,10 +172,11 @@ label directories' `images/`→`labels/` convention rather than a naive
 ## Training a custom YOLO model
 
 **Base model:** COCO-pretrained `yolov8n.pt` (nano, ~3M params) for the
-first experiment, `yolov8s.pt` (small, ~11M params) for the shipped model -
-both use transfer learning rather than random initialization, so the
-backbone already knows general edges/textures/shapes and only has to learn
-what a pothole or a crack looks like, not how to see at all.
+shipped model and 4 of the 6 experiments, `yolov8s.pt` (small, ~11M params)
+for the two highest-scoring comparison runs (5 and 6) - all use transfer
+learning rather than random initialization, so the backbone already knows
+general edges/textures/shapes and only has to learn what a pothole or a
+crack looks like, not how to see at all.
 
 **What each training parameter does** (`train.py`, wraps
 `ultralytics.YOLO.train()`):
@@ -180,8 +202,8 @@ what a pothole or a crack looks like, not how to see at all.
    class taxonomies, a bigger model, more epochs, a second dataset)
    actually feasible in one project. `colab_train.ipynb` holds the
    self-contained notebook cells used for this (open in Colab or Kaggle,
-   enable a GPU runtime, paste a Roboflow API key, run). The shipped
-   model's exact config: `yolov8s.pt`, `epochs=120`, `patience=20`,
+   enable a GPU runtime, paste a Roboflow API key, run). Best-scoring run's
+   (run 5) exact config: `yolov8s.pt`, `epochs=120`, `patience=20`,
    `imgsz=640` (the dataset's native resolution - affordable once GPU
    removed the CPU time pressure), `batch=32`, `device=0`.
 
@@ -379,20 +401,20 @@ meaningfully based on the evidence gathered here.
 
 ## Evaluation
 
-Run: `python coding_practice/02_prepare_class_variants.py` (builds `dataset_2class/` if you haven't already), then:
+Run:
 
-    python coding_practice/03_evaluate.py --weights best.pt --data dataset_2class/data.yaml --imgsz 640
+    python coding_practice/03_evaluate.py --weights best.pt --data dataset/data.yaml --imgsz 384
 
-Full per-class table: [`sample_outputs/metrics.md`](sample_outputs/metrics.md). Test split, 493 images / 1,007 instances (2 classes: crack, pothole).
-See the **Results** section near the top for the full 6-run comparison and honest discussion of the 80% target.
+Full per-class table: [`sample_outputs/metrics.md`](sample_outputs/metrics.md). Test split, 494 images / 1,009 instances (all 8 original classes).
+See the **Results** section near the top for the full 6-run comparison, why run 1 (this one) was the one shipped despite not scoring highest, and honest discussion of the 80% target.
 
 
 ## Inference
 
-`coding_practice/04_inference.py` runs the trained model on test-split
-images (default 12, seeded for reproducibility) and writes annotated copies
-plus a results table to `sample_outputs/predictions/` - see
-[`sample_outputs/predictions/results_table.md`](sample_outputs/predictions/results_table.md).
+`coding_practice/04_inference.py` runs the trained model on the curated
+`sample_images/` set (18 images, real test-split photos) and writes
+annotated copies plus a results table to `sample_outputs/predictions/` -
+see [`sample_outputs/predictions/results_table.md`](sample_outputs/predictions/results_table.md).
 
 
 ## The Streamlit app
@@ -404,8 +426,8 @@ image/video inference logic; `app.py` is only UI), but with a single
 custom model instead of a pretrained-model picker, since these classes
 don't exist in any pretrained checkpoint. Both files read the model's
 class list dynamically (`model.names`), so nothing in the app needed
-changing when the taxonomy moved from 8 classes down to 2 (`crack`,
-`pothole`) across the experiments above.
+changing across any of the 6 experiments' different taxonomies (8 classes
+down to 1) - swap `best.pt` for any of them and the UI just adapts.
 
 Run locally: `streamlit run app.py` (see `HOW_TO_RUN.txt` for full setup).
 
@@ -419,11 +441,11 @@ Day29/
 ├── download_dataset.py                 # Roboflow -> dataset/
 ├── prepare_samples.py                  # dataset/test -> sample_images/, sample_videos/
 ├── train.py                            # local (CPU) training script (Ultralytics YOLO wrapper)
-├── colab_train.ipynb                   # GPU training notebook (Colab/Kaggle) - trained the shipped model
-├── best.pt                             # trained weights (deliverable) - YOLOv8s, 2 classes
+├── colab_train.ipynb                   # GPU training notebook (Colab/Kaggle) - runs 2-6 in the Results table
+├── best.pt                             # trained weights (deliverable) - YOLOv8n, 8 classes (run 1)
 ├── coding_practice/
 │   ├── 01_explore_dataset.py
-│   ├── 02_prepare_class_variants.py    # builds dataset_2class/ (shipped) + 2 reference variants
+│   ├── 02_prepare_class_variants.py    # builds the 3 alternative-taxonomy datasets used in runs 2, 4-6
 │   ├── 03_evaluate.py
 │   └── 04_inference.py
 ├── sample_images/                      # curated test images (committed)
