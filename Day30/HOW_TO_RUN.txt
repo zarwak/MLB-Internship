@@ -1,0 +1,95 @@
+Day 30 - Multi-Object Tracking (YOLOv8 + ByteTrack / BoT-SORT)
+================================================================
+
+SETUP
+-----
+From inside the Day30 folder:
+
+    pip install -r requirements.txt
+
+No API key or dataset download needed - yolov8n.pt (pretrained COCO
+weights) is auto-downloaded by ultralytics on first use if it isn't
+already present, and all 5 sample videos are already committed in
+sample_videos/.
+
+To re-fetch the sample videos from scratch (not needed unless you deleted
+them):
+
+    python download_samples.py
+
+
+RUN TRACKING FROM THE COMMAND LINE
+-----------------------------------
+    python tracking.py sample_videos/pedestrians_cctv.mp4 --tracker bytetrack.yaml
+
+    python tracking.py sample_videos/sports_soccer.mp4 --tracker botsort.yaml --conf 0.3
+
+Prints frame count, unique-object count, and a per-class breakdown; saves
+an annotated mp4 next to wherever --out points (defaults to
+<video-stem>_<tracker>_tracked.mp4 in the current folder).
+
+
+CODING PRACTICE SCRIPTS
+-------------------------
+    python coding_practice/01_track_videos.py
+        Runs tracking on all 5 sample videos x both trackers (10 runs),
+        saves every annotated output into sample_outputs/, and writes
+        sample_outputs/tracking_results.md.
+
+    python coding_practice/02_id_consistency_check.py
+        Heuristic ID-switch counter across the same 10 runs - writes
+        sample_outputs/id_consistency.md. See README.md "Full results"
+        for what a "suspected switch" means and why it's a heuristic, not
+        a formal MOTA/IDF1 score.
+
+Both scripts take a few minutes total on CPU-only hardware (each ~14-19s
+clip takes 20-60s to process per tracker - see README.md "Challenges").
+
+
+RUN THE APP
+-----------
+    streamlit run app.py
+
+Then open http://localhost:8501
+
+  - Sidebar: choose ByteTrack or BoT-SORT, tune confidence/IoU thresholds,
+    pick a sample video or upload your own.
+  - Click "Run tracking on this video" to process it frame by frame
+    (capped at 300 frames on the hosted app so one upload can't stall it
+    for other users).
+  - Result: annotated video (ID-colored boxes + motion trail), 4 summary
+    metrics, a per-track-ID table, a per-class bar chart, and a download
+    button for the annotated mp4.
+
+
+DEPLOY TO A PUBLIC URL (do this yourself - needs your own accounts)
+---------------------------------------------------------------------
+1. Push this Day30 folder to your GitHub repo. yolov8n.pt is gitignored
+   (it's a stock checkpoint - ultralytics re-downloads it automatically on
+   first run, no need to commit it) - the deployed app's first boot will
+   download it itself, same as it did locally.
+2. Go to https://share.streamlit.io, sign in with GitHub, "New app".
+3. Pick your repo/branch, set "Main file path" to Day30/app.py.
+4. Deploy.
+5. Copy the resulting *.streamlit.app URL into README.md's "APP LINK" line.
+
+For the screen recording deliverable: record yourself running the app -
+pick a sample (the crosswalk clip shows crossing/occlusion best), switch
+between ByteTrack and BoT-SORT, and point out the ID labels staying on the
+same person as they cross paths with others.
+
+
+NOTES
+-----
+- requirements.txt uses opencv-python-headless (same reasoning as
+  Day27/Day29 - the full build fails to import on Streamlit Cloud, missing
+  libGL.so).
+
+- Video output goes through imageio's bundled ffmpeg (libx264), not
+  cv2.VideoWriter - see tracking.py's track_video() docstring for why.
+
+- lap is pinned in requirements.txt because Ultralytics' trackers
+  auto-install it on first .track() call if it's missing - pinning it
+  avoids relying on that happening at deploy time.
+
+- Python 3.11 or newer. Developed and tested on Python 3.13.
