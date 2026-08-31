@@ -1,0 +1,124 @@
+Day 29 - Custom Road Damage Detection (Training + Deployment)
+================================================================
+
+SETUP
+-----
+From inside the Day29 folder:
+
+    pip install -r requirements.txt
+
+To re-download the dataset or re-train from scratch you also need a free
+Roboflow API key (Settings -> API Keys at app.roboflow.com) in a .env file
+next to this one:
+
+    ROBOFLOW_API_KEY=your_key_here
+
+Then:
+
+    python download_dataset.py         downloads dataset/ (~330 MB, gitignored)
+    python prepare_samples.py          builds sample_images/ + sample_videos/ from it
+
+If you just want to run the app and don't have a Roboflow key, sample_images/,
+sample_videos/ and best.pt are already committed - you can skip both of the
+above.
+
+
+TRAIN
+-----
+The shipped best.pt (2 classes: crack, pothole - YOLOv8s, 120 epochs, 640px)
+was trained on a free GPU via colab_train.ipynb, NOT on this CPU-only
+machine - see README.md "Challenges" for the full story of why (measured
+CPU throughput made anything beyond a nano/short run impractical) and the
+complete experiment history (8/6/5/2/1-class, nano vs small, 60 vs 100/120
+epochs) that led to this configuration.
+
+To reproduce: open colab_train.ipynb in Google Colab or Kaggle Notebooks,
+enable a GPU runtime, paste your Roboflow API key when prompted, and run
+all cells. Download the resulting best.pt and drop it in as Day29/best.pt.
+
+Local CPU training still works for smaller experiments (e.g. the original
+8-class nano baseline) if you want to reproduce that part instead:
+
+    python coding_practice/02_prepare_class_variants.py   builds dataset_2class/, dataset_dropped5/, dataset_merged6/
+    python train.py --data dataset_2class/data.yaml --model yolov8n.pt --epochs 30 --imgsz 384 --batch 32 --patience 10 --name road_damage_2class_cpu
+
+Writes checkpoints/plots to runs/detect/<name>/. Copy the resulting
+weights/best.pt to the Day29 root as best.pt to use it in the app:
+
+    cp runs/detect/<name>/weights/best.pt best.pt
+
+
+EVALUATE
+--------
+    python coding_practice/02_prepare_class_variants.py   (if you haven't already - builds dataset_2class/)
+    python coding_practice/03_evaluate.py --weights best.pt --data dataset_2class/data.yaml --imgsz 640
+
+Writes sample_outputs/metrics.md (overall + per-class mAP50 / mAP50-95 /
+precision / recall) and prints the same table to the console.
+
+
+RUN INFERENCE ON TEST IMAGES
+-----------------------------
+    python coding_practice/04_inference.py --weights best.pt --source dataset_2class/test/images --n 12
+
+Writes annotated images + sample_outputs/predictions/results_table.md.
+
+
+RUN THE APP
+-----------
+    streamlit run app.py
+
+Then open http://localhost:8501
+
+  - Sidebar: tune the confidence and IoU thresholds, switch between Image
+    and Video mode, and pick a sample or upload your own.
+  - Image mode: three tabs - Detection Result (original vs. annotated,
+    download button), Detections Table (class/confidence/box + bar chart),
+    Try All Samples (runs the model over the whole sample gallery at once).
+  - Video mode: click "Run detection on this video" to process it frame by
+    frame (capped at 300 frames on the hosted app), then preview and
+    download the annotated mp4.
+
+
+DEPLOY TO A PUBLIC URL (do this yourself - needs your own accounts)
+---------------------------------------------------------------------
+1. Push this Day29 folder (with best.pt committed - see NOTES below) to
+   your GitHub repo.
+2. Go to https://share.streamlit.io, sign in with GitHub, "New app".
+3. Pick your repo/branch, set "Main file path" to Day29/app.py.
+4. Deploy. First boot installs requirements.txt and downloads nothing else
+   (best.pt is already in the repo, so no Roboflow key is needed at
+   runtime - the deployed app never calls download_dataset.py).
+5. Copy the resulting *.streamlit.app URL into README.md's "APP LINK" line.
+
+For the "public model output video" deliverable: run the app's Video mode
+on a sample or your own clip, download the annotated mp4, and either link
+it directly (e.g. upload to the same GitHub repo, or any video host you
+already use) or record your screen running Video mode as part of the
+walkthrough recording.
+
+
+CODING PRACTICE SCRIPTS
+-------------------------
+    python coding_practice/01_explore_dataset.py         dataset structure, class counts, ground-truth preview
+    python coding_practice/02_prepare_class_variants.py  builds dataset_2class/ (shipped taxonomy) + dataset_merged6/ + dataset_dropped5/ (reference)
+    python coding_practice/03_evaluate.py                mAP50 / mAP50-95 / precision / recall on the test split
+    python coding_practice/04_inference.py                annotated predictions + results table
+
+
+NOTES
+-----
+- requirements.txt uses opencv-python-headless. The code never calls
+  cv2.imshow, so either build works locally; headless is required for
+  Streamlit Cloud (the full build fails to import there - missing libGL.so).
+
+- Video output goes through imageio's bundled ffmpeg (libx264), not
+  cv2.VideoWriter - see Day 27's HOW_TO_RUN.txt for why.
+
+- dataset/, dataset_2class/, dataset_merged6/, dataset_dropped5/ and runs/
+  are gitignored (too large / fully reproducible from the scripts above).
+  best.pt is the one *.pt file this project does commit (root .gitignore
+  has a narrow `!Day29/best.pt` exception to the repo-wide "don't commit
+  weights" rule).
+
+- Python 3.11 or newer. Developed and tested on Python 3.13.

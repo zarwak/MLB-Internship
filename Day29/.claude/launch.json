@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "day29-road-damage-detection",
+      "runtimeExecutable": "streamlit",
+      "runtimeArgs": ["run", "D:\\GitHub\\ML-Bench\\Day29\\app.py", "--server.port", "8529"],
+      "port": 8529
+    }
+  ]
+}
