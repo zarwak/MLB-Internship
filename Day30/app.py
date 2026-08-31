@@ -38,7 +38,7 @@ def sample_video_paths() -> dict[str, str]:
     return {p.stem: str(p) for p in sorted(VIDEO_SAMPLES.glob("*.mp4"))}
 
 
-@st.cache_resource(show_spinner="Loading YOLOv8n...")
+@st.cache_resource(show_spinner="Loading YOLOv8n (first run downloads the ~6MB checkpoint)...")
 def get_model():
     return load_model(str(WEIGHTS_PATH))
 
@@ -64,11 +64,11 @@ def tracks_table(result) -> pd.DataFrame:
 
 st.title("\U0001F3AF Smart Object Tracking System")
 
-if not WEIGHTS_PATH.exists():
-    st.error("yolov8n.pt not found next to app.py.")
+try:
+    model = get_model()
+except Exception as exc:
+    st.error(f"Could not load yolov8n.pt: {exc}")
     st.stop()
-
-model = get_model()
 
 st.markdown(
     "Tracks people and objects across a video with **Ultralytics YOLOv8** "
