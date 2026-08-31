@@ -1,0 +1,19 @@
+names:
+- Alligator
+- Edge Cracking
+- Lateral-Crack
+- Longitudinal-Crack
+- Ravelling
+- Rutting
+- Striping
+- pothole
+nc: 8
+roboflow:
+  license: Public Domain
+  project: road-damage-dataset-8jvz5
+  url: https://universe.roboflow.com/road-damage-detection-ds22n/road-damage-dataset-8jvz5/dataset/2
+  version: 2
+  workspace: road-damage-detection-ds22n
+test: ../test/images
+train: ../train/images
+val: ../valid/images

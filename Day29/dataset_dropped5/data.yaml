@@ -1,0 +1,10 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+nc: 5
+names:
+- Alligator
+- Edge Cracking
+- Lateral-Crack
+- Longitudinal-Crack
+- pothole
