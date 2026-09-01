@@ -1,0 +1,106 @@
+Day 31 - Vehicle Counting System (YOLOv8n + ByteTrack)
+========================================================
+
+SETUP
+-----
+From inside the Day31 folder:
+
+    pip install -r requirements.txt
+
+No API key or dataset download needed - yolov8n.pt (pretrained COCO
+weights) is auto-downloaded by ultralytics on first use if it isn't
+already present, and all 5 sample videos are already committed in
+sample_videos/.
+
+To re-fetch the sample videos from scratch (not needed unless you deleted
+them):
+
+    python download_samples.py
+
+
+COUNT VEHICLES FROM THE COMMAND LINE
+-------------------------------------
+    python counting.py sample_videos/highway_many_cars.mp4
+
+    python counting.py sample_videos/urban_intersection_motorcycles.mp4 \
+        --orientation horizontal --position 0.6 --conf 0.3
+
+    python counting.py sample_videos/highway_many_cars.mp4 --car-truck-only
+
+Prints frame count, total vehicles counted, a per-class and per-direction
+breakdown; saves an annotated mp4 next to wherever --out points (defaults
+to <video-stem>_counted.mp4 in the current folder).
+
+
+CODING PRACTICE SCRIPTS
+-------------------------
+    python coding_practice/01_count_vehicles.py
+        The brief's literal "Coding Practice" checklist: tracks
+        highway_many_cars.mp4, classifies car+truck only, draws a
+        horizontal counting line, counts crossings, saves the annotated
+        video into sample_outputs/.
+
+    python coding_practice/02_batch_count_all_videos.py
+        Runs the full car/motorcycle/bus/truck counting + directional
+        breakdown on all 5 sample videos, saves every annotated output into
+        sample_outputs/, and writes sample_outputs/counting_results.md -
+        see README.md "Full results" for what came out of this.
+
+Both scripts take several minutes total on CPU-only hardware (each clip
+takes roughly 20s-4min to process depending on length and frame rate - see
+README.md "Challenges").
+
+
+RUN THE APP
+-----------
+    streamlit run app.py
+
+Then open http://localhost:8501
+
+  - Sidebar: choose the counting line's orientation and position, optionally
+    restrict counting to a region of interest, tune confidence/IoU
+    thresholds, pick a sample video or upload your own.
+  - Click "Run vehicle counting on this video" to process it frame by frame
+    (capped at 300 frames on the hosted app so one upload can't stall it
+    for other users).
+  - Result: annotated video (ID-colored boxes + counting line + live count
+    badge), 4 summary metrics, a per-class bar chart, a per-direction bar
+    chart, and a download button for the annotated mp4.
+
+
+DEPLOY TO A PUBLIC URL (do this yourself - needs your own accounts)
+---------------------------------------------------------------------
+1. Push this Day31 folder to your GitHub repo. yolov8n.pt is gitignored
+   (it's a stock checkpoint - ultralytics re-downloads it automatically on
+   first run, no need to commit it) - the deployed app's first boot will
+   download it itself, same as it did locally.
+2. Go to https://share.streamlit.io, sign in with GitHub, "New app".
+3. Pick your repo/branch, set "Main file path" to Day31/app.py.
+4. Deploy.
+5. Copy the resulting *.streamlit.app URL into README.md's "APP LINK" line.
+
+For the screen recording deliverable: record yourself running the app -
+pick a dense clip (highway_many_cars shows the clearest crossings), point
+out the live badge counting up, then switch orientation to vertical and
+show a different clip to demonstrate directional counting.
+
+
+NOTES
+-----
+- requirements.txt uses opencv-python-headless (same reasoning as
+  Day27/29/30 - the full build fails to import on Streamlit Cloud, missing
+  libGL.so).
+
+- Video output goes through imageio's bundled ffmpeg (libx264), not
+  cv2.VideoWriter - same as Day30/tracking.py, and for the same reason
+  (browser-playable H.264, not OpenCV's unlicensed build).
+
+- lap is pinned in requirements.txt because Ultralytics' ByteTrack
+  auto-installs it on first .track() call if it's missing - pinning it
+  avoids relying on that happening at deploy time.
+
+- Two straight-down AERIAL clips were tried first and dropped from
+  sample_videos/ - YOLOv8n detected zero vehicles on either. See
+  download_samples.py's docstring and README.md "Challenges".
+
+- Python 3.11 or newer. Developed and tested on Python 3.13.

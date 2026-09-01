@@ -1,0 +1,19 @@
+# Day 31 - Vehicle Counting (YOLOv8 + ByteTrack)
+
+streamlit>=1.40.0
+ultralytics>=8.3.0
+opencv-python-headless>=4.9.0
+numpy>=1.26.0
+pillow>=10.0.0
+pandas>=2.0.0
+
+# Association solver Ultralytics' trackers (ByteTrack/BoT-SORT) need for
+# matching detections to existing tracks - installed automatically on first
+# .track() call if missing, pinned here so a fresh deploy doesn't rely on
+# that auto-install happening at runtime.
+lap>=0.5.12
+
+# Video output as browser-playable H.264 mp4 (OpenCV's own build has no
+# licensed H.264 encoder, so cv2.VideoWriter output won't play in a <video>
+# tag - imageio's bundled ffmpeg wheel does the encoding instead).
+imageio[ffmpeg]>=2.34.0
