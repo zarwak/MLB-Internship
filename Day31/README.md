@@ -8,7 +8,9 @@ moment it crosses that line."
 **Live demo:** _(recording + hosted URL added after deployment - see
 `HOW_TO_RUN.txt`)_
 
+
 **APP LINK:** _[add after deploying - see HOW_TO_RUN.txt]_
+[Click here to go to the app](https://vehicle-counting-system.streamlit.app/)
 
 
 ## What is object counting?
