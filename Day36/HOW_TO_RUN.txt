@@ -1,0 +1,143 @@
+Day 36 - Traffic Violation Detection System (YOLOv8n + ByteTrack)
+===================================================================
+
+SETUP
+-----
+From inside the Day36 folder:
+
+    pip install -r requirements.txt
+
+No API key needed - yolov8n.pt (pretrained COCO weights) is auto-downloaded
+by ultralytics on first use if it isn't already present. All 6 sample
+videos + their *_config.json direction/zone presets are already committed
+in sample_videos/.
+
+To re-fetch the sample videos from scratch (not needed unless you deleted
+them - and note the *_config.json presets are hand-calibrated and won't
+regenerate from this script, only the videos do):
+
+    python download_samples.py
+
+
+CHECK VIOLATIONS FROM THE COMMAND LINE
+-----------------------------------------
+    python traffic_violation.py sample_videos/madrid_intersection.mp4 \
+        --config sample_videos/madrid_intersection_config.json --variant wrong_way
+
+    python traffic_violation.py sample_videos/bangkok_boulevard.mp4 \
+        --config sample_videos/bangkok_boulevard_config.json --variant analytics
+
+    python traffic_violation.py sample_videos/river_bridge_junction.mp4 \
+        --config sample_videos/river_bridge_junction_config.json --variant wrong_way --conf 0.15
+
+    python traffic_violation.py sample_videos/nhatrang_street.mp4 \
+        --config sample_videos/nhatrang_street_config.json --variant analytics
+
+    python traffic_violation.py sample_videos/atlanta_commute.mp4 \
+        --config sample_videos/atlanta_commute_config.json --variant wrong_way --conf 0.10
+
+river_bridge_junction needs --conf 0.15 and atlanta_commute needs --conf
+0.10 explicitly for reliable detection - both have smaller/more distant
+vehicles than the other 4 clips - see README.md "Real challenges faced".
+Prints vehicle/violation counts and per-class stats; saves an annotated mp4
+next to wherever --out points (defaults to <video-stem>_<variant>.mp4 in
+the current folder). Pass --direction/--zone instead of --config to define
+direction/zone on the fly rather than loading a preset.
+
+
+CODING PRACTICE SCRIPTS
+-------------------------
+    python coding_practice/01_traffic_violation.py
+        The brief's literal "Coding Practice" checklist: loads
+        bangkok_boulevard.mp4 (picked because it reliably shows both
+        violation types, not just a clean run), loads its preset
+        direction/zone, detects + tracks vehicles, checks for wrong-way and
+        zone violations, prints the required stats + violation event log,
+        saves the annotated video into sample_outputs/.
+
+    python coding_practice/02_batch_all_videos.py
+        Runs both demo variants on all 6 sample videos, saves every
+        annotated output into outputs/variant-1/ (Wrong-Way Detection) and
+        outputs/variant-2/ (Traffic Violation Analytics), and writes
+        outputs/violation_results.md - see README.md "Results" for what
+        came out of this.
+
+Both scripts run on CPU-only hardware; the full batch script processes 12
+video/variant combinations (6 videos x 2 variants, most capped at 300
+frames - nhatrang_street is only ~200 frames total, that clip's full
+native length).
+
+
+RUN THE APP
+-----------
+    streamlit run app.py
+
+Then open http://localhost:8501
+
+  - Sidebar: choose Wrong-Way Detection or Traffic Violation Analytics,
+    pick a sample video (auto-loads its preset direction/zone/ROI) or
+    upload your own (uncheck "Use preset config" - or it's unchecked
+    automatically for an upload - to get a direction dropdown + zone
+    sliders with a live preview image), tune confidence/IoU and the
+    wrong-way sensitivity (angle threshold, confirmation ratio).
+  - Click "Run <variant> on this video" to process it frame by frame
+    (capped at 300 frames on the hosted app so one upload can't stall it
+    for other users).
+  - Result: the annotated video, 5 summary metrics (vehicles, violations,
+    wrong-way, zone, traffic status), a violation events table, a
+    vehicle-type bar chart, a cumulative-violations chart, and a download
+    button.
+
+
+DEPLOY TO A PUBLIC URL (do this yourself - needs your own accounts)
+---------------------------------------------------------------------
+1. Push this Day36 folder to your GitHub repo. yolov8n.pt is gitignored
+   (it's a stock checkpoint - ultralytics re-downloads it automatically on
+   first run) - the deployed app's first boot will download it itself,
+   same as it did locally.
+2. Go to https://share.streamlit.io, sign in with GitHub, "New app".
+3. Pick your repo/branch, set "Main file path" to Day36/app.py.
+4. Deploy.
+5. Copy the resulting *.streamlit.app URL into README.md's "APP LINK" line.
+
+For the screen recording deliverable: record yourself running the app -
+start with Wrong-Way Detection on madrid_intersection (cleanest
+detections), then switch to bangkok_boulevard to show the direction_roi
+scoping a divided road, then switch to Traffic Violation Analytics on the
+same video to show the dashboard panel and status banner, then switch to
+river_bridge_junction and lower the confidence slider to ~0.15 to show the
+distance-related detection finding from README.md "Real challenges faced".
+
+
+NOTES
+-----
+- requirements.txt uses opencv-python-headless (same reasoning as
+  Day27/29/30/31/32 - the full build fails to import on Streamlit Cloud,
+  missing libGL.so).
+
+- Video output goes through imageio's bundled ffmpeg (libx264), not
+  cv2.VideoWriter - same as Day30/31/32, and for the same reason
+  (browser-playable H.264, not OpenCV's unlicensed build).
+
+- lap is pinned in requirements.txt because Ultralytics' ByteTrack
+  auto-installs it on first .track() call if missing - pinning it avoids
+  relying on that happening at deploy time.
+
+- angle_threshold_deg defaults to 130 (not a more obvious 90-100) and the
+  debounce window requires 80% agreement over 14 frames - see README.md
+  "Real challenges faced" for the measured reason (a divided or
+  perspective-converging road produces enough lane-change/turning noise at
+  looser thresholds to generate false wrong-way flags).
+
+- Around a dozen candidate videos were downloaded and measured for this
+  project; only 6 made the cut. Rejects include steep drone highway shots
+  a plain COCO-pretrained YOLOv8n hallucinated as a "train" at up to 0.83
+  confidence, night hyperlapse clips whose long exposure turns cars into
+  light streaks, a tilt-shift/miniature-effect clip, a straight-down nadir
+  highway shot, and a backlit sunrise clip too low-contrast to detect
+  anything. See README.md "Real challenges faced" for the full account,
+  including why Day32's own aerial-trained checkpoint didn't transfer to
+  this footage either, and why one of the "train" locations, filmed again
+  at a different time of day, became a keeper (`atlanta_commute`).
+
+- Python 3.11 or newer. Developed and tested on Python 3.13.
