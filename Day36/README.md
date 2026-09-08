@@ -10,8 +10,10 @@ a **restricted zone**.
 **Live demo:** _(recording + hosted URL added after deployment - see
 `HOW_TO_RUN.txt`)_
 
-**APP LINK:** _[add after deploying - see HOW_TO_RUN.txt]_
+![DEMO HERE](demo_video_summarizer.gif)
 
+**APP LINK:** _[add after deploying - see HOW_TO_RUN.txt]_
+[app here](https://traffic-violence-detection-app.streamlit.app/)
 
 ## How vehicle tracking works
 
