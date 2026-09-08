@@ -1,0 +1,166 @@
+Day 32 - Smart Parking Occupancy Detection (YOLOv8n + ByteTrack)
+===================================================================
+
+SETUP
+-----
+From inside the Day32 folder:
+
+    pip install -r requirements.txt
+
+No API key or dataset download needed - yolov8n.pt (pretrained COCO
+weights) is auto-downloaded by ultralytics on first use if it isn't
+already present. vehicle_detection_aerial.pt (the aerial-footage
+checkpoint, see README.md "How vehicle detection works") is already
+committed, as are all 4 sample videos + their parking-space layouts in
+sample_videos/.
+
+To re-fetch the sample videos from scratch (not needed unless you deleted
+them - and note the *_spaces.json layouts are hand-calibrated and won't
+regenerate from this script, only the videos do):
+
+    python download_samples.py
+
+
+CHECK OCCUPANCY FROM THE COMMAND LINE
+---------------------------------------
+    python parking_detection.py sample_videos/mall_curbside_lot.mp4 \
+        --layout sample_videos/mall_curbside_lot_spaces.json --variant monitor
+
+    python parking_detection.py sample_videos/courtyard_lot.mp4 \
+        --layout sample_videos/courtyard_lot_spaces.json --variant analytics --conf 0.10
+
+    python parking_detection.py sample_videos/aerial_numbered_lot.mp4 \
+        --layout sample_videos/aerial_numbered_lot_spaces.json --variant monitor \
+        --model vehicle_detection_aerial.pt --overlap 0.15
+
+The 2 aerial_* clips need --model vehicle_detection_aerial.pt explicitly -
+plain yolov8n.pt finds ~0 vehicles at that camera angle (see README.md
+"Real challenges faced"). --overlap 0.15 is already the default either way.
+
+Prints spaces/occupied/free/occupancy% and unique-vehicle count; saves an
+annotated mp4 next to wherever --out points (defaults to
+<video-stem>_<variant>.mp4 in the current folder). Pass
+--top-range/--bottom-range/--top-y/--bottom-y/--rows/--cols instead of
+--layout to generate a grid on the fly rather than loading a preset.
+
+
+CODING PRACTICE SCRIPTS
+-------------------------
+    python coding_practice/01_parking_occupancy.py
+        The brief's literal "Coding Practice" checklist: loads
+        mall_curbside_lot.mp4, loads its preset space layout, detects +
+        tracks vehicles, checks occupancy, prints the 5 required stats,
+        saves the annotated video into sample_outputs/.
+
+    python coding_practice/02_batch_all_videos.py
+        Runs both demo variants on both sample videos, saves every
+        annotated output into outputs/variant-1/ (Monitor) and
+        outputs/variant-2/ (Analytics), and writes
+        outputs/occupancy_results.md - see README.md "Results" for what
+        came out of this.
+
+Both scripts take under 2 minutes total on CPU-only hardware
+(mall_curbside_lot at 300 frames is the slowest single run, ~42s; the full
+batch script runs 4 video/variant combinations).
+
+
+DEFINE PARKING SLOTS FOR A NEW CAMERA ANGLE (one time)
+---------------------------------------------------------
+    python slot_annotator.py sample_videos/your_video.mp4 sample_videos/your_video_spaces.json
+
+Opens the video's first frame in an OpenCV window. Left-drag a box over
+each real parking space, release to commit it. u = undo last box, r =
+clear all, s = save + quit, q/Esc = quit without saving. Writes a normal
+layout JSON in the same format load_layout()/save_layout() use everywhere
+else, so it's immediately usable by the app or the CLI's --layout flag.
+
+This needs a GUI-capable OpenCV build - requirements.txt intentionally
+pins opencv-python-headless for the deployed app (see NOTES below), which
+can't open a window. Run `pip install opencv-python` first if `cv2.imshow`
+errors with "not implemented" (see the script's own docstring for detail).
+
+
+RUN THE APP
+-----------
+    streamlit run app.py
+
+Then open http://localhost:8501
+
+  - Sidebar: choose Parking Monitor or Parking Analytics, pick a sample
+    video (auto-loads its preset space layout, and switches to the aerial
+    detector + a lower overlap default automatically for the 2 aerial_*
+    samples) or upload your own video (uncheck "Use preset layout" - or
+    it's unchecked automatically for an upload - to get trapezoid+grid
+    sliders with a live preview image, plus a checkbox to switch on the
+    aerial detector for drone/top-down footage), tune
+    confidence/IoU/occupancy-overlap thresholds.
+  - Click "Run <variant> on this video" to process it frame by frame
+    (capped at 300 frames on the hosted app so one upload can't stall it
+    for other users).
+  - Result: the annotated video, 5 summary metrics, a utilization badge,
+    a per-space status table, an occupancy-over-time chart, and a
+    download button.
+
+
+DEPLOY TO A PUBLIC URL (do this yourself - needs your own accounts)
+---------------------------------------------------------------------
+1. Push this Day32 folder to your GitHub repo. yolov8n.pt is gitignored
+   (it's a stock checkpoint - ultralytics re-downloads it automatically on
+   first run, no need to commit it) - the deployed app's first boot will
+   download it itself, same as it did locally.
+2. Go to https://share.streamlit.io, sign in with GitHub, "New app".
+3. Pick your repo/branch, set "Main file path" to Day32/app.py.
+4. Deploy.
+5. Copy the resulting *.streamlit.app URL into README.md's "APP LINK" line.
+
+For the screen recording deliverable: record yourself running the app -
+start with Parking Monitor on mall_curbside_lot (the default sample - best
+detection, 4/8 spaces read correctly), then switch to Parking Analytics on
+the same video to show the dashboard panel and utilization level, then
+switch to courtyard_lot and lower the confidence slider to ~0.08-0.10 to
+show more of the lot register as occupied - a good illustration of the
+"Real challenges faced" section's camera-distance finding, then switch to
+an aerial_* sample to show the detector/overlap defaults change
+automatically and the aerial checkpoint detecting a steep top-down angle
+plain COCO YOLOv8n cannot.
+
+
+NOTES
+-----
+- requirements.txt uses opencv-python-headless (same reasoning as
+  Day27/29/30/31 - the full build fails to import on Streamlit Cloud,
+  missing libGL.so).
+
+- Video output goes through imageio's bundled ffmpeg (libx264), not
+  cv2.VideoWriter - same as Day30/31, and for the same reason
+  (browser-playable H.264, not OpenCV's unlicensed build).
+
+- lap is pinned in requirements.txt because Ultralytics' ByteTrack
+  auto-installs it on first .track() call if it's missing - pinning it
+  avoids relying on that happening at deploy time.
+
+- DEFAULT_CONF is 0.15 here, lower than Day30/31's 0.25 - see README.md
+  "Real challenges faced" for the measured reason (camera distance affects
+  detection confidence more than it did for close-up traffic footage).
+
+- Two detector checkpoints ship: yolov8n.pt (general-purpose, COCO) and
+  vehicle_detection_aerial.pt (fine-tuned on CARPK for drone/top-down
+  footage - plain COCO YOLOv8n finds ~0 vehicles at that angle). app.py
+  and the batch script pick automatically by video name; the CLI needs
+  --model set explicitly - see "CHECK OCCUPANCY FROM THE COMMAND LINE"
+  above.
+
+- scipy is a direct dependency now, not just a transitive one -
+  linear_sum_assignment (Hungarian algorithm) enforces one-to-one
+  vehicle<->space matching so one car can't be double-counted as occupying
+  two adjacent spaces at once - see README.md "How occupied/free status is
+  calculated" and "Real challenges faced".
+
+- Only 4 sample videos are shipped, not 3-5 - see README.md "Real
+  challenges faced" for the full, measured account of why (40+ candidates
+  tested across two passes; "fixed camera" and "reliable detection" pulled
+  in opposite directions for almost every candidate that wasn't one of
+  these four - including a 5th, aerial_mall_lot.mp4, that was wired in and
+  then pulled after measuring real camera motion).
+
+- Python 3.11 or newer. Developed and tested on Python 3.13.

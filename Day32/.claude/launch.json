@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "day32-parking-occupancy",
+      "runtimeExecutable": "streamlit",
+      "runtimeArgs": ["run", "D:\\GitHub\\ML-Bench\\Day32\\app.py", "--server.port", "8532"],
+      "port": 8532
+    }
+  ]
+}
