@@ -19,8 +19,10 @@ pick whichever of the two checkpoints matches the footage automatically.
 
 **Live demo:** _(recording + hosted URL added after deployment - see
 `HOW_TO_RUN.txt`)_
+!(demo_video_summarizer.gif)
 
 **APP LINK:** _(added after deploying to Streamlit Community Cloud)_
+[app here](https://parking-occupancy-detection.streamlit.app/)
 
 
 ## Results
