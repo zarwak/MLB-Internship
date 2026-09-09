@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Callable
 
 import cv2
-import imageio.v2 as imageio
 import numpy as np
 from ultralytics import YOLO
 
@@ -268,7 +267,12 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
 
     fps = cap.get(cv2.CAP_PROP_FPS) or 25.0
     n_total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) or None
-    writer = imageio.get_writer(str(out_path), fps=fps, codec="libx264", quality=7, macro_block_size=None)
+    frame_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frame_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+    writer = cv2.VideoWriter(str(out_path), fourcc, fps, (frame_w, frame_h))
+    if not writer.isOpened():
+        raise RuntimeError(f"Could not open video writer for {out_path}")
 
     seen_ids: set[int] = set()
     people_per_frame: list[int] = []
@@ -312,7 +316,7 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
                 _draw_roi(annotated, roi)
             _draw_overlay(annotated, count, peak_count, total_seen=len(seen_ids), roi_count=roi_count, line_crossings=line_crossings)
 
-            writer.append_data(cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB))
+            writer.write(annotated)
             frame_idx += 1
             if progress_cb:
                 progress_cb(frame_idx, n_total or frame_idx)
@@ -320,7 +324,7 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
                 break
     finally:
         cap.release()
-        writer.close()
+        writer.release()
 
     elapsed_s = time.perf_counter() - start
     current_count = people_per_frame[-1] if people_per_frame else 0
