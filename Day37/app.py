@@ -101,16 +101,22 @@ if st.button("Run analysis", type="primary"):
         progress.progress(min(value, 1.0), text=f"Processing frame {done}/{total}")
 
     if input_kind == "video":
-        result = process_video(
-            model=model,
-            in_path=input_path,
-            out_path=output_path,
-            conf=conf,
-            iou=iou,
-            line=line,
-            roi=roi,
-            progress_cb=on_progress,
-        )
+        try:
+            result = process_video(
+                model=model,
+                in_path=input_path,
+                out_path=output_path,
+                conf=conf,
+                iou=iou,
+                line=line,
+                roi=roi,
+                progress_cb=on_progress,
+            )
+        except Exception as exc:
+            progress.empty()
+            st.error(f"Video processing failed: {exc}")
+            st.stop()
+
         progress.empty()
 
         st.success(f"Processed {result.n_frames} frames and saved output video.")
@@ -122,9 +128,12 @@ if st.button("Run analysis", type="primary"):
 
         st.caption(f"Processing time: {result.elapsed_s:.2f}s")
 
-        st.video(str(result.out_path))
-        with open(result.out_path, "rb") as f:
-            st.download_button("Download processed video", f.read(), file_name=result.out_path.name, mime="video/mp4")
+        if result.out_path.exists() and result.out_path.stat().st_size > 0:
+            st.video(str(result.out_path))
+            with open(result.out_path, "rb") as f:
+                st.download_button("Download processed video", f.read(), file_name=result.out_path.name, mime="video/mp4")
+        else:
+            st.error("The processed video was generated but is empty or unreadable. Please re-run with a shorter sample clip.")
 
         st.line_chart(result.people_per_frame)
     else:

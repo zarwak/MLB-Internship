@@ -6,6 +6,18 @@
       "runtimeExecutable": "streamlit",
       "runtimeArgs": ["run", "D:\\GitHub\\ML-Bench\\Day29\\app.py", "--server.port", "8529"],
       "port": 8529
+    },
+    {
+      "name": "day32-parking-occupancy",
+      "runtimeExecutable": "streamlit",
+      "runtimeArgs": ["run", "D:\\GitHub\\ML-Bench\\Day32\\app.py", "--server.port", "8532"],
+      "port": 8532
+    },
+    {
+      "name": "day36-traffic-violation",
+      "runtimeExecutable": "streamlit",
+      "runtimeArgs": ["run", "D:\\GitHub\\ML-Bench\\Day36\\app.py", "--server.port", "8536"],
+      "port": 8536
     }
   ]
 }

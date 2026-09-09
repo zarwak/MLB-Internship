@@ -75,6 +75,21 @@ class PeopleCountResult:
 _MODEL_CACHE: dict[str, YOLO] = {}
 
 
+def _is_valid_video(path: str | Path) -> bool:
+    path = Path(path)
+    if not path.exists() or path.stat().st_size == 0:
+        return False
+    cap = cv2.VideoCapture(str(path))
+    try:
+        ok = cap.isOpened()
+        if not ok:
+            return False
+        frame_ok, _ = cap.read()
+        return frame_ok
+    finally:
+        cap.release()
+
+
 def load_model(model_name: str = DEFAULT_MODEL) -> YOLO:
     if model_name not in _MODEL_CACHE:
         model = YOLO(model_name)
@@ -260,6 +275,8 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
     in_path = Path(in_path)
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    if out_path.exists():
+        out_path.unlink()
 
     cap = cv2.VideoCapture(str(in_path))
     if not cap.isOpened():
@@ -267,6 +284,9 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
 
     fps = cap.get(cv2.CAP_PROP_FPS) or 25.0
     n_total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) or None
+    temp_path = out_path.with_name(f"{out_path.stem}_tmp{out_path.suffix}")
+    if temp_path.exists():
+        temp_path.unlink()
     writer = None
 
     seen_ids: set[int] = set()
@@ -285,9 +305,9 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
             frame = cv2.resize(frame, (min(frame.shape[1], MAX_SIDE), min(frame.shape[0], MAX_SIDE)))
             if writer is None:
                 fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-                writer = cv2.VideoWriter(str(out_path), fourcc, fps, (frame.shape[1], frame.shape[0]))
+                writer = cv2.VideoWriter(str(temp_path), fourcc, fps, (frame.shape[1], frame.shape[0]))
                 if not writer.isOpened():
-                    raise RuntimeError(f"Could not open video writer for {out_path}")
+                    raise RuntimeError(f"Could not open video writer for {temp_path}")
 
             result = model.track(frame, persist=True, tracker=tracker, conf=conf, iou=iou, classes=[0], verbose=False)[0]
             people = _extract_people(result, result.names)
@@ -327,6 +347,11 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
         if writer is not None:
             writer.release()
 
+    if not _is_valid_video(temp_path):
+        temp_path.unlink(missing_ok=True)
+        raise RuntimeError(f"The processed video could not be written as a valid MP4: {out_path}")
+
+    temp_path.replace(out_path)
     elapsed_s = time.perf_counter() - start
     current_count = people_per_frame[-1] if people_per_frame else 0
     return PeopleCountResult(
