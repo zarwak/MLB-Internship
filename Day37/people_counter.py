@@ -267,12 +267,7 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
 
     fps = cap.get(cv2.CAP_PROP_FPS) or 25.0
     n_total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) or None
-    frame_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    frame_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-    writer = cv2.VideoWriter(str(out_path), fourcc, fps, (frame_w, frame_h))
-    if not writer.isOpened():
-        raise RuntimeError(f"Could not open video writer for {out_path}")
+    writer = None
 
     seen_ids: set[int] = set()
     people_per_frame: list[int] = []
@@ -288,6 +283,11 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
             if not ok:
                 break
             frame = cv2.resize(frame, (min(frame.shape[1], MAX_SIDE), min(frame.shape[0], MAX_SIDE)))
+            if writer is None:
+                fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+                writer = cv2.VideoWriter(str(out_path), fourcc, fps, (frame.shape[1], frame.shape[0]))
+                if not writer.isOpened():
+                    raise RuntimeError(f"Could not open video writer for {out_path}")
 
             result = model.track(frame, persist=True, tracker=tracker, conf=conf, iou=iou, classes=[0], verbose=False)[0]
             people = _extract_people(result, result.names)
@@ -324,7 +324,8 @@ def process_video(model: YOLO, in_path: str | Path, out_path: str | Path, conf: 
                 break
     finally:
         cap.release()
-        writer.release()
+        if writer is not None:
+            writer.release()
 
     elapsed_s = time.perf_counter() - start
     current_count = people_per_frame[-1] if people_per_frame else 0
