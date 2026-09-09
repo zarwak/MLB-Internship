@@ -1,4 +1,5 @@
 ultralytics>=8.2.0
+lap
 opencv-python-headless
 numpy
 streamlit
