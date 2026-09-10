@@ -2,6 +2,9 @@
 
 This project contains both required Day-38 tasks in one Streamlit application.
 
+## Demo
+![demo here](demo_video_summarizer2.gif)
+
 ## Tasks
 
 ### 1. Coding Practice — Intelligent Security Monitoring
