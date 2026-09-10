@@ -1,0 +1,18 @@
+timestamp,entry_time,exit_time,frame,track_id,roi,event,status,duration_seconds
+2026-09-10 12:17:56,2026-09-10 12:17:56,,2,4,Main Entrance,ENTRY,active,
+2026-09-10 12:17:56,2026-09-10 12:17:56,,2,6,Main Entrance,ENTRY,active,
+2026-09-10 12:17:56,2026-09-10 12:17:56,,2,8,Main Entrance,ENTRY,active,
+2026-09-10 12:17:56,2026-09-10 12:17:56,,3,7,Main Entrance,ENTRY,active,
+2026-09-10 12:17:56,2026-09-10 12:17:56,,4,9,Main Entrance,ENTRY,active,
+2026-09-10 12:18:00,2026-09-10 12:18:00,,31,3,Main Entrance,ENTRY,active,
+2026-09-10 12:18:00,2026-09-10 12:18:00,,33,20,Main Entrance,ENTRY,active,
+2026-09-10 12:18:02,2026-09-10 12:18:02,,45,25,Main Entrance,ENTRY,active,
+2026-09-10 12:18:02,2026-09-10 12:18:02,,47,10,Main Entrance,ENTRY,active,
+2026-09-10 12:18:14,2026-09-10 12:17:56,2026-09-10 12:18:14,113,4,Main Entrance,EXIT,inactive,3.7
+2026-09-10 12:18:15,2026-09-10 12:18:15,,120,37,Main Entrance,ENTRY,active,
+2026-09-10 12:18:19,2026-09-10 12:18:19,,146,40,Main Entrance,ENTRY,active,
+2026-09-10 12:18:23,2026-09-10 12:18:23,,166,1,Main Entrance,ENTRY,active,
+2026-09-10 12:18:26,2026-09-10 12:18:26,,186,5,Main Entrance,ENTRY,active,
+2026-09-10 12:18:27,2026-09-10 12:18:26,2026-09-10 12:18:27,190,5,Main Entrance,EXIT,inactive,0.13
+2026-09-10 12:18:27,2026-09-10 12:18:27,,190,43,Main Entrance,ENTRY,active,
+2026-09-10 12:18:27,2026-09-10 12:18:27,,193,5,Main Entrance,ENTRY,active,
